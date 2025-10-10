@@ -82,8 +82,8 @@ def main() -> None:
 
     tmpdir = Path(tempfile.mkdtemp(prefix='publish_worktree_'))
     try:
-        # create an orphan branch in the worktree
-        run(['git', 'worktree', 'add', '--detach', str(tmpdir), orphan])
+        # create a new worktree with a new branch based on HEAD
+        run(['git', 'worktree', 'add', '-b', orphan, str(tmpdir)])
 
         # copy public content into the worktree
         for item in public.iterdir():
