@@ -31,15 +31,6 @@ def run(cmd, cwd: str | None = None, shell: bool = False):
         subprocess.run(cmdstr, check=True, cwd=cwd, shell=True)
 
 
-def find_hexo_cmd(repo: Path) -> str | None:
-    win = repo / 'node_modules' / '.bin' / 'hexo.cmd'
-    unix = repo / 'node_modules' / '.bin' / 'hexo'
-    if win.exists():
-        return str(win)
-    if unix.exists():
-        return str(unix)
-    return None
-
 
 def main() -> None:
     repo = Path.cwd()
@@ -51,16 +42,10 @@ def main() -> None:
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     msg = f'Deploy: {ts}'
 
-    # 1) hexo clean && hexo g
-    hexo_cmd = find_hexo_cmd(repo)
+    # 1) hexo clean && hexo g (直接使用 shell 中的 hexo，用户已确认可用)
     try:
-        if hexo_cmd:
-            run([hexo_cmd, 'clean'])
-            run([hexo_cmd, 'g'])
-        else:
-            # on Windows npx may be a ps1 script, use shell=True
-            run('npx hexo clean', shell=True)
-            run('npx hexo g', shell=True)
+        run('hexo clean', shell=True)
+        run('hexo g', shell=True)
     except subprocess.CalledProcessError:
         print('Hexo 构建失败，取消部署', file=sys.stderr)
         sys.exit(1)
@@ -92,52 +77,42 @@ def main() -> None:
 
     orphan = f'publish-orphan-{datetime.now().strftime("%Y%m%d%H%M%S")}'
 
+    # Use git worktree to stage public content in a detached worktree and push it
+    import tempfile
+
+    tmpdir = Path(tempfile.mkdtemp(prefix='publish_worktree_'))
     try:
-        # create orphan branch
-        run(['git', 'checkout', '--orphan', orphan])
-        run(['git', 'reset', '--hard'])
+        # create an orphan branch in the worktree
+        run(['git', 'worktree', 'add', '--detach', str(tmpdir), orphan])
 
-        # remove all files except .git
-        for p in Path.cwd().iterdir():
-            if p.name == '.git':
-                continue
-            if p.is_dir():
-                shutil.rmtree(p)
-            else:
-                p.unlink()
-
-        # copy public content to repo root
+        # copy public content into the worktree
         for item in public.iterdir():
-            dest = Path.cwd() / item.name
+            dest = tmpdir / item.name
             if item.is_dir():
                 shutil.copytree(item, dest)
             else:
                 shutil.copy2(item, dest)
 
-        run(['git', 'add', '-A'])
+        # commit and push from the worktree
+        run(['git', 'add', '-A'], cwd=str(tmpdir))
         try:
-            run(['git', 'commit', '-m', msg])
+            run(['git', 'commit', '-m', msg], cwd=str(tmpdir))
         except subprocess.CalledProcessError:
-            run(['git', 'commit', '--allow-empty', '-m', msg])
-
-        run(['git', 'push', 'origin', f'{orphan}:refs/heads/main', '--force'])
+            run(['git', 'commit', '--allow-empty', '-m', msg], cwd=str(tmpdir))
+        run(['git', 'push', 'origin', f'{orphan}:refs/heads/main', '--force'], cwd=str(tmpdir))
 
     except subprocess.CalledProcessError as exc:
         print('public 推送失败：', exc, file=sys.stderr)
-        try:
-            run(['git', 'checkout', cur_branch])
-        except Exception:
-            pass
         sys.exit(1)
     finally:
-        # restore and delete orphan
+        # remove the worktree and temporary dir
         try:
-            run(['git', 'checkout', cur_branch])
+            run(['git', 'worktree', 'remove', str(tmpdir), '--force'])
         except subprocess.CalledProcessError:
-            print('恢复原分支失败，请手动检查仓库状态', file=sys.stderr)
+            pass
         try:
-            run(['git', 'branch', '-D', orphan])
-        except subprocess.CalledProcessError:
+            shutil.rmtree(tmpdir)
+        except Exception:
             pass
 
     print('完成：源码已推 data 分支；public 已强制推到 origin/main')
