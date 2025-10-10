@@ -1,0 +1,32 @@
+<section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    <% var site_info = (site && site.data && site.data.site_info) ? site.data.site_info : {}; %>
+    <% var author_avatar = site_info.profile || theme.author.avatar; %>
+    <% var author_name = site_info.author_name || theme.author.name; %>
+    <% var author_description = site_info.author_description || theme.author.description; %>
+    <% if (author_avatar) { %>
+      <img src="<%= author_avatar %>" class="soft-size--round soft-style--box" alt="<%= author_name %>">
+    <% } %>
+    <% if (author_name) { %>
+      <h2><%= author_name %></h2>
+    <% } %>
+    <% if (author_description) { %>
+      <p><%- author_description.trim().replace(/\r?\n/g, '<br/>') %></p>
+    <% } %>
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <%- partial("../_svg/icon-article.svg") %>
+        <span><%= site.posts.length %></span>
+      </div>
+      <div class="count-box--item">
+        <%- partial("../_svg/icon-categories.svg") %>
+        <%= site.categories.length %>
+      </div>
+      <div class="count-box--item">
+        <%- partial("../_svg/icon-tags.svg") %>
+        <%= site.tags.length %>
+      </div>
+    </div>
+  </div>
+</section>
