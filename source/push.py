@@ -19,9 +19,16 @@ from datetime import datetime
 from pathlib import Path
 
 
-def run(cmd, cwd: str | None = None):
-    print('> ' + ' '.join(cmd))
-    subprocess.run(cmd, check=True, cwd=cwd)
+def run(cmd, cwd: str | None = None, shell: bool = False):
+    # cmd can be a list or a string. When shell=True we pass a string to the shell.
+    if isinstance(cmd, (list, tuple)) and not shell:
+        print('> ' + ' '.join(cmd))
+        subprocess.run(cmd, check=True, cwd=cwd)
+    else:
+        # ensure we have a string for shell execution
+        cmdstr = cmd if isinstance(cmd, str) else ' '.join(cmd)
+        print('> ' + cmdstr)
+        subprocess.run(cmdstr, check=True, cwd=cwd, shell=True)
 
 
 def find_hexo_cmd(repo: Path) -> str | None:
@@ -51,8 +58,9 @@ def main() -> None:
             run([hexo_cmd, 'clean'])
             run([hexo_cmd, 'g'])
         else:
-            run(['npx', 'hexo', 'clean'])
-            run(['npx', 'hexo', 'g'])
+            # on Windows npx may be a ps1 script, use shell=True
+            run('npx hexo clean', shell=True)
+            run('npx hexo g', shell=True)
     except subprocess.CalledProcessError:
         print('Hexo 构建失败，取消部署', file=sys.stderr)
         sys.exit(1)
