@@ -2,7 +2,7 @@ name: Build and deploy Hexo to GitHub Pages
 
 on:
   push:
-    branches: [ source ]
+    branches: [ data ]
 
 jobs:
   build-and-deploy:
