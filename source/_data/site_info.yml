@@ -1,9 +1,28 @@
-site_title: shiranzby
-banner: /images/banner.jpg
-favicon: /images/favicon.ico
-profile: /images/profile_photo.jpg
-author_name: shiranzby
-author_description: |
+# 站点信息（供主题模板读取）
+# 在主题模板中通常通过 site.data.site_info 使用这些值
+site_title: shiranzby         # 站点标题
+banner: /images/banner.jpg   # 顶部横幅图片路径（相对于站点根）
+favicon: /images/favicon.ico # 网站 favicon
+profile: /images/profile_photo.jpg # 头像图片
+author_name: shiranzby       # 作者名
+author_description: |       # 作者描述（支持多行）
   知不可乎骤得，
   托遗响于悲风。
-notice: 释然
+notice: 释然              # 站点顶部/栏目的短通知
+
+# 社交链接（用于页脚或侧边栏的社交图标）
+# 格式：social: { github: "https://...", twitter: "https://..." }
+# 模板可以按键名渲染对应图标
+social:
+  github: https://github.com/shiranzby
+  cool: http://www.coolapk.com/u/18690800
+  # 可以按需添加更多键，例如 weibo, linkedin, rss 等
+
+# 友链 / 推荐链接 列表（主题可能在“友情链接”或其他位置渲染）
+# 格式：- name: 昵称; url: 链接
+friend_links:
+  - name: miiiku
+    url: https://github.com/miiiku
+  - name: Guanquan
+    url: https://twitter.com/guanquanhong
+
