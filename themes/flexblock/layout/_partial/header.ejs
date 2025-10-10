@@ -4,7 +4,7 @@
   <% var site_info = (site && site.data && site.data.site_info) ? site.data.site_info : {}; %>
   <% var banner_src = page.cover || site_info.banner || theme.banner; %>
   <% if (banner_src) { %>
-    <div class="post-image" style="background-image: url(<%= banner_src %>)"></div>
+    <div class="post-image" style="background-image: url('<%= banner_src %>')"></div>
   <% } %>
 
   <%- partial('_partial/nav', null, {cache: !config.relative_link}) %>
