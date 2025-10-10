@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+    <meta name="description" content="欢迎来到我的博客！">
+  
+
+  
+    <meta name="keywords" content="学习,博客,Shiranzby">
+  
+
+  
+    <meta name="author" content="Shiranzby">
+  
+
+  
+
+  
+
+  <title>数据备份策略 | Shiranzby</title>
+
+  
+
+  
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+  
+  
+    <div class="post-image" style="background-image: url('/images/banner.jpg')"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Shiranzby
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/">首页</a></li>
+        
+          <li class="navbar-list-item"><a href="/archives">归档</a></li>
+        
+          <li class="navbar-list-item"><a href="/links">友链</a></li>
+        
+          <li class="navbar-list-item"><a href="/about">关于</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">数据备份策略</h1>
+          <h2 class="title-sub-wrap">
+            <strong>Shiranzby</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2025-08-04T15:33:36.000Z" itemprop="datePublished">2025-08-04</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2025-10-10T15:30:55.077Z" itemprop="dateUpdated">2025-10-10</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/%E6%8A%80%E6%9C%AF/">🏷️ 技术</a></li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h1 id="最终备份方案"><a href="#最终备份方案" class="headerlink" title="最终备份方案"></a>最终备份方案</h1><h2 id="🧭-备份策略总览"><a href="#🧭-备份策略总览" class="headerlink" title="🧭 备份策略总览"></a>🧭 备份策略总览</h2><p>为了确保个人数据的<strong>安全性、可恢复性与使用便捷性</strong>，本方案制定如下总目标：</p>
+<h3 id="🎯-目标原则"><a href="#🎯-目标原则" class="headerlink" title="🎯 目标原则"></a>🎯 目标原则</h3><ol>
+<li>✅ <strong>Free 优先 &#x2F; 极力节省成本</strong><ul>
+<li>优先使用免费工具与服务（如夸克网盘、FreeFileSync、GitHub 私有仓库等）。</li>
+<li>如遇容量&#x2F;功能限制，可在关键场景下考虑“轻量付费”。</li>
+</ul>
+</li>
+<li>🧊🔥 <strong>冷备份 + 热备份并存</strong><ul>
+<li><strong>冷备份</strong>（如外置硬盘、月度虚拟机镜像）：面向大规模恢复与长期留存。</li>
+<li><strong>热备份</strong>（如夸克同步文件夹、WebDAV）：用于日常使用&#x2F;误删恢复。</li>
+</ul>
+</li>
+<li>✌️ <strong>双重备份</strong><ul>
+<li>所有重要数据均至少存在两份：本地一份 + 云端一份。</li>
+<li>特别关键数据可建立“三重冗余”（如代码库、密码数据库）。</li>
+</ul>
+</li>
+<li>🔐 <strong>安全、便携、实用</strong><ul>
+<li>所有备份路径可在新设备&#x2F;系统中快速恢复（不依赖某一单一设备）。</li>
+<li>敏感文件使用 <code>.gitignore</code> &#x2F; 加密等方式保障隐私。</li>
+<li>所用工具应支持主流系统（Windows&#x2F;macOS&#x2F;Linux&#x2F;手机）。</li>
+</ul>
+</li>
+<li>🌀 <strong>热备尽量做到“无感备份”，自动化脚本</strong><ul>
+<li>使用同步客户端（夸克、天翼）或脚本（FreeFileSync + 定时任务）实现定时自动化。</li>
+<li>避免手动操作，提高容错率。</li>
+</ul>
+</li>
+<li>📖 <strong>编写《恢复手册.md》</strong><ul>
+<li>文档中将详细记录：<ul>
+<li>所有数据来源位置（路径 &#x2F; 网盘）</li>
+<li>对应恢复方式与工具</li>
+<li>账号密码管理器路径</li>
+<li>依赖的插件&#x2F;脚本清单</li>
+</ul>
+</li>
+<li>保证任何时候数据在 24 小时内可通过登录账户 + 同步脚本 + 手动恢复操作，实现完整数据还原。</li>
+</ul>
+</li>
+</ol>
+<h3 id="备份设备"><a href="#备份设备" class="headerlink" title="备份设备"></a>备份设备</h3><h4 id="本地"><a href="#本地" class="headerlink" title="本地"></a>本地</h4><ul>
+<li>手机</li>
+<li>电脑</li>
+<li>软路由</li>
+<li>U盘</li>
+</ul>
+<h4 id="云端"><a href="#云端" class="headerlink" title="云端"></a>云端</h4><ul>
+<li>夸克网盘</li>
+<li>坚果云（免费轻量云端Webdav）</li>
+<li>谷歌相册</li>
+<li>一刻相册</li>
+</ul>
+<h2 id="备份内容类别"><a href="#备份内容类别" class="headerlink" title="备份内容类别"></a>备份内容类别</h2><ul>
+<li>照片&#x2F;视频</li>
+<li>影视</li>
+<li>音乐</li>
+<li>代码工作区</li>
+<li>QQ&#x2F;微信聊天记录</li>
+<li>浏览器书签</li>
+<li>椒盐笔记</li>
+<li>文档素材</li>
+<li>虚拟机</li>
+<li>密码管理器</li>
+<li>输入法词库</li>
+</ul>
+<h3 id="照片-视频"><a href="#照片-视频" class="headerlink" title="照片&#x2F;视频"></a><strong>照片&#x2F;视频</strong></h3><ul>
+<li><strong>云端</strong>：Google Photos（免费原图备份，已启用）+ 一刻相册。</li>
+<li><strong>本地</strong>：暂缓，后续可考虑NAS+易有云。</li>
+</ul>
+<h4 id="🧐-为什么选择-Google-Photos-一刻相册作为主力云端备份方案？"><a href="#🧐-为什么选择-Google-Photos-一刻相册作为主力云端备份方案？" class="headerlink" title="🧐 为什么选择 Google Photos + 一刻相册作为主力云端备份方案？"></a>🧐 为什么选择 Google Photos + 一刻相册作为主力云端备份方案？</h4><h5 id="✅-1-Google-Photos（谷歌相册）"><a href="#✅-1-Google-Photos（谷歌相册）" class="headerlink" title="✅ 1. Google Photos（谷歌相册）"></a>✅ 1. Google Photos（谷歌相册）</h5><ul>
+<li><p>我已搭建软路由，家中设备默认处于“魔法环境”，<strong>Google Photos 可实现无感自动同步</strong>。</p>
+</li>
+<li><p><strong>优点</strong>：</p>
+<ul>
+<li><strong>无限容量优势</strong>：Google 官方承诺 <strong>Pixel 1 机型享有永久、无损、无限量照片与视频备份</strong>。</li>
+<li><strong>技术绕过可实现“伪Pixel”特权</strong>：通过 Root 的手机设备 + Magisk 模块，可模拟为 Pixel 1，激活无限备份策略。</li>
+<li><strong>自动分类、搜索强大</strong>：Google Photos 提供 <strong>AI 智能识别、人脸聚合、地图定位、关键词搜索</strong> 等强大功能，方便管理海量照片。</li>
+</ul>
+</li>
+<li><p><strong>缺点</strong>：</p>
+<ul>
+<li>Google 在中国大陆无法直接访问，<strong>必须依赖稳定 VPN 或旁路代理环境</strong>。</li>
+</ul>
+</li>
+</ul>
+<h5 id="✅-2-一刻相册（作为国产补充方案）"><a href="#✅-2-一刻相册（作为国产补充方案）" class="headerlink" title="✅ 2. 一刻相册（作为国产补充方案）"></a>✅ 2. 一刻相册（作为国产补充方案）</h5><ul>
+<li><strong>优点</strong>：<ul>
+<li>理论无限空间、界面友好。</li>
+<li>适合中国用户使用。</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：<ul>
+<li>备份大视频、批量恢复需开通会员。</li>
+<li>卡顿，使用体验并不好，自动备份实测耗电情况严重。</li>
+</ul>
+</li>
+</ul>
+<h5 id="✅-3-本地备份（未来补充方案）"><a href="#✅-3-本地备份（未来补充方案）" class="headerlink" title="✅ 3. 本地备份（未来补充方案）"></a>✅ 3. 本地备份（未来补充方案）</h5><ul>
+<li>本地方案，计划后续部署 <strong>NAS + 易有云</strong> 搭建家庭私有云，实现本地备份、快速访问和远程同步。</li>
+<li>配合 Google Photos 可形成「冷 + 热备份」组合，提高数据安全性和可恢复性。</li>
+</ul>
+<hr>
+<h3 id="🎬-影视"><a href="#🎬-影视" class="headerlink" title="🎬 影视"></a>🎬 影视</h3><h4 id="☁️-云端备份策略"><a href="#☁️-云端备份策略" class="headerlink" title="☁️ 云端备份策略"></a>☁️ 云端备份策略</h4><ul>
+<li><strong>115 网盘</strong>（主力推荐）<ul>
+<li>✅ 稳定性高，上传&#x2F;下载&#x2F;播放速度极佳。</li>
+<li>✅ 支持 WebDAV 协议，可被 Jellyfin、Infuse、nPlayer 等播放器远程挂载使用。</li>
+<li>✅ 支持在线播放，大视频兼容性强。</li>
+<li>⚠️ <strong>需付费会员才能正常使用</strong>，非会员限速严重，功能大幅受限。</li>
+<li>⚠️ 分享功能有限制，建议搭配 AList 或其他工具使用。</li>
+</ul>
+</li>
+<li><strong>天翼云盘</strong>（适合电信用户）<ul>
+<li>✅ <strong>永久免费扩容活动多</strong>（绑定手机号后空间可达 6TB+）。</li>
+<li>✅ 上传&#x2F;下载速度快，支持自动备份监控文件夹。</li>
+<li>✅ 适合作为长期备份盘，配合自动化工具使用更佳。</li>
+<li>⚠️ 播放器兼容性一般，不支持 WebDAV，适合作为存储盘而非播放源。</li>
+</ul>
+</li>
+<li><strong>移动云盘</strong>（适合移动用户）<ul>
+<li>✅ 与天翼云盘类似，用户活跃度高时也有较大空间赠送。</li>
+<li>✅ 上传&#x2F;下载体验不错，适合作为副备份盘。</li>
+<li>⚠️ 播放体验一般，不支持 WebDAV。</li>
+</ul>
+</li>
+<li><strong>夸克网盘</strong>（次级推荐）<ul>
+<li>✅ 支持在线播放、AI字幕识别、自动分类等功能。</li>
+<li>✅ 可通过淘宝88VIP（88元&#x2F;年）获得夸克会员，<strong>相当于“白嫖”会员体验</strong>。</li>
+<li>⚠️ 免费用户限速严重，长时间使用必须配合会员。</li>
+<li>⚠️ 分享和下载频率受限，适合当临时备份盘。</li>
+</ul>
+</li>
+<li><strong>123 网盘</strong>（备用方案）<ul>
+<li>✅ 上传&#x2F;下载&#x2F;在线播放体验优秀，客户端简洁无广告。</li>
+<li>✅ 分享功能较开放，支持大文件外链。</li>
+<li>✅ 官方有 Web API 支持，可接入 AList 或自建下载脚本。</li>
+<li>⚠️ <strong>无会员使用体验较差</strong>，限速较严重，上传大文件基本不可行。</li>
+<li>⚠️ 存储安全性有待考察，<strong>适合短期转存或资源中转</strong>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="🧩-聚合播放方案：小雅-AList"><a href="#🧩-聚合播放方案：小雅-AList" class="headerlink" title="🧩 聚合播放方案：小雅 AList"></a>🧩 聚合播放方案：小雅 AList</h4><ul>
+<li>AList 是聚合网盘的 Web 文件浏览器，可统一访问多个云盘资源。</li>
+<li>支持网盘包括：<strong>阿里云盘、115、123、坚果云、天翼云盘（部分支持）、WebDAV、自建服务等</strong>。</li>
+<li>可配置为 WebDAV 网关，与 Jellyfin、Infuse、Kodi、nPlayer 等播放器联动使用，实现局域网或远程无感播放。</li>
+<li>推荐搭配方案：<ul>
+<li>小雅 AList 公共节点（alist.xiaoya.pro）→ 挂载 115 &#x2F; 123 网盘 → Infuse &#x2F; nPlayer 播放器观看。</li>
+<li>自建 AList 实例（Docker &#x2F; 本地）+ Token 授权更安全稳定。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="🖥️-本地方案规划：Jellyfin-NAS（后续）"><a href="#🖥️-本地方案规划：Jellyfin-NAS（后续）" class="headerlink" title="🖥️ 本地方案规划：Jellyfin + NAS（后续）"></a>🖥️ 本地方案规划：Jellyfin + NAS（后续）</h4><p>虽然当前未考虑，但未来部署仍具备价值，作为云端存储的<strong>本地冷备+家庭影院</strong>方案：</p>
+<ul>
+<li><strong>Jellyfin</strong>：免费开源媒体中心，自动整理影视资源，支持多平台客户端。</li>
+<li><strong>NAS（当前为软路由）</strong>：集中存储、远程访问、播放高清无压力。</li>
+<li><strong>自动化工具搭配</strong>：<ul>
+<li><code>rclone</code> 同步网盘内容至本地。</li>
+<li><code>aria2 / qBittorrent</code> 搭建自动下载中心。</li>
+<li>AList + Jellyfin 构建本地 + 云端混合播放环境。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="📊-云盘对比汇总（影视适用性）"><a href="#📊-云盘对比汇总（影视适用性）" class="headerlink" title="📊 云盘对比汇总（影视适用性）"></a>📊 云盘对比汇总（影视适用性）</h4><table>
+<thead>
+<tr>
+<th>云盘平台</th>
+<th>是否限速</th>
+<th>播放支持</th>
+<th>WebDAV 支持</th>
+<th>是否需要会员</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>115 网盘</strong></td>
+<td>免费限速，会员不限</td>
+<td>✅ 强</td>
+<td>✅（需配置）</td>
+<td><strong>需要付费</strong></td>
+<td>主力备份 + 播放 + AList挂载</td>
+</tr>
+<tr>
+<td><strong>天翼云盘</strong></td>
+<td>不限速</td>
+<td>一般</td>
+<td>❌</td>
+<td><strong>免费</strong></td>
+<td>大容量备份（电信优选）</td>
+</tr>
+<tr>
+<td><strong>移动云盘</strong></td>
+<td>不限速</td>
+<td>一般</td>
+<td>❌</td>
+<td><strong>免费</strong></td>
+<td>大容量备份（移动用户）</td>
+</tr>
+<tr>
+<td><strong>夸克网盘</strong></td>
+<td>免费限速，会员快</td>
+<td>✅ 中等</td>
+<td>❌</td>
+<td><strong>88VIP 白嫖会员</strong></td>
+<td>临时转存 &#x2F; 播放</td>
+</tr>
+<tr>
+<td><strong>123 网盘</strong></td>
+<td>免费限速，会员快</td>
+<td>✅ 中等</td>
+<td>⚠️（API 或绕过）</td>
+<td><strong>基本需付费</strong></td>
+<td>中转下载 &#x2F; 资源分享</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="音乐"><a href="#音乐" class="headerlink" title="音乐"></a>音乐</h3><p><strong>本地</strong>：当前占用约10GB，统一存放于固定路径（<code>E:/音乐/</code>），冷备份至U盘及软路由存储中，确保本地多设备冗余。</p>
+<ul>
+<li><strong>本地播放&#x2F;管理方案</strong>：采用 <strong>Navidrome + NAS</strong> 组合或 <strong>Jellyfin + NAS</strong>，搭建私人音乐服务器，实现跨设备在线播放、管理和元数据同步。<ul>
+<li><strong>Navidrome</strong>：轻量级音乐服务器，支持多用户、Web和手机客户端，兼容多种音频格式，适合个人或小团队使用。</li>
+<li><strong>Jellyfin</strong>：功能更强大，支持多媒体统一管理（音乐、电影、电视），支持DLNA、Chromecast等多种播放协议，适合更丰富的多媒体需求。</li>
+</ul>
+</li>
+</ul>
+<p><strong>云端同步</strong>：</p>
+<ul>
+<li>夸克网盘：启用“同步文件夹”功能，将<code>D:/Music/</code>设为同步目录热备份（需确保夸克客户端常驻后台）。</li>
+</ul>
+<p><strong>歌单与播放列表管理</strong>：</p>
+<ul>
+<li>使用 <strong>歌单无界</strong> 等工具，能有效匹配和同步歌单排序，实现云端与本地播放列表的无缝衔接，避免歌单乱序问题，提升听歌体验。</li>
+</ul>
+<h4 id="🧐-为什么选择夸克网盘作为音乐备份平台？"><a href="#🧐-为什么选择夸克网盘作为音乐备份平台？" class="headerlink" title="🧐 为什么选择夸克网盘作为音乐备份平台？"></a>🧐 为什么选择夸克网盘作为音乐备份平台？</h4><h5 id="✅-多平台支持，使用体验优秀"><a href="#✅-多平台支持，使用体验优秀" class="headerlink" title="✅ 多平台支持，使用体验优秀"></a>✅ 多平台支持，使用体验优秀</h5><ul>
+<li>支持 <strong>Android &#x2F; iOS &#x2F; Web &#x2F; Windows &#x2F; Mac</strong> 等主流平台。</li>
+<li>无论是手机、平板、电脑均可便捷访问、播放与下载音频文件。</li>
+<li>网页端支持50MB以内单文件下载，<strong>无需额外客户端</strong>。</li>
+</ul>
+<h5 id="✅-存储空间充足，价格极低"><a href="#✅-存储空间充足，价格极低" class="headerlink" title="✅ 存储空间充足，价格极低"></a>✅ 存储空间充足，价格极低</h5><ul>
+<li><p>通过 <strong>88VIP 赠送的夸克会员权益（价值5元一年）</strong>，可获得至少 <strong>6TB 超大云盘容量</strong>。</p>
+</li>
+<li><p>适合长期保存大量高质量无损音乐、专辑、母带文件。</p>
+</li>
+<li><p><strong>性价比极高</strong>，几乎免费获得专业级云盘体验。</p>
+</li>
+</ul>
+<h5 id="✅-上传-下载速度优秀"><a href="#✅-上传-下载速度优秀" class="headerlink" title="✅ 上传&#x2F;下载速度优秀"></a>✅ 上传&#x2F;下载速度优秀</h5><ul>
+<li>会员上传、下载稳定在 <strong>50MB&#x2F;s 以上</strong>，支持单文件最大100GB上传。</li>
+<li>支持断点续传，保障长时间上传的稳定性。</li>
+</ul>
+<h5 id="✅-原文件存储，不转码不压缩"><a href="#✅-原文件存储，不转码不压缩" class="headerlink" title="✅ 原文件存储，不转码不压缩"></a>✅ 原文件存储，不转码不压缩</h5><ul>
+<li>音频文件 <strong>不会被转码或重命名</strong>，保留完整元数据。</li>
+<li>适合储存音乐资料库、专辑封面、歌词、Cue 文件等文件结构较复杂的音乐归档。</li>
+</ul>
+<h5 id="✅-文件结构清晰，支持批量管理"><a href="#✅-文件结构清晰，支持批量管理" class="headerlink" title="✅ 文件结构清晰，支持批量管理"></a>✅ 文件结构清晰，支持批量管理</h5><ul>
+<li>支持自定义目录层级，如 <code>音乐归档/无损合集/年代/艺术家/</code>，便于分类和查找。</li>
+<li>PC客户端支持拖拽和批量上传，简化管理流程。</li>
+<li>支持文件重命名规则插件，保持命名规范。</li>
+</ul>
+<h5 id="✅-分享与恢复便捷"><a href="#✅-分享与恢复便捷" class="headerlink" title="✅ 分享与恢复便捷"></a>✅ 分享与恢复便捷</h5><ul>
+<li>支持生成带有效期的分享链接，方便与朋友共享音乐。</li>
+<li>设备更换或损坏后，登录账号即可无缝恢复全库，免除手动迁移烦恼。</li>
+</ul>
+<hr>
+<h3 id="代码工作区（F-Workspace-）"><a href="#代码工作区（F-Workspace-）" class="headerlink" title="代码工作区（F:/Workspace/）"></a>代码工作区（<code>F:/Workspace/</code>）</h3><h4 id="本地备份"><a href="#本地备份" class="headerlink" title="本地备份"></a>本地备份</h4><h5 id="当前状态"><a href="#当前状态" class="headerlink" title="当前状态"></a>当前状态</h5><ul>
+<li>主要代码工作区位于F盘本地磁盘。</li>
+</ul>
+<h5 id="未来规划"><a href="#未来规划" class="headerlink" title="未来规划"></a>未来规划</h5><ul>
+<li>计划部署 <strong>NAS 设备</strong>，实现自动定时快照和备份。</li>
+<li>NAS结合版本控制或增量备份方案，可大幅提升数据安全性和多设备访问便利。</li>
+</ul>
+<h4 id="云端同步"><a href="#云端同步" class="headerlink" title="云端同步"></a>云端同步</h4><h5 id="Git-GitHub-私有仓库（适合核心代码版本控制）"><a href="#Git-GitHub-私有仓库（适合核心代码版本控制）" class="headerlink" title="Git + GitHub 私有仓库（适合核心代码版本控制）"></a>Git + GitHub 私有仓库（适合核心代码版本控制）</h5><h6 id="注册与创建仓库"><a href="#注册与创建仓库" class="headerlink" title="注册与创建仓库"></a>注册与创建仓库</h6><ul>
+<li>注册GitHub账号（<a target="_blank" rel="noopener" href="https://github.com/%EF%BC%89%E3%80%82">https://github.com/）。</a></li>
+<li>创建私有仓库（例如 <code>my-workspace</code>）。</li>
+<li><strong>创建时避免勾选“Initialize with README”</strong>，防止初始化文件与本地冲突。</li>
+</ul>
+<h6 id="初始化本地仓库并关联远程"><a href="#初始化本地仓库并关联远程" class="headerlink" title="初始化本地仓库并关联远程"></a>初始化本地仓库并关联远程</h6><ul>
+<li><p>在目标项目目录（如<code>F:/Workspace/project1/</code>）打开 <strong>Git Bash Here</strong>，依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git remote add origin https://github.com/你的用户名/my-workspace.git</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;Initial commit&quot;</span></span><br><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h6 id="日常更新流程"><a href="#日常更新流程" class="headerlink" title="日常更新流程"></a>日常更新流程</h6><ul>
+<li><p>每次代码修改完成后，执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;简短描述本次修改&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h6 id="多设备恢复"><a href="#多设备恢复" class="headerlink" title="多设备恢复"></a>多设备恢复</h6><ul>
+<li><p>在新设备或工作环境，执行克隆操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/你的用户名/my-workspace.git</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h6 id="建议辅助工具"><a href="#建议辅助工具" class="headerlink" title="建议辅助工具"></a>建议辅助工具</h6><ul>
+<li>推荐使用 VSCode 等支持Git的编辑器，内置Git插件使操作更直观便捷。</li>
+</ul>
+<h6 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h6><ul>
+<li>避免提交大文件或敏感信息。</li>
+<li>可通过 <code>.gitignore</code> 文件排除不需要同步的文件。</li>
+</ul>
+<h5 id="夸克网盘（适合非版本控制的备份）"><a href="#夸克网盘（适合非版本控制的备份）" class="headerlink" title="夸克网盘（适合非版本控制的备份）"></a>夸克网盘（适合非版本控制的备份）</h5><h6 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h6><ul>
+<li>备份无需版本控制的代码副本、资料文件、配置文件或二进制资源。</li>
+</ul>
+<h6 id="备份方法"><a href="#备份方法" class="headerlink" title="备份方法"></a>备份方法</h6><ul>
+<li>在夸克网盘创建同步文件夹（如 <code>Workspace_Backup</code>）。</li>
+<li>将本地目录 <code>F:/Workspace/</code> 拖入同步文件夹，实现自动热备份。</li>
+<li>保证夸克客户端常驻后台以确保同步稳定及时。</li>
+</ul>
+<h4 id="补充建议"><a href="#补充建议" class="headerlink" title="补充建议"></a>补充建议</h4><h5 id="自动备份脚本"><a href="#自动备份脚本" class="headerlink" title="自动备份脚本"></a>自动备份脚本</h5><ul>
+<li>可编写定时任务脚本，自动复制代码工作区至NAS或备份目录。</li>
+<li>结合增量备份工具，如Linux的 <code>rsync</code>，Windows下推荐使用 <code>DeltaCopy</code>，提高备份效率。</li>
+</ul>
+<h5 id="多版本备份策略"><a href="#多版本备份策略" class="headerlink" title="多版本备份策略"></a>多版本备份策略</h5><ul>
+<li>利用Git的版本管理优势管理代码历史。</li>
+<li>结合NAS快照功能，实现数据误删、误覆盖的快速恢复。</li>
+</ul>
+<h5 id="安全性建议"><a href="#安全性建议" class="headerlink" title="安全性建议"></a>安全性建议</h5><ul>
+<li>私有仓库不宜存储明文密码或敏感密钥。</li>
+<li>建议使用环境变量或专门的安全管理工具处理敏感信息。</li>
+</ul>
+<hr>
+<h3 id="QQ-微信聊天记录"><a href="#QQ-微信聊天记录" class="headerlink" title="QQ&#x2F;微信聊天记录"></a>QQ&#x2F;微信聊天记录</h3><h4 id="手机-→-电脑备份"><a href="#手机-→-电脑备份" class="headerlink" title="手机 → 电脑备份"></a>手机 → 电脑备份</h4><h5 id="微信备份"><a href="#微信备份" class="headerlink" title="微信备份"></a>微信备份</h5><ul>
+<li>通过电脑版微信“备份与恢复”功能，连接手机和电脑，选择“备份聊天记录至电脑”操作（需同一局域网）。</li>
+<li>可备份聊天文本、图片、语音等内容，需手动操作。</li>
+</ul>
+<h5 id="QQ备份"><a href="#QQ备份" class="headerlink" title="QQ备份"></a>QQ备份</h5><ul>
+<li>进入手机QQ“设置 → 通用 → 聊天记录备份与恢复”，选择“备份聊天记录到电脑QQ”，手机与电脑需联网且在同一网络。</li>
+</ul>
+<h4 id="电脑-→-本地存储"><a href="#电脑-→-本地存储" class="headerlink" title="电脑 → 本地存储"></a>电脑 → 本地存储</h4><h5 id="默认存储路径"><a href="#默认存储路径" class="headerlink" title="默认存储路径"></a>默认存储路径</h5><ul>
+<li>微信聊天记录路径为：<br> <code>C:/Users/&lt;用户名&gt;/Documents/WeChat Files/&lt;微信号&gt;/</code></li>
+<li>QQ聊天记录路径为：<br> <code>C:/Users/&lt;用户名&gt;/Documents/Tencent Files/&lt;QQ号&gt;/</code></li>
+</ul>
+<h5 id="备份文件管理"><a href="#备份文件管理" class="headerlink" title="备份文件管理"></a>备份文件管理</h5><ul>
+<li>建议定期将聊天记录目录压缩成 <code>DataBackup.zip</code> 方便管理和迁移。</li>
+<li>压缩包可存储于U盘、NAS或上传至云盘（如夸克网盘）实现多重备份。</li>
+</ul>
+<h4 id="Root手机完整备份（推荐第三方工具“数据备份”）"><a href="#Root手机完整备份（推荐第三方工具“数据备份”）" class="headerlink" title="Root手机完整备份（推荐第三方工具“数据备份”）"></a>Root手机完整备份（推荐第三方工具“数据备份”）</h4><h5 id="为什么推荐“数据备份”"><a href="#为什么推荐“数据备份”" class="headerlink" title="为什么推荐“数据备份”"></a>为什么推荐“数据备份”</h5><ul>
+<li>经多次测试，手机官方微信和QQ备份功能<strong>容易遗漏大量图片和视频</strong>，导致备份不完整。</li>
+<li>“数据备份”作为Root权限工具，能<strong>完整导出所有QQ和微信数据</strong>，包括聊天记录、图片、视频、数据库和缓存文件。</li>
+</ul>
+<h5 id="备份流程"><a href="#备份流程" class="headerlink" title="备份流程"></a>备份流程</h5><ul>
+<li>在Root的手机设备上运行“数据备份”软件，进行完整数据导出。</li>
+<li>备份数据压缩成 <code>DataBackup.zip</code> 文件，方便保存与传输。</li>
+<li>上传压缩文件到夸克网盘或其他云盘，实现安全、长期存储。</li>
+</ul>
+<h5 id="优势说明"><a href="#优势说明" class="headerlink" title="优势说明"></a>优势说明</h5><ul>
+<li>该备份方式全面且数据完整，适合设备更换、系统重装时恢复使用。</li>
+<li>极大减少因官方备份功能不足造成的数据丢失风险。</li>
+</ul>
+<h4 id="自动化备份建议"><a href="#自动化备份建议" class="headerlink" title="自动化备份建议"></a>自动化备份建议</h4><h5 id="Windows定时压缩"><a href="#Windows定时压缩" class="headerlink" title="Windows定时压缩"></a>Windows定时压缩</h5><ul>
+<li>利用任务计划结合批处理脚本，定期压缩本地聊天记录文件夹，减轻手动备份负担。</li>
+</ul>
+<h5 id="多层备份架构"><a href="#多层备份架构" class="headerlink" title="多层备份架构"></a>多层备份架构</h5><ul>
+<li>结合软路由与NAS，定期同步聊天数据，实现本地与网络的多层冗余备份。</li>
+</ul>
+<h4 id="安全与隐私"><a href="#安全与隐私" class="headerlink" title="安全与隐私"></a>安全与隐私</h4><h5 id="数据加密"><a href="#数据加密" class="headerlink" title="数据加密"></a>数据加密</h5><ul>
+<li>聊天记录包含个人隐私，建议使用7-Zip等工具对压缩包设置密码保护。</li>
+</ul>
+<h5 id="云盘权限控制"><a href="#云盘权限控制" class="headerlink" title="云盘权限控制"></a>云盘权限控制</h5><ul>
+<li>上传云盘后，务必设置访问权限，避免数据泄露风险。</li>
+</ul>
+<h5 id="Root权限风险"><a href="#Root权限风险" class="headerlink" title="Root权限风险"></a>Root权限风险</h5><ul>
+<li>Root操作存在一定风险，务必保证备份工具来源正规可靠。</li>
+</ul>
+<h4 id="恢复方法"><a href="#恢复方法" class="headerlink" title="恢复方法"></a>恢复方法</h4><h5 id="官方恢复途径"><a href="#官方恢复途径" class="headerlink" title="官方恢复途径"></a>官方恢复途径</h5><ul>
+<li>电脑版微信和QQ支持“备份与恢复”功能，可恢复聊天记录（需确保备份文件完整且版本匹配）。</li>
+</ul>
+<h5 id="Root备份恢复"><a href="#Root备份恢复" class="headerlink" title="Root备份恢复"></a>Root备份恢复</h5><ul>
+<li>需借助相应的手机恢复工具，将完整备份数据导入手机，恢复聊天内容、图片和视频。</li>
+</ul>
+<h5 id="手动恢复"><a href="#手动恢复" class="headerlink" title="手动恢复"></a>手动恢复</h5><ul>
+<li>关闭对应客户端后，手动复制聊天记录文件夹到原路径，实现基础数据恢复。</li>
+</ul>
+<hr>
+<h3 id="浏览器书签（Chrome）"><a href="#浏览器书签（Chrome）" class="headerlink" title="浏览器书签（Chrome）"></a>浏览器书签（Chrome）</h3><ul>
+<li><strong>本地备份</strong>：可通过 Chrome 自带的导出功能，定期导出为 <code>.html</code> 文件保存到本地。</li>
+<li><strong>云端同步</strong>：<ul>
+<li>使用 <strong>Floccus 浏览器插件</strong>，配置 WebDAV（推荐坚果云）后，可实现自动同步浏览器书签到云端。</li>
+<li>也可手动导出书签 <code>.html</code> 文件，存入夸克网盘等云服务。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="🧐-为什么选择坚果云作为同步平台？"><a href="#🧐-为什么选择坚果云作为同步平台？" class="headerlink" title="🧐 为什么选择坚果云作为同步平台？"></a>🧐 为什么选择坚果云作为同步平台？</h4><h5 id="✅-完全支持-WebDAV-协议"><a href="#✅-完全支持-WebDAV-协议" class="headerlink" title="✅ 完全支持 WebDAV 协议"></a>✅ 完全支持 WebDAV 协议</h5><ul>
+<li>坚果云提供长期稳定的 WebDAV 接口。</li>
+<li>与 Floccus 等插件完美兼容，无需额外脚本或服务端配置。</li>
+</ul>
+<h5 id="✅-安装简便、自动同步"><a href="#✅-安装简便、自动同步" class="headerlink" title="✅ 安装简便、自动同步"></a>✅ 安装简便、自动同步</h5><ul>
+<li>配置一次即可后台自动同步书签文件，无需手动导出。</li>
+<li>支持多浏览器、多设备自动保持书签一致。</li>
+</ul>
+<h5 id="✅-空间充足，传输速度快"><a href="#✅-空间充足，传输速度快" class="headerlink" title="✅ 空间充足，传输速度快"></a>✅ 空间充足，传输速度快</h5><ul>
+<li>免费版即提供 1GB 存储，书签数据占用极小。</li>
+<li>中国大陆服务器，上传&#x2F;同步速度快、延迟低。</li>
+</ul>
+<h5 id="✅-安全性强"><a href="#✅-安全性强" class="headerlink" title="✅ 安全性强"></a>✅ 安全性强</h5><ul>
+<li><p>传输使用 HTTPS 加密。</p>
+</li>
+<li><p>可为 Floccus 单独生成 <strong>应用专用授权码</strong>：</p>
+<blockquote>
+<p>即便泄露也可随时吊销，确保主账户安全。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h4 id="🧩-第一步：注册坚果云并启用-WebDAV-功能"><a href="#🧩-第一步：注册坚果云并启用-WebDAV-功能" class="headerlink" title="🧩 第一步：注册坚果云并启用 WebDAV 功能"></a>🧩 第一步：注册坚果云并启用 WebDAV 功能</h4><ol>
+<li>访问官网：<a target="_blank" rel="noopener" href="https://www.jianguoyun.com/">https://www.jianguoyun.com</a></li>
+<li>注册新账户（推荐使用邮箱）</li>
+<li>登录后，进入「设置」页面 → 进入「<strong>第三方应用管理</strong>」</li>
+<li>点击「添加应用」→ 输入名称（如：Floccus 书签同步）</li>
+<li>系统生成一个「<strong>应用专用授权码</strong>」</li>
+</ol>
+<blockquote>
+<p>⚠️ 请妥善保存该授权码，稍后配置 WebDAV 时将用到</p>
+</blockquote>
+<hr>
+<h4 id="🌐-第二步：获取-WebDAV-配置信息"><a href="#🌐-第二步：获取-WebDAV-配置信息" class="headerlink" title="🌐 第二步：获取 WebDAV 配置信息"></a>🌐 第二步：获取 WebDAV 配置信息</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>地址</td>
+<td><code>https://dav.jianguoyun.com/dav/</code></td>
+</tr>
+<tr>
+<td>用户名</td>
+<td>你的坚果云注册邮箱</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>应用专用授权码（非登录密码）</td>
+</tr>
+</tbody></table>
+<p><strong>注意！需要创建一个文件夹(如&#x2F;Bookmarks)</strong></p>
+<hr>
+<h4 id="🧩-第三步：在-Chrome-中配置-Floccus-插件"><a href="#🧩-第三步：在-Chrome-中配置-Floccus-插件" class="headerlink" title="🧩 第三步：在 Chrome 中配置 Floccus 插件"></a>🧩 第三步：在 Chrome 中配置 Floccus 插件</h4><ol>
+<li><p>前往 <a target="_blank" rel="noopener" href="https://github.com/floccusaddon/floccus">Github主页</a> 或<a target="_blank" rel="noopener" href="https://floccus.org/">软件官网</a>安装 <strong>Floccus</strong> 插件</p>
+</li>
+<li><p>安装后点击插件图标 → 选择「<strong>添加配置</strong>」→ 选择「<strong>WebDAV分享</strong>」</p>
+</li>
+<li><p>填写以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>服务器地址</td>
+<td><code>https://dav.jianguoyun.com/dav/</code></td>
+</tr>
+<tr>
+<td>用户名</td>
+<td>你的坚果云注册邮箱</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>应用专用授权码</td>
+</tr>
+<tr>
+<td>同步文件名</td>
+<td><code>/Bookmarks/bookmarks.html</code> 或默认设置</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>设置同步频率</p>
+</li>
+<li><p>成功后，你可以在坚果云的 <code>/bookmarks/</code> 路径中看到同步生成的 bookmarks.html 文件</p>
+</li>
+</ol>
+<hr>
+<h4 id="💾-第四步：恢复或迁移书签数据"><a href="#💾-第四步：恢复或迁移书签数据" class="headerlink" title="💾 第四步：恢复或迁移书签数据"></a>💾 第四步：恢复或迁移书签数据</h4><ol>
+<li>在新设备安装 Chrome 与 Floccus 插件</li>
+<li>使用相同 WebDAV 信息创建同步账户</li>
+<li>点击「Sync」按钮 → 即可从云端恢复书签数据</li>
+<li><strong>也可手动导入坚果云保存的bookmarks <code>.html</code> 文件</strong></li>
+</ol>
+<h3 id="椒盐笔记"><a href="#椒盐笔记" class="headerlink" title="椒盐笔记"></a>椒盐笔记</h3><ul>
+<li><strong>本地备份</strong>：已自动保存到手机<code>/Documents/SaltNote/</code>（确认路径无误）。</li>
+<li><strong>云端备份</strong>：<ul>
+<li>通过椒盐笔记的WebDAV功能备份到支持WebDAV的网盘（如坚果云、Nextcloud）。</li>
+<li>或手动定期导出Markdown文件到云盘（如夸克&#x2F;百度网盘）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="🧐-为什么选择坚果云作为备份平台？"><a href="#🧐-为什么选择坚果云作为备份平台？" class="headerlink" title="🧐 为什么选择坚果云作为备份平台？"></a>🧐 为什么选择坚果云作为备份平台？</h4><h5 id="✅-完全支持-WebDAV-协议-1"><a href="#✅-完全支持-WebDAV-协议-1" class="headerlink" title="✅ 完全支持 WebDAV 协议"></a>✅ 完全支持 WebDAV 协议</h5><ul>
+<li>坚果云是国内极少数长期稳定支持 WebDAV 的云服务，兼容性好。</li>
+<li>与椒盐笔记等支持 WebDAV 的应用完美配合，几乎零配置可同步。</li>
+</ul>
+<h5 id="✅-免费也够用"><a href="#✅-免费也够用" class="headerlink" title="✅ 免费也够用"></a>✅ 免费也够用</h5><ul>
+<li>免费账户提供 <strong>1GB 空间</strong>，Markdown 纯文本笔记占用极小。</li>
+<li>同步数据流量极低，基本可实现<strong>长期免费使用</strong>。</li>
+</ul>
+<h5 id="✅-安全性高"><a href="#✅-安全性高" class="headerlink" title="✅ 安全性高"></a>✅ 安全性高</h5><ul>
+<li><p>全程 HTTPS 加密传输，支持两步验证。</p>
+</li>
+<li><p>支持每个应用生成独立的授权码：</p>
+<blockquote>
+<p>泄露后可随时吊销，不影响主账户安全。</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="✅-服务稳定、速度优秀"><a href="#✅-服务稳定、速度优秀" class="headerlink" title="✅ 服务稳定、速度优秀"></a>✅ 服务稳定、速度优秀</h5><ul>
+<li>拥有中国大陆服务器，同步速度快、延迟低。</li>
+<li>多年稳定运营，无大规模中断记录。</li>
+</ul>
+<h5 id="✅-可拓展用途"><a href="#✅-可拓展用途" class="headerlink" title="✅ 可拓展用途"></a>✅ 可拓展用途</h5><ul>
+<li>除椒盐笔记，还可用于：<ul>
+<li>Obsidian、Joplin 等 WebDAV 应用</li>
+<li>FreeFileSync、rclone、Python 脚本工具等</li>
+<li>批量同步文档、PDF、代码片段等轻量资料</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="🧩-第一步：注册坚果云并启用-WebDAV-功能-1"><a href="#🧩-第一步：注册坚果云并启用-WebDAV-功能-1" class="headerlink" title="🧩 第一步：注册坚果云并启用 WebDAV 功能"></a>🧩 第一步：注册坚果云并启用 WebDAV 功能</h4><ol>
+<li><p>访问官网：<a target="_blank" rel="noopener" href="https://www.jianguoyun.com/">https://www.jianguoyun.com</a></p>
+</li>
+<li><p>点击「注册」，推荐使用邮箱注册账号</p>
+</li>
+<li><p>登录后，点击右上角头像 → 进入「设置」</p>
+</li>
+<li><p>打开「<strong>第三方应用管理</strong>」菜单</p>
+</li>
+<li><p>点击「添加应用」，输入自定义应用名（如：椒盐笔记备份）</p>
+</li>
+<li><p>系统生成一个「应用授权码」：</p>
+<blockquote>
+<p><strong>请复制并妥善保存</strong>，稍后配置 WebDAV 会使用</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h4 id="🌐-第二步：获取-WebDAV-配置信息-1"><a href="#🌐-第二步：获取-WebDAV-配置信息-1" class="headerlink" title="🌐 第二步：获取 WebDAV 配置信息"></a>🌐 第二步：获取 WebDAV 配置信息</h4><ul>
+<li>WebDAV 地址：<code>https://dav.jianguoyun.com/dav/</code></li>
+<li>用户名：你的坚果云注册邮箱</li>
+<li>密码：上一步生成的「<strong>应用授权码</strong>」（<strong>不是登录密码</strong>）</li>
+</ul>
+<hr>
+<h4 id="📱-第三步：在椒盐笔记中配置-WebDAV-自动同步"><a href="#📱-第三步：在椒盐笔记中配置-WebDAV-自动同步" class="headerlink" title="📱 第三步：在椒盐笔记中配置 WebDAV 自动同步"></a>📱 第三步：在椒盐笔记中配置 WebDAV 自动同步</h4><ol>
+<li><p>打开椒盐笔记（SaltNote）App</p>
+</li>
+<li><p>点击右上角齿轮图标，进入设置页面</p>
+</li>
+<li><p>选择「<strong>WebDAV 同步</strong>」</p>
+</li>
+<li><p>填写以下信息：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>地址</td>
+<td><code>https://dav.jianguoyun.com/dav/</code></td>
+</tr>
+<tr>
+<td>用户名</td>
+<td>注册邮箱</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>应用授权码</td>
+</tr>
+<tr>
+<td>同步路径</td>
+<td>推荐使用 <code>/saltnote/</code>，网盘中将自动创建此目录</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>启用「自动同步」功能</p>
+</li>
+<li><p>第一次同步完成后，坚果云网页端将出现 <code>/saltnote/</code> 文件夹</p>
+<blockquote>
+<p>内含 <code>.md</code> 文件与 PepperNote 设置数据，后续将持续自动更新</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h4 id="💾-第四步：恢复笔记数据流程（换手机-重装-App）"><a href="#💾-第四步：恢复笔记数据流程（换手机-重装-App）" class="headerlink" title="💾 第四步：恢复笔记数据流程（换手机 &#x2F; 重装 App）"></a>💾 第四步：恢复笔记数据流程（换手机 &#x2F; 重装 App）</h4><ol>
+<li><p>在新设备上安装椒盐笔记 App</p>
+</li>
+<li><p>进入设置 → WebDAV 同步，填写相同信息（地址、邮箱、授权码、路径）</p>
+</li>
+<li><p>等待连接成功</p>
+</li>
+<li><p>点击「设置 → 备份与恢复 → 恢复备份」</p>
+</li>
+<li><p>稍候几秒，历史笔记将自动恢复</p>
+<blockquote>
+<p>无需手动导入，云端会同步所有内容与配置</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="文档素材（E盘-F盘分散文件夹）"><a href="#文档素材（E盘-F盘分散文件夹）" class="headerlink" title="文档素材（E盘/F盘分散文件夹）"></a>文档素材（<code>E盘/F盘</code>分散文件夹）</h3><ul>
+<li><strong>本地备份</strong>：已存在原位置，考虑NAS。</li>
+<li><strong>云端同步</strong>：<ul>
+<li>夸克网盘：添加多个文件夹到同步列表（注意单个文件大小限制）。</li>
+<li>天翼云盘？</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟机（VMware）"><a href="#虚拟机（VMware）" class="headerlink" title="虚拟机（VMware）"></a>虚拟机（VMware）</h3><ul>
+<li><strong>备份建议</strong>：<ul>
+<li><strong>方案1</strong>：关闭VMware后，直接复制整个虚拟机文件夹（默认路径：<code>C:/Users/&lt;用户名&gt;/Documents/Virtual Machines/</code>），需包含<code>.vmx</code>（配置文件）和<code>.vmdk</code>（虚拟磁盘文件）。</li>
+<li><strong>方案2</strong>：VMware自带“快照”功能（临时备份，占用空间大）。</li>
+</ul>
+</li>
+<li><strong>推荐</strong>：每月一次完整备份+每周快照。</li>
+</ul>
+<h3 id="密码管理器"><a href="#密码管理器" class="headerlink" title="密码管理器"></a>密码管理器</h3><ul>
+<li><strong>推荐工具</strong>：<ul>
+<li><strong>Bitwarden</strong>（免费开源，支持WebDAV同步，加密备份到网盘）。</li>
+<li><strong>KeePassXC</strong>（本地存储，数据库文件可同步到云盘）。</li>
+</ul>
+</li>
+<li><strong>迁移建议</strong>：将微信收藏的密码整理到Bitwarden，启用自动填充功能。</li>
+</ul>
+<h3 id="百度输入法词库"><a href="#百度输入法词库" class="headerlink" title="百度输入法词库"></a>百度输入法词库</h3><ul>
+<li><strong>暂缓</strong>，但记录路径：<ul>
+<li>Windows：<code>%APPDATA%\Baidu\BaiduPinyin\UserData\</code>（如<code>C:/Users/&lt;用户名&gt;/AppData/Roaming/Baidu/BaiduPinyin/UserData/</code>）。</li>
+<li>备份时复制整个<code>UserData</code>文件夹。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="自动化工具整合"><a href="#自动化工具整合" class="headerlink" title="自动化工具整合"></a>自动化工具整合</h2><ol>
+<li><p><strong>FreeFileSync</strong>（核心工具）：</p>
+<ul>
+<li>配置任务：<ul>
+<li>同步<code>D:/Music/</code>→夸克网盘音乐文件夹。</li>
+<li>同步<code>F:/Workspace/</code>（非Git子文件夹）→夸克网盘代码文件夹。</li>
+<li>同步<code>E:/文档素材/</code>→夸克网盘文档文件夹。</li>
+</ul>
+</li>
+<li>设置定时任务（通过Windows任务计划程序每天触发）。</li>
+</ul>
+</li>
+<li><p><strong>插件&#x2F;脚本</strong>：</p>
+<ul>
+<li>Chrome书签：</li>
+<li>密码管理：迁移到Bitwarden并启用WebDAV同步。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="🛠-自动化备份与脚本整合"><a href="#🛠-自动化备份与脚本整合" class="headerlink" title="🛠 自动化备份与脚本整合"></a>🛠 自动化备份与脚本整合</h3><h4 id="🔄-自动化备份流程"><a href="#🔄-自动化备份流程" class="headerlink" title="🔄 自动化备份流程"></a>🔄 自动化备份流程</h4><p>为了实现备份的“无人值守、自动执行”，以下是推荐的自动化流程与工具：</p>
+<h5 id="✅-使用-FreeFileSync-Windows-任务计划程序-实现本地同步"><a href="#✅-使用-FreeFileSync-Windows-任务计划程序-实现本地同步" class="headerlink" title="✅ 使用 FreeFileSync + Windows 任务计划程序 实现本地同步"></a>✅ 使用 FreeFileSync + Windows 任务计划程序 实现本地同步</h5><ol>
+<li><p>安装 FreeFileSync</p>
+</li>
+<li><p>新建“同步任务”（Batch Job），每个任务可指定如下内容：</p>
+<ul>
+<li>源文件夹 → 目标文件夹（如 <code>F:/Workspace/</code> → <code>夸克同步文件夹/Workspace/</code>）</li>
+<li>选择同步方式：<strong>镜像同步（Mirror）</strong> 或 <strong>更新同步（Update）</strong></li>
+<li>排除无关内容（如 <code>.git/</code>、临时文件夹、系统隐藏目录）</li>
+<li>勾选：同步后发送通知 &#x2F; 日志记录</li>
+<li>保存为 <code>.ffs_batch</code> 文件</li>
+</ul>
+</li>
+<li><p>打开 Windows“任务计划程序”：</p>
+<ul>
+<li><p>新建基本任务 → 设置触发时间（如“每天 9:00”）</p>
+</li>
+<li><p>动作选择“启动程序”，指向 FreeFileSync 的可执行文件，并附上参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FreeFileSync.exe &quot;C:\路径\to\sync_task.ffs_batch&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>重复以上步骤，可对多个同步项目（音乐、代码、文档）设定不同计划任务。</p>
+</li>
+<li><p>可勾选“开机自启 + 错过任务立即执行”选项，保障离线时也不会丢同步任务。</p>
+</li>
+</ol>
+<h5 id="✅-可选增强工具：Rclone-脚本"><a href="#✅-可选增强工具：Rclone-脚本" class="headerlink" title="✅ 可选增强工具：Rclone + 脚本"></a>✅ 可选增强工具：Rclone + 脚本</h5><ul>
+<li>对于不支持同步客户端的云平台（如坚果云 WebDAV），可使用 Rclone 工具进行自动同步：</li>
+</ul>
+<ol>
+<li><p>下载并配置 Rclone：<a target="_blank" rel="noopener" href="https://rclone.org/downloads/">https://rclone.org/downloads/</a></p>
+</li>
+<li><p>执行配置命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone config</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输入 <code>n</code> 新建配置 → 输入名称（如 <code>jianguo</code>）</li>
+<li>类型选择 <code>WebDAV</code></li>
+<li>填入坚果云信息：地址、用户名（邮箱）、密码（应用授权码）</li>
+</ul>
+</li>
+<li><p>编写自动同步脚本 <code>saltnote_sync.bat</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">rclone sync &quot;C:\Users\你的用户名\Documents\SaltNote&quot; jianguo:/saltnote/ --update --copy-links --log-file=sync.log</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将脚本添加至“任务计划程序”，设定定时执行。</p>
+</li>
+<li><p>亦可设置为“系统启动时执行”。</p>
+</li>
+</ol>
+<h5 id="✅-脚本增强建议"><a href="#✅-脚本增强建议" class="headerlink" title="✅ 脚本增强建议"></a>✅ 脚本增强建议</h5><ul>
+<li><p>增加错误提示与日志保存功能（<code>--log-file</code>）</p>
+</li>
+<li><p>可配合 Telegram Bot 或邮件推送异常信息（需额外脚本集成）</p>
+</li>
+<li><p>添加网络检查逻辑，避免断网时执行失败：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ping www.baidu.com -n 2</span><br><span class="line">if errorlevel 1 exit</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="✅-汇总：当前自动备份任务表（建议表格打印）"><a href="#✅-汇总：当前自动备份任务表（建议表格打印）" class="headerlink" title="✅ 汇总：当前自动备份任务表（建议表格打印）"></a>✅ 汇总：当前自动备份任务表（建议表格打印）</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>工具&#x2F;平台</th>
+<th>同步频率</th>
+<th>同步方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>音乐</td>
+<td>FreeFileSync + 夸克网盘</td>
+<td>每日</td>
+<td>本地 → 云端热备份</td>
+<td>夸克客户端需保持后台运行</td>
+</tr>
+<tr>
+<td>代码仓库</td>
+<td>GitHub</td>
+<td>实时</td>
+<td>Git push&#x2F;pull</td>
+<td>含版本控制</td>
+</tr>
+<tr>
+<td>代码文档</td>
+<td>FreeFileSync</td>
+<td>每日</td>
+<td>本地 → 夸克文件夹</td>
+<td>非Git部分直接同步</td>
+</tr>
+<tr>
+<td>椒盐笔记</td>
+<td>WebDAV (坚果云)</td>
+<td>实时</td>
+<td>App自动同步</td>
+<td>基于 WebDAV，免脚本</td>
+</tr>
+<tr>
+<td>文档资料</td>
+<td>FreeFileSync</td>
+<td>每日</td>
+<td>多路径同步</td>
+<td><code>E:/素材</code> → 夸克同步</td>
+</tr>
+<tr>
+<td>QQ&#x2F;微信备份</td>
+<td>手动导出 → 云盘</td>
+<td>每周</td>
+<td>Zip 压缩手动上传</td>
+<td>可用计划任务自动移动 + 上传</td>
+</tr>
+<tr>
+<td>虚拟机镜像</td>
+<td>手动拷贝</td>
+<td>每月</td>
+<td>拷贝整个目录</td>
+<td><code>.vmx</code> + <code>.vmdk</code> 需完整</td>
+</tr>
+</tbody></table>
+<h3 id="✅-后续可扩展方向"><a href="#✅-后续可扩展方向" class="headerlink" title="✅ 后续可扩展方向"></a>✅ 后续可扩展方向</h3><ol>
+<li>✅ 使用 Syncthing 实现跨设备局域网同步<ul>
+<li>将手机 &#x2F; 平板与 PC 形成自动同步</li>
+</ul>
+</li>
+<li>✅ 部署本地 NAS + 易有云<ul>
+<li>使用手机访问 NAS 内容 + 做本地冷备份</li>
+</ul>
+</li>
+<li>✅ 定期生成恢复文档&#x2F;索引清单<ul>
+<li>每月导出当前所有文件目录结构清单 <code>.tree</code></li>
+<li>生成存储路径快照，帮助恢复</li>
+</ul>
+</li>
+<li>✅ 加入异常提醒机制<ul>
+<li>如某路径三天无更新 → 通过 Telegram&#x2F;邮件提醒</li>
+<li>如某文件夹容量超过阈值 → 发出警报</li>
+</ul>
+</li>
+</ol>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2025/10/10/%E9%80%82%E8%80%81%E5%8C%96%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E6%8B%A8%E6%89%93%E8%A7%86%E9%A2%91%E5%92%8C%E5%88%B7%E6%8A%96%E9%9F%B3/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">适老化——自动拨打视频和刷抖音</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2025/08/04/test/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">test</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+    
+    
+    
+    
+      <img src="/images/profile_photo.jpg" class="soft-size--round soft-style--box" alt="shiranzby">
+    
+    
+      <h2>shiranzby</h2>
+    
+    
+      <p>释然</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>3</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        1
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        4
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+        <li class="categories-list-item">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+            学习笔记 (1)
+          </a>
+        </li>
+        
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/Hexo/" style="font-size: 10px;" class="tags-cloud-0">Hexo</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;" class="tags-cloud-0">博客</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;" class="tags-cloud-0">技术</a> <a href="/tags/%E6%8A%80%E6%9C%AF-%E9%9A%8F%E7%AC%94/" style="font-size: 10px;" class="tags-cloud-0">技术,随笔</a>
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    
+    
+    
+    <div class="social-icons">
+      
+        
+          <a href="https://github.com/shiranzby" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+            
+          </a>
+        
+      
+        
+          <a href="http://www.coolapk.com/u/18690800" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              
+              <span>cool</span>
+            
+          </a>
+        
+      
+    </div>
+    
+    <p>&copy; 2025 <a href="/" target="_blank">Shiranzby</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  
+
+
+
+
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>

@@ -1,17 +1,24 @@
 <!-- footer container -->
 <footer id="footer" class="footer">
   <div class="footer-container">
-    <% if (theme.social_icon.enable) { %>
+    <% // 优先使用 site.data.site_info.social，回退到 theme.social_icon.icons %>
+    <% var site_info = (site && site.data && site.data.site_info) ? site.data.site_info : {}; %>
+    <% var social = (site_info && site_info.social) ? site_info.social : (theme && theme.social_icon && theme.social_icon.icons ? theme.social_icon.icons : {}); %>
+    <% if (social && Object.keys(social).length) { %>
     <div class="social-icons">
-      <% for (var i in theme.social_icon.icons) { %>
-        <% if (theme.social_icon.icons[i]) { %>
-          <a href="<%= theme.social_icon.icons[i] %>" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
-            <%- partial("../_svg/social-"+ i +".svg") %>
+      <% for (var i in social) { %>
+        <% if (social[i]) { %>
+          <a href="<%= social[i] %>" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <% try { %>
+              <%- partial("../_svg/social-"+ i +".svg") %>
+            <% } catch (e) { %>
+              <span><%= i %></span>
+            <% } %>
           </a>
         <% } %>
       <% } %>
     </div>
-    <% } %> 
+    <% } %>
     <p>&copy; <%= date(new Date(), 'YYYY') %> <a href="/" target="_blank"><%= config.author %></a></p>
 
     <% if (theme.beian) { %>
