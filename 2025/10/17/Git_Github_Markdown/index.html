@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+    <meta name="description" content="欢迎来到我的博客！">
+  
+
+  
+    <meta name="keywords" content="学习,博客,Shiranzby">
+  
+
+  
+    <meta name="author" content="Shiranzby">
+  
+
+  
+
+  
+
+  <title>Git &amp; GitHub &amp; Markdown &amp;刷课 | Shiranzby</title>
+
+  
+
+  
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+  
+  
+    <div class="post-image" style="background-image: url('/images/banner.jpg')"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Shiranzby
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/">首页</a></li>
+        
+          <li class="navbar-list-item"><a href="/archives">归档</a></li>
+        
+          <li class="navbar-list-item"><a href="/links">友链</a></li>
+        
+          <li class="navbar-list-item"><a href="/about">关于</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">Git &amp; GitHub &amp; Markdown &amp;刷课</h1>
+          <h2 class="title-sub-wrap">
+            <strong>Shiranzby</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2025-10-17T03:17:00.000Z" itemprop="datePublished">2025-10-17</time>
+          </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+    <li><a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">📒 学习笔记</a></li>
+    
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/%E6%8A%80%E6%9C%AF/">🏷️ 技术</a></li>
+  
+    <li><a href="/tags/%E6%95%99%E7%A8%8B/">🏷️ 教程</a></li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h1 id="Git-GitHub-Markdown-刷课"><a href="#Git-GitHub-Markdown-刷课" class="headerlink" title="Git &amp; GitHub &amp; Markdown &amp;刷课"></a>Git &amp; GitHub &amp; Markdown &amp;刷课</h1><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a><strong>环境准备</strong></h2><h3 id="Chrome-浏览器下载"><a href="#Chrome-浏览器下载" class="headerlink" title="Chrome 浏览器下载"></a>Chrome 浏览器下载</h3><p><strong>推荐使用国内 Cent Browser：</strong></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.centbrowser.cn/">官方下载地址(官网)</a></p>
+</li>
+<li><p>继承谷歌内核稳定流畅的优点同时，与 Chrome 基本操作界面别无二致, 并加入其他常用功能</p>
+</li>
+</ul>
+<p><strong>推荐使用谷歌 Chrome 浏览器：</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.google.com/chrome/">官方下载地址（需科学上网）</a></li>
+<li>或搜索“Chrome 浏览器下载国内镜像”获取国内最新可用链接。</li>
+</ul>
+<h3 id="VPN-与机场"><a href="#VPN-与机场" class="headerlink" title="VPN 与机场"></a>VPN 与机场</h3><h4 id="VPN-是什么？机场是什么？"><a href="#VPN-是什么？机场是什么？" class="headerlink" title="VPN 是什么？机场是什么？"></a>VPN 是什么？机场是什么？</h4><ul>
+<li><strong>VPN</strong>：虚拟专用网络，最初是企业、学校等用于远程安全访问内部资源。后来大家习惯把“翻墙”工具称为 VPN，但实际上 VPN 协议并不专属于翻墙，比如 WireGuard、OpenVPN 等真正网络层的 VPN 协议。</li>
+<li><strong>机场</strong>：是专门提供“科学上网”服务的平台。机场主租用大量 VPS（国外服务器），搭建 SS、SSR、Vmess、Trojan 等代理协议节点，用户买流量后通过代理软件（如 Clash、小火箭等）连接机场获得自由访问外网的能力。</li>
+<li><strong>区别与关系</strong>：VPN 是网络层代理，机场多用应用层&#x2F;会话层代理。大多数商业 VPN 广告多且贵，体验和性价比远不如机场。</li>
+</ul>
+<h4 id="为什么叫“机场”？"><a href="#为什么叫“机场”？" class="headerlink" title="为什么叫“机场”？"></a>为什么叫“机场”？</h4><p>因为最早的代理工具 Shadowsocks 图标是一架小飞机，大家就把这种代理服务叫做“机场”。</p>
+<p>机场并不是一个单一的服务器或网站，而是由许多分布在国内外的节点组成，具备分布式、多协议、动态更新和多种抗干扰技术，能灵活应对各种封锁与干扰。即使部分节点被墙，用户只需刷新订阅或等待机场主修复即可继续使用。</p>
+<p>下面分几条简要解释：</p>
+<ol>
+<li><strong>多节点分散部署</strong><br>机场通常在国内外部署了很多服务器（节点），即使部分节点被墙封锁，其他节点仍可正常工作，不会导致整个机场服务瘫痪。</li>
+<li><strong>协议混淆与加密</strong><br>机场使用的代理协议（如 SS、Trojan、Vmess 等）都具备流量加密和混淆能力，能有效隐藏翻墙行为，使防火墙难以精准识别和封锁。</li>
+<li><strong>动态更换节点和订阅</strong><br>机场可以随时更换服务器 IP、端口、协议等参数，用户通过订阅链接自动获取最新节点信息，及时绕开已被封锁的节点。</li>
+<li><strong>中转与专线技术</strong><br>很多机场采用“国内中转”、“隧道”、“专线”等技术，使流量出境路线更加隐蔽和多样化，提高抗封锁能力。</li>
+<li><strong>高防与灾备机制</strong><br>优质机场会购买高防护服务器、备用线路、CDN 加速等服务，即使遭遇攻击或封锁，也能迅速切换恢复服务。</li>
+</ol>
+<h4 id="协议科普"><a href="#协议科普" class="headerlink" title="协议科普"></a>协议科普</h4><ul>
+<li><strong>SS&#x2F;SSR</strong>：Shadowsocks 及其分支 SSR，轻量级加密代理，速度快，兼容性好。</li>
+<li><strong>Vmess&#x2F;VLESS</strong>：V2Ray 框架的协议，功能丰富，支持多种混淆和传输方式。</li>
+<li><strong>Trojan</strong>：基于 HTTPS，伪装成正常网页流量，抗封锁能力强。</li>
+<li><strong>Hy2&#x2F;Reality&#x2F;Tuic</strong>：新一代协议，多用于自建直连，机场较少支持，安全性更高。</li>
+<li><strong>传统 VPN 协议</strong>：如 PPTP、L2TP&#x2F;IPSec、OpenVPN、WireGuard 等，主要用于网络层代理，穿透性和安全性各有不同。</li>
+</ul>
+<h4 id="机场线路名词解释"><a href="#机场线路名词解释" class="headerlink" title="机场线路名词解释"></a>机场线路名词解释</h4><ul>
+<li><strong>规则</strong>：只有国外网站走代理，节省流量</li>
+<li><strong>全局</strong>：所有流量都走代理</li>
+<li><strong>直连</strong>：用户设备直接连境外代理服务器，速度受限、极易被墙。</li>
+<li><strong>中转</strong>：流量先到国内中转服务器，再转发到境外代理服务器。可以优化速度和稳定性，降低被墙风险。</li>
+<li><strong>隧道</strong>：国内服务器入口+境外服务器（如香港 CMI），流量经过 TLS 加密再转发，更安全。</li>
+<li><strong>专线（IEPL&#x2F;IPLC）</strong>：点对点物理线路，低延迟，不经过公网，最稳定但成本高，机场多用 IEPL。</li>
+<li><strong>BGP</strong>：边界网关协议，优化多运营商之间的互联访问速度和稳定性。</li>
+<li><strong>前置</strong>：中转入口前再加一台国内机器，抗通报&#x2F;墙封。</li>
+<li><strong>转发</strong>：多个机场共享中转资源，速度和稳定性差，常见于小机场。</li>
+<li><strong>流量倍率</strong>：部分机场设置倍率，如 2 倍率表示实际消耗 2 倍流量。</li>
+<li><strong>系统代理</strong>：大多数应用（如浏览器）自动走代理，部分软件需手动设置</li>
+<li><strong>TUN 模式&#x2F;虚拟网卡</strong>：创建虚拟网卡，实现真正全局代理，解决部分应用不走代理的问题</li>
+<li><strong>自动选择&#x2F;故障转移：</strong> 自动选择延迟最低节点，但可能频繁切换 IP，容易被某些网站风控</li>
+</ul>
+<h4 id="线路体验优先级"><a href="#线路体验优先级" class="headerlink" title="线路体验优先级"></a>线路体验优先级</h4><p>同样带宽下，体验优先级：  </p>
+<p><strong>IEPL 专线中转 &gt; 隧道中转 &gt; 公网中转（如广东移动&#x2F;湖南联通） &gt; 直连</strong></p>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_1.png" alt="image-20251016175400498"></p>
+<h5 id="1-直连机场"><a href="#1-直连机场" class="headerlink" title="1. 直连机场"></a>1. 直连机场</h5><ul>
+<li><strong>流程</strong>：用户设备 → 宽带运营商 → 境内防火墙&#x2F;QoS 限速 → 直接连接境外 VPS&#x2F;服务器 → 国际互联网</li>
+<li><strong>特点</strong>：没有经过国内中转节点，直接出海。速度受限、易被墙，体验和稳定性都较差，适合流量小、只偶尔使用者。</li>
+</ul>
+<h5 id="2-普通中转机场"><a href="#2-普通中转机场" class="headerlink" title="2. 普通中转机场"></a>2. 普通中转机场</h5><ul>
+<li><strong>流程</strong>：用户设备 → 宽带运营商 → 境内中转 VPS → 境内防火墙&#x2F;QoS 限速 → 境外 VPS → 国际互联网</li>
+<li><strong>特点</strong>：增加了一个国内中转节点，优化了出海速度和稳定性。成本较低，但中转节点易受干扰，遇到高峰期或被墙会影响体验。</li>
+</ul>
+<h5 id="3-BGP-中转机场"><a href="#3-BGP-中转机场" class="headerlink" title="3. BGP 中转机场"></a>3. BGP 中转机场</h5><ul>
+<li><strong>流程</strong>：用户设备 → 宽带运营商 → BGP 中转服务器（多线接入、跨运营商优化） → 境内防火墙&#x2F;QoS 限速 → 境外 VPS → 国际互联网</li>
+<li><strong>特点</strong>：BGP 中转节点支持多运营商线路，自动选择最优路径，提升了全国范围的访问速度和稳定性。更适合多地区用户，成本比普通中转高。</li>
+</ul>
+<h5 id="4-IPLC-中转机场"><a href="#4-IPLC-中转机场" class="headerlink" title="4. IPLC 中转机场"></a>4. IPLC 中转机场</h5><ul>
+<li><strong>流程</strong>：用户设备 → 宽带运营商 → 境内中转 VPS → IPLC 专线传输 → 境外 VPS → 国际互联网</li>
+<li><strong>特点</strong>：IPLC（国际专线）是物理专用通道，数据从境内直接通过专线传到境外，几乎不经过防火墙和公网，速度、稳定性和安全性最高，但价格也最贵。适合对速度和稳定性要求极高的用户或企业。</li>
+</ul>
+<hr>
+<h4 id="推荐客户端工具"><a href="#推荐客户端工具" class="headerlink" title="推荐客户端工具"></a>推荐客户端工具</h4><ul>
+<li><strong>Windows&#x2F;Mac&#x2F;Android</strong>：首选 Clash 系列（Clash for Windows、Clash Verge、Clash Meta、Flclash、Clash Party、Sparkle 等）</li>
+<li><strong>iOS</strong>：首选小火箭（Shadowrocket，付费）。</li>
+</ul>
+<h4 id="客户端使用流程简述"><a href="#客户端使用流程简述" class="headerlink" title="客户端使用流程简述"></a>客户端使用流程简述</h4><ol>
+<li>下载并安装客户端软件</li>
+<li>在机场后台获取订阅链接（通常一键复制）</li>
+<li>导入到客户端</li>
+<li>打开系统代理或虚拟网卡（TUN 模式），实现全局或分流科学上网</li>
+<li>常见问题：分流规则设置、系统代理&#x2F;TUN 模式选择、节点测速与切换</li>
+</ol>
+<hr>
+<h4 id="机场购买与使用流程"><a href="#机场购买与使用流程" class="headerlink" title="机场购买与使用流程"></a>机场购买与使用流程</h4><h4 id="如何购买机场"><a href="#如何购买机场" class="headerlink" title="如何购买机场"></a>如何购买机场</h4><ul>
+<li>注册账号（推荐 Gmail&#x2F;Outlook 邮箱，不建议 QQ 邮箱，避免实名风险）</li>
+<li>选择套餐，付款（部分机场支持试用套餐）</li>
+<li>获取订阅链接，导入代理软件</li>
+<li>按照机场提供的小白教程操作，几乎所有机场都有详细的使用说明</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_2.webp" alt="三色图"></p>
+<h4 id="小白教程"><a href="#小白教程" class="headerlink" title="小白教程"></a>小白教程</h4><p>最小白的教程，适合第一次买机场的，</p>
+<p>先注册，注意的点是验证码邮件可能会在邮箱垃圾箱里面。<br>如果有试用先试用，没试用就去购买套餐。</p>
+<p>1）我们以随便某个 v2board 机场为例子，因为现在很多机场都是用的 v2board 页面。<br><strong>第一步：购买套餐：点击购买订阅–选择你想要的套餐–付款</strong><br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/v1.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/v1.webp" alt="购买订阅"></a><br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/v2.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/v2.webp" alt="选择套餐"></a></p>
+<p><strong>第二步：下载代理软件</strong>，这里以 Clash for windows 为例子</p>
+<p><strong>第三步：导入订阅：回到仪表盘–点击一键订阅–导入到你的 Clash 客户端中</strong><br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/v3.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/v3.webp" alt="仪表盘"></a><br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/v4.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/v4.webp" alt="导入订阅"></a><br>导入订阅后<br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/v5.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/v5.webp" alt="导入订阅后"></a></p>
+<p>后面看 clash 教程</p>
+<p>2）另一个常见面板的：sspanel 前端面板的也是类似的。购买套餐-导入订阅</p>
+<p><strong>购买订阅</strong><br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/s1.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/s1.webp" alt="购买订阅"></a><br><strong>回到首页导入订阅</strong><br><a target="_blank" rel="noopener" href="https://jichangtuijian.com/uploads/jichangjiaochen/s2.webp"><img src="https://jichangtuijian.com/uploads/jichangjiaochen/s2.webp" alt="导入订阅"></a></p>
+<p>具体详细操场教程可以参考各个机场的使用教程，每个机场基本都有小白教程的。</p>
+<h4 id="节点和订阅相关问题"><a href="#节点和订阅相关问题" class="headerlink" title="节点和订阅相关问题"></a>节点和订阅相关问题</h4><ul>
+<li>节点不能用时，先检查流量套餐是否到期或用尽，再刷新订阅或重新复制订阅链接</li>
+<li>校园网或公司网可能封端口或 DNS 异常，影响机场使用</li>
+<li>机场官网和订阅地址常变，因 GFW 污染 DNS，老牌机场处理经验更丰富</li>
+</ul>
+<hr>
+<h4 id="线路技术与常见问题详解"><a href="#线路技术与常见问题详解" class="headerlink" title="线路技术与常见问题详解"></a>线路技术与常见问题详解</h4><h5 id="机场官网慢-打不开？"><a href="#机场官网慢-打不开？" class="headerlink" title="机场官网慢&#x2F;打不开？"></a>机场官网慢&#x2F;打不开？</h5><ul>
+<li>多数机场官网套了 Cloudflare CDN，隐藏真实 IP，防止被墙，访问速度慢需要科学上网</li>
+</ul>
+<h5 id="为什么有些机场便宜？"><a href="#为什么有些机场便宜？" class="headerlink" title="为什么有些机场便宜？"></a>为什么有些机场便宜？</h5><ul>
+<li>便宜线路（如月抛）、多人共享、直连节点、不买中转、割韭菜跑路风险高</li>
+</ul>
+<h5 id="为什么流量消耗快？"><a href="#为什么流量消耗快？" class="headerlink" title="为什么流量消耗快？"></a>为什么流量消耗快？</h5><ul>
+<li>流量倍率设置、自动选择高倍率节点、系统更新等走代理流量</li>
+</ul>
+<h5 id="为什么机场界面都很像？"><a href="#为什么机场界面都很像？" class="headerlink" title="为什么机场界面都很像？"></a>为什么机场界面都很像？</h5><ul>
+<li>大多数机场用开源面板（V2board、SSpanel），前端界面相似是正常现象</li>
+</ul>
+<h5 id="为什么延迟测试异常？"><a href="#为什么延迟测试异常？" class="headerlink" title="为什么延迟测试异常？"></a>为什么延迟测试异常？</h5><ul>
+<li>部分机场劫持延迟测试，仅到中转入口（非真实国际延迟），可更换延迟测试 URL 验证</li>
+</ul>
+<h5 id="机场能否打游戏？"><a href="#机场能否打游戏？" class="headerlink" title="机场能否打游戏？"></a>机场能否打游戏？</h5><ul>
+<li>不推荐机场打游戏，延迟高、UDP 支持差，建议用专业游戏加速器（如 UU 加速器）。部分机场有专线游戏节点，但不保证稳定</li>
+</ul>
+<hr>
+<h4 id="机场安全性与合规问题"><a href="#机场安全性与合规问题" class="headerlink" title="机场安全性与合规问题"></a>机场安全性与合规问题</h4><h4 id="翻墙是安全吗？"><a href="#翻墙是安全吗？" class="headerlink" title="翻墙是安全吗？"></a>翻墙是安全吗？</h4><ul>
+<li>你猜</li>
+<li>低调，不要键政，不要绑定实名信息</li>
+<li>机场主肉身墙外更安全，选老牌大机场，月付为佳</li>
+<li>被抓多因机场主肉身墙内、高调、实名收款、境内推广</li>
+</ul>
+<h4 id="机场跑路怎么办？"><a href="#机场跑路怎么办？" class="headerlink" title="机场跑路怎么办？"></a>机场跑路怎么办？</h4><ul>
+<li>灰色产业，跑路风险高，优先选择老牌、肉身墙外的机场主，推荐月付。跑路后只能更换机场</li>
+</ul>
+<h4 id="白嫖机场安全吗？"><a href="#白嫖机场安全吗？" class="headerlink" title="白嫖机场安全吗？"></a>白嫖机场安全吗？</h4><ul>
+<li>免费机场体验差或安全风险高，仅试用阶段可考虑，长期建议付费正规机场</li>
+</ul>
+<hr>
+<h2 id="Git-与-GitHub"><a href="#Git-与-GitHub" class="headerlink" title="Git 与 GitHub"></a>Git 与 GitHub</h2><ul>
+<li><strong>Git</strong>：核心工具，记录代码修改历史，创建分支，合并分支等。</li>
+<li><strong>GitHub&#x2F;Gitee</strong>：代码托管平台，方便协作、展示作品、参与开源项目。、</li>
+</ul>
+<ol>
+<li>Git 版本控制基础<ul>
+<li>安装与配置（Windows&#x2F;Mac&#x2F;Linux）</li>
+<li>常用命令演示</li>
+</ul>
+</li>
+<li>GitHub 账号注册与界面介绍<ul>
+<li>教育邮箱注册技巧</li>
+<li>仓库、Issue、PR 等基本功能</li>
+</ul>
+</li>
+<li>GitHub 教育认证与 Copilot 白嫖流程<ul>
+<li>Copilot 是什么</li>
+<li>认证与激活详细步骤</li>
+</ul>
+</li>
+<li>基础实战：远程仓库协作、Fork、PR 操作演示</li>
+</ol>
+<h3 id="Git-是什么"><a href="#Git-是什么" class="headerlink" title="Git 是什么"></a>Git 是什么</h3><p><strong>Git 就像一本“时光机日记本”📖</strong>  </p>
+<p>每段代码的改动，Git 都会帮你记录下来，随时可以“穿越回过去”查找任何时间点的代码状态。</p>
+<ul>
+<li><strong>主要特点：</strong><ol>
+<li><strong>版本控制</strong>：每次提交都像写新日记，保存开发成果。</li>
+<li><strong>分支管理</strong>：分支如同章节，可以并行开发互不干扰。</li>
+<li><strong>分布式</strong>：每个人都有完整的“时光机日记本”，即使没有网络也能工作。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="Git-与-GitHub-SSH-Key-配置与使用"><a href="#Git-与-GitHub-SSH-Key-配置与使用" class="headerlink" title="Git 与 GitHub SSH Key 配置与使用"></a>Git 与 GitHub SSH Key 配置与使用</h3><h4 id="1-配置个人信息"><a href="#1-配置个人信息" class="headerlink" title="1. 配置个人信息"></a>1. 配置个人信息</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的名字&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;你的邮箱&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置后每次提交都会自动带上你的署名。</li>
+</ul>
+<h4 id="2-生成-SSH-密钥"><a href="#2-生成-SSH-密钥" class="headerlink" title="2. 生成 SSH 密钥"></a>2. 生成 SSH 密钥</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">&quot;你的邮箱@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>-t rsa ：使 ⽤ RSA 算法 ⽣ 成密钥。</li>
+<li>一路回车即可，密钥默认保存在 <code>~/.ssh/</code> 目录。</li>
+</ul>
+<h4 id="3-查看并复制公钥内容"><a href="#3-查看并复制公钥内容" class="headerlink" title="3. 查看并复制公钥内容"></a>3. 查看并复制公钥内容</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制输出的内容（全部内容）。</li>
+</ul>
+<h4 id="4-添加公钥到远程仓库"><a href="#4-添加公钥到远程仓库" class="headerlink" title="4. 添加公钥到远程仓库"></a>4. 添加公钥到远程仓库</h4><ul>
+<li><strong>GitHub</strong>：Settings &gt; SSH and GPG keys &gt; New SSH key，粘贴公钥并保存。</li>
+<li><strong>Gitee</strong>：设置 &gt; 安全设置 &gt; SSH 密钥，粘贴公钥并保存。</li>
+</ul>
+<h4 id="5-测试连接"><a href="#5-测试连接" class="headerlink" title="5. 测试连接"></a>5. 测试连接</h4><ul>
+<li><p>GitHub：<code>ssh -T git@github.com</code></p>
+</li>
+<li><p>Gitee：<code>ssh -T git@gitee.com</code></p>
+</li>
+<li><p>第一次会提示“Are you sure you want to continue connecting”，输入 yes</p>
+</li>
+<li><p>若看到 <code>Hi 用户名! You&#39;ve successfully authenticated...</code> 表示成功！</p>
+</li>
+</ul>
+<h4 id="6-多平台-多账户密钥配置（进阶）"><a href="#6-多平台-多账户密钥配置（进阶）" class="headerlink" title="6. 多平台&#x2F;多账户密钥配置（进阶）"></a>6. 多平台&#x2F;多账户密钥配置（进阶）</h4><ul>
+<li>多台电脑、多个平台可分别生成密钥并添加到账户。</li>
+<li>如需配置多个密钥，在 <code>~/.ssh/config</code> 文件中添加：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line">Host gitee.com</span><br><span class="line">  HostName gitee.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_gitee</span><br></pre></td></tr></table></figure>
+
+<h3 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h3><h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化仓库（只需一次）</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆远程仓库到本地</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前状态</span></span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看历史提交记录</span></span><br><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加所有更改到暂存区</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加指定文件到暂存区</span></span><br><span class="line">git add 文件名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从暂存区移除文件</span></span><br><span class="line">git reset 文件名</span><br></pre></td></tr></table></figure>
+
+<h4 id="提交-保存更改"><a href="#提交-保存更改" class="headerlink" title="提交&#x2F;保存更改"></a>提交&#x2F;保存更改</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提交到本地仓库</span></span><br><span class="line">git commit -m <span class="string">&quot;提交说明&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="与远程仓库交互"><a href="#与远程仓库交互" class="headerlink" title="与远程仓库交互"></a>与远程仓库交互</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关联远程仓库（只需一次）</span></span><br><span class="line">git remote add origin &lt;仓库地址&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送到远程仓库</span></span><br><span class="line">git push</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送到远程指定分支（第一次推送用）</span></span><br><span class="line">git push -u origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从远程仓库拉取最新内容</span></span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<h4 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有分支</span></span><br><span class="line">git branch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新分支</span></span><br><span class="line">git branch 新分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换分支</span></span><br><span class="line">git checkout 分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并切换到新分支</span></span><br><span class="line">git checkout -b 新分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除本地分支</span></span><br><span class="line">git branch -d 分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程分支</span></span><br><span class="line">git branch -r</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取远程分支并创建本地分支</span></span><br><span class="line">git checkout -b 本地分支名 origin/远程分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除远程分支</span></span><br><span class="line">git push origin --delete 分支名</span><br></pre></td></tr></table></figure>
+
+<h4 id="撤销与恢复"><a href="#撤销与恢复" class="headerlink" title="撤销与恢复"></a>撤销与恢复</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 撤销工作区的修改（让文件恢复到上一次commit的状态）</span></span><br><span class="line">git checkout -- 文件名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 撤销暂存区的修改（把已add的文件撤回到工作区）</span></span><br><span class="line">git reset HEAD 文件名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 撤销最近一次commit但保留修改（回退到上一次commit，修改内容还在）</span></span><br><span class="line">git reset --soft HEAD^</span><br><span class="line"></span><br><span class="line"><span class="comment"># 丢弃最近一次commit和修改（慎用，修改会丢失）</span></span><br><span class="line">git reset --hard HEAD^</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复被删除的文件（找回误删的文件）</span></span><br><span class="line">git checkout HEAD -- 文件名</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看与对比"><a href="#查看与对比" class="headerlink" title="查看与对比"></a>查看与对比</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看本地和远程分支对应关系</span></span><br><span class="line">git branch -vv</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看远程地址</span></span><br><span class="line">git remote -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某个文件的修改内容</span></span><br><span class="line">git diff 文件名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看暂存区和上一次commit的区别</span></span><br><span class="line">git diff --cached</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某个文件的历史修改记录</span></span><br><span class="line">git <span class="built_in">log</span> 文件名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对比本地分支与远程分支的差异</span></span><br><span class="line">git diff main origin/main</span><br></pre></td></tr></table></figure>
+
+<h4 id="标签（Tag）"><a href="#标签（Tag）" class="headerlink" title="标签（Tag）"></a>标签（Tag）</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打标签</span></span><br><span class="line">git tag v1.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 推送标签到远程</span></span><br><span class="line">git push origin v1.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有标签</span></span><br><span class="line">git tag</span><br></pre></td></tr></table></figure>
+
+<h4 id="合并与冲突"><a href="#合并与冲突" class="headerlink" title="合并与冲突"></a>合并与冲突</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 合并分支</span></span><br><span class="line">git merge 另一个分支名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解决冲突后，添加并提交</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;fix conflict&quot;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p><strong>提示：</strong></p>
+<ul>
+<li>不会的命令可以用 <code>git help 命令名</code> 查看帮助。</li>
+<li>日常开发建议多用 <code>git status</code> 和 <code>git log</code> 观察当前状态。</li>
+<li>日常开发推荐分支模型，每个功能新建分支，开发完成合并主线</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="Git-常用命令速查表"><a href="#Git-常用命令速查表" class="headerlink" title="Git 常用命令速查表"></a>Git 常用命令速查表</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置用户名和邮箱</td>
+<td><code>git config --global user.name &quot;你的名字&quot;</code> <br> <code>git config --global user.email &quot;你的邮箱&quot;</code></td>
+<td>设置“署名”，每次提交都标记贡献者</td>
+</tr>
+<tr>
+<td>初始化仓库</td>
+<td><code>git init</code></td>
+<td>新建“时光机日记本”，准备记录代码版本</td>
+</tr>
+<tr>
+<td>添加文件到暂存区</td>
+<td><code>git add 文件名</code> 或 <code>git add .</code></td>
+<td>把修改内容放到“草稿区”</td>
+</tr>
+<tr>
+<td>提交到本地仓库</td>
+<td><code>git commit -m &quot;提交说明&quot;</code></td>
+<td>草稿正式进入日记本，并附说明</td>
+</tr>
+<tr>
+<td>推送到远程仓库</td>
+<td><code>git push origin 分支名</code></td>
+<td>把本地代码同步到远程仓库</td>
+</tr>
+<tr>
+<td>克隆远程仓库</td>
+<td><code>git clone 仓库地址</code></td>
+<td>下载别人的代码到本地</td>
+</tr>
+<tr>
+<td>查看状态</td>
+<td><code>git status</code></td>
+<td>检查当前代码变化情况</td>
+</tr>
+<tr>
+<td>查看提交历史</td>
+<td><code>git log</code></td>
+<td>查看代码记录，回顾“时间线”</td>
+</tr>
+<tr>
+<td>创建分支</td>
+<td><code>git branch 分支名</code></td>
+<td>新功能独立章节</td>
+</tr>
+<tr>
+<td>切换分支</td>
+<td><code>git checkout 分支名</code></td>
+<td>从一个章节切换到另一个章节</td>
+</tr>
+<tr>
+<td>合并分支</td>
+<td><code>git merge 分支名</code></td>
+<td>不同章节内容合并到主线</td>
+</tr>
+<tr>
+<td>拉取远程代码</td>
+<td><code>git pull origin 分支名</code></td>
+<td>从远程仓库获取最新代码</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="GitHub-入门详解"><a href="#GitHub-入门详解" class="headerlink" title="GitHub 入门详解"></a>GitHub 入门详解</h3><h4 id="1-GitHub-是什么？"><a href="#1-GitHub-是什么？" class="headerlink" title="1. GitHub 是什么？"></a>1. GitHub 是什么？</h4><ul>
+<li><strong>GitHub</strong> 是全球最大的开源代码托管平台，基于 Git 版本控制，方便开发者协作、分享和展示项目。</li>
+<li>在 GitHub 上，你可以：<ul>
+<li>托管自己的项目代码，并进行版本管理</li>
+<li>查找和参与全球开源项目</li>
+<li>与他人协作开发（团队项目、开源贡献）</li>
+<li>展示个人作品，提升技术影响力</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-GitHub-账号注册与界面介绍"><a href="#2-GitHub-账号注册与界面介绍" class="headerlink" title="2. GitHub 账号注册与界面介绍"></a>2. GitHub 账号注册与界面介绍</h4><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/">GitHub 注册入口</a></p>
+</li>
+<li><p>不建议直接使用教育邮箱注册</p>
+<blockquote>
+<p>我们学校的教育邮箱是   学号@stu.nchu.edu.cn</p>
+<p>教育认证可额外绑定教育邮箱，可获取学生认证福利（如 Copilot 免费使用）</p>
+</blockquote>
+</li>
+<li><p>注册流程：填写邮箱、用户名、密码 → 邮箱验证 → 完善个人资料</p>
+</li>
+</ul>
+<h5 id="GitHub-主要界面说明"><a href="#GitHub-主要界面说明" class="headerlink" title="GitHub 主要界面说明"></a>GitHub 主要界面说明</h5><ul>
+<li><strong>Repositories（仓库）</strong>：项目代码的存放地，每个仓库包含代码、文档、历史记录等</li>
+<li><strong>Issues</strong>：用于提交问题、建议、任务分解，方便项目管理和交流</li>
+<li><strong>Pull Requests（PR）</strong>：代码协作的核心，提交代码修改请求，项目维护者审核后合并</li>
+<li><strong>Fork</strong>：复制别人的项目到你的账户，方便独立开发或贡献代码</li>
+<li><strong>Star</strong>：收藏项目，方便日后查找</li>
+<li><strong>Actions</strong>：自动化 CI&#x2F;CD 工具，帮助自动测试和部署</li>
+</ul>
+<h4 id="3-GitHub-教育认证与-Copilot-白嫖流程"><a href="#3-GitHub-教育认证与-Copilot-白嫖流程" class="headerlink" title="3. GitHub 教育认证与 Copilot 白嫖流程"></a>3. GitHub 教育认证与 Copilot 白嫖流程</h4><ul>
+<li><strong>GitHub Copilot</strong>：AI 智能编程助手，自动补全代码、生成函数&#x2F;注释，提升开发效率</li>
+<li><strong>教育认证步骤</strong>：<ol>
+<li>注册并登录 GitHub 账号</li>
+<li>访问 <a target="_blank" rel="noopener" href="https://education.github.com/">GitHub Education</a> 页面，点击“Get benefits”或“Apply for Student Developer Pack”</li>
+<li>根据提示填写教育邮箱、学生身份等信息，提交认证</li>
+<li>通过后可免费开通 Copilot（<a target="_blank" rel="noopener" href="https://github.com/settings/copilot">Copilot 激活入口</a>）</li>
+</ol>
+</li>
+</ul>
+<h4 id="4-GitHub-基础实战流程"><a href="#4-GitHub-基础实战流程" class="headerlink" title="4. GitHub 基础实战流程"></a>4. GitHub 基础实战流程</h4><ul>
+<li><p><strong>远程仓库协作流程</strong>：</p>
+<ol>
+<li>Fork 项目到个人账户</li>
+<li>Clone 仓库到本地</li>
+<li>新建分支，进行开发</li>
+<li>提交并推送修改到远程分支</li>
+<li>发起 Pull Request，等待项目维护者审核合并</li>
+<li>参与 Issues 讨论，跟进项目进展</li>
+</ol>
+</li>
+<li><p><strong>常见协作场景</strong>：</p>
+<ul>
+<li>团队开发：多人协作同一项目，分工明确，分支合并</li>
+<li>开源贡献：发现项目问题或有新功能建议，可提交 PR 或 Issue</li>
+<li>个人作品：将自己的代码托管公开，展示技术实力</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-GitHub-常用术语补充"><a href="#5-GitHub-常用术语补充" class="headerlink" title="5. GitHub 常用术语补充"></a>5. GitHub 常用术语补充</h4><ul>
+<li><strong>Commit</strong>：每一次代码提交</li>
+<li><strong>Branch</strong>：分支，独立开发环境</li>
+<li><strong>Merge</strong>：合并分支</li>
+<li><strong>Release</strong>：项目发布版本</li>
+<li><strong>Webhook</strong>：自动通知外部服务</li>
+</ul>
+<hr>
+<h3 id="Gitee-入门详解"><a href="#Gitee-入门详解" class="headerlink" title="Gitee 入门详解"></a>Gitee 入门详解</h3><h4 id="1-Gitee-是什么？"><a href="#1-Gitee-是什么？" class="headerlink" title="1. Gitee 是什么？"></a>1. Gitee 是什么？</h4><ul>
+<li><strong>Gitee（码云）</strong>：中国主流的代码托管平台，支持 Git 管理，适合国内团队、企业使用。</li>
+<li>优势：<ul>
+<li>国内访问速度快，无需科学上网</li>
+<li>支持私有仓库免费（适合团队或企业项目）</li>
+<li>与中国开发者生态结合紧密（对接企事业单位、开源中国等）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-Gitee-账号注册与界面介绍"><a href="#2-Gitee-账号注册与界面介绍" class="headerlink" title="2. Gitee 账号注册与界面介绍"></a>2. Gitee 账号注册与界面介绍</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://gitee.com/">Gitee 注册入口</a></li>
+<li>支持手机号、邮箱注册</li>
+<li>注册流程：填写信息 → 验证 → 完善个人资料</li>
+</ul>
+<h5 id="Gitee-主要界面说明"><a href="#Gitee-主要界面说明" class="headerlink" title="Gitee 主要界面说明"></a>Gitee 主要界面说明</h5><ul>
+<li><strong>项目（Project）</strong>：代码仓库</li>
+<li><strong>问题（Issue）</strong>：项目问题追踪与任务管理</li>
+<li><strong>合并请求（Pull Request）</strong>：代码协作</li>
+<li><strong>收藏、Fork、Watch</strong>：功能与 GitHub 类似</li>
+<li><strong>Gitee Pages</strong>：静态网站托管（个人博客&#x2F;项目文档）</li>
+</ul>
+<h4 id="3-Gitee-SSH-Key-配置与项目协作"><a href="#3-Gitee-SSH-Key-配置与项目协作" class="headerlink" title="3. Gitee SSH Key 配置与项目协作"></a>3. Gitee SSH Key 配置与项目协作</h4><ul>
+<li>SSH Key 配置流程与 GitHub 类似（见上方）</li>
+<li>项目协作流程：<ol>
+<li>创建或 Fork 仓库</li>
+<li>Clone 到本地</li>
+<li>新建分支开发，提交并推送</li>
+<li>发起合并请求</li>
+<li>参与 Issue 讨论</li>
+</ol>
+</li>
+</ul>
+<h4 id="4-Gitee-特色功能"><a href="#4-Gitee-特色功能" class="headerlink" title="4. Gitee 特色功能"></a>4. Gitee 特色功能</h4><ul>
+<li>支持企业版和团队协作</li>
+<li>支持中国主流第三方登录（微信、支付宝等）</li>
+<li>支持私有仓库免费，适合企业内部项目管理</li>
+</ul>
+<hr>
+<h3 id="第五部分：GitHub-和-Gitee-的核心功能对比"><a href="#第五部分：GitHub-和-Gitee-的核心功能对比" class="headerlink" title="第五部分：GitHub 和 Gitee 的核心功能对比"></a>第五部分：GitHub 和 Gitee 的核心功能对比</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>GitHub</th>
+<th>Gitee</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fork</td>
+<td>复制项目到个人账户</td>
+<td>同样支持复制项目</td>
+</tr>
+<tr>
+<td>Star</td>
+<td>收藏项目</td>
+<td>同样支持收藏项目</td>
+</tr>
+<tr>
+<td>Watch</td>
+<td>订阅项目动态</td>
+<td>支持订阅</td>
+</tr>
+<tr>
+<td>Issues</td>
+<td>提交问题或建议</td>
+<td>问题追踪支持更本地化</td>
+</tr>
+<tr>
+<td>Pull Request</td>
+<td>提交代码修改和合并</td>
+<td>类似功能</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td>自动化 CI&#x2F;CD 工作流</td>
+<td>不支持 Actions</td>
+</tr>
+<tr>
+<td>Pages</td>
+<td>静态网站托管</td>
+<td>提供类似功能</td>
+</tr>
+<tr>
+<td>Releases</td>
+<td>发布稳定版本</td>
+<td>同样支持发布功能</td>
+</tr>
+<tr>
+<td>Webhooks</td>
+<td>自动消息通知</td>
+<td>支持类似功能</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>Git</strong>：本地代码管理和版本控制工具</li>
+<li><strong>GitHub</strong>：全球开源协作、作品展示和技术交流平台</li>
+<li><strong>Gitee</strong>：国内主流代码托管平台，适合本地团队和企业项目协作</li>
+</ul>
+<p><strong>建议：</strong></p>
+<ul>
+<li>日常学习和开源项目优先用 GitHub，参与国际技术社区</li>
+<li>团队&#x2F;企业项目可选用 Gitee，便于国内协作和访问</li>
+<li>熟练掌握 Git 命令和 SSH 配置，提升协作效率</li>
+</ul>
+<hr>
+<h2 id="Typora-与-Markdown"><a href="#Typora-与-Markdown" class="headerlink" title="Typora 与 Markdown"></a>Typora 与 Markdown</h2><h3 id="Typora-使用教程"><a href="#Typora-使用教程" class="headerlink" title="Typora 使用教程"></a>Typora 使用教程</h3><h4 id="安装和激活"><a href="#安装和激活" class="headerlink" title="安装和激活"></a>安装和激活</h4><ul>
+<li>下载 Typora 安装包，运行后一路点击 OK 即可完成安装。</li>
+<li>如果需要激活，将文件夹中的 <strong>winmm.dll</strong> 移动到 Typora 的安装路径下（如 D:\Program Files\Typora）。注意此步骤需关闭 Typora 软件，否则会报错。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_3.png" alt="image-20251017092741839"></p>
+<hr>
+<h4 id="插件使用"><a href="#插件使用" class="headerlink" title="插件使用"></a>插件使用</h4><ul>
+<li>推荐安装 <a target="_blank" rel="noopener" href="https://github.com/obgnail/typora_plugin">typora_plugin</a>：可以显著优化 Typora 的使用体验，按官方文档安装即可。</li>
+<li>论文工具<a target="_blank" rel="noopener" href="https://github.com/Keldos-Li/typora-latex-theme">typora-latex-theme</a>：对于没有学过office三件套或WPS的同学大有帮助。</li>
+</ul>
+<hr>
+<h4 id="建议配置"><a href="#建议配置" class="headerlink" title="建议配置"></a>建议配置</h4><h5 id="侧边栏设置"><a href="#侧边栏设置" class="headerlink" title="侧边栏设置"></a>侧边栏设置</h5><ul>
+<li>建议将侧边栏打开，便于查看和管理文档结构。</li>
+<li>在 Typora 主界面点击右下角的 <code>显示/隐藏侧边栏</code> 按钮即可。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_4.png" alt="image-20251017093303047"></p>
+<hr>
+<h5 id="文件配置"><a href="#文件配置" class="headerlink" title="文件配置"></a>文件配置</h5><ul>
+<li>进入 Typora 菜单栏 <code>文件 -&gt; 偏好设置</code>，进行文件相关配置。</li>
+<li>推荐按照下图设置，便于文档管理与文件归档。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_5.png" alt="image-20251017093318594"></p>
+<hr>
+<h5 id="编辑器配置"><a href="#编辑器配置" class="headerlink" title="编辑器配置"></a>编辑器配置</h5><ul>
+<li>推荐启用智能缩进、自动补全 Markdown 字符、统一行尾符号等功能，提升编辑效率，减少语法出错。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_6.png" alt="image-20251017093327185"></p>
+<hr>
+<h5 id="图片配置"><a href="#图片配置" class="headerlink" title="图片配置"></a>图片配置</h5><ul>
+<li>插入图片时，建议选择自动复制图片到当前 md 文件同名的 assets 文件夹下，方便文档迁移和分享。  </li>
+<li>推荐勾选：  <ul>
+<li>自动上传图片到 assets 文件夹</li>
+<li>优化图片路径显示</li>
+<li>生成图片相对路径</li>
+</ul>
+</li>
+<li>图片插入后，建议压缩图片或生成缩略图，减少文档体积。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_7.png" alt="image-20251017093345944"></p>
+<hr>
+<h5 id="Markdown-配置"><a href="#Markdown-配置" class="headerlink" title="Markdown 配置"></a>Markdown 配置</h5><p>我们在这里可以配置markdown的语法相关，我的建议是全部勾上（除了那个首行缩进&lt;这是个人喜好</p>
+<p>&gt;），一定勾选上那个图表，这样可以让typora对mermaid等图表代码直接进行渲染，下面的公式编号还是看个人情况，这里就不过多说了</p>
+<ul>
+<li>建议开启 Typora 对 mermaid 图表和数学公式的支持，方便画流程图和写公式。</li>
+<li>推荐设置常用语法快捷键，提升编辑效率。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_8.png" alt="image-20251017093521861"></p>
+<hr>
+<h5 id="导出配置"><a href="#导出配置" class="headerlink" title="导出配置"></a>导出配置</h5><ul>
+<li>可根据个人需求设置 PDF 导出参数，包括页面大小、边距等。</li>
+<li>支持设置 YAML 头信息（如 title、author），导出时自动识别并加到对应位置。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_9.png" alt="image-20251017093617999"></p>
+<hr>
+<h5 id="外观配置"><a href="#外观配置" class="headerlink" title="外观配置"></a>外观配置</h5><ul>
+<li>推荐使用「经典」模式，字体大小和主题可按个人习惯调整，支持多种主题切换（如 HappySimple、Jetbrains Mono Theme 等）。</li>
+</ul>
+<p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_10.png" alt="image-20251017093703523"></p>
+<ul>
+<li>主题获取途径：<ul>
+<li><a target="_blank" rel="noopener" href="https://theme.typora.io/">Themes Gallery – Typora</a></li>
+<li>GitHub 搜索 typora theme</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h5 id="通用配置"><a href="#通用配置" class="headerlink" title="通用配置"></a>通用配置</h5><p><img src="/images/Git_Github_Markdown/Git_Github_Markdown_11.png" alt="image-20251017093728150"></p>
+<ul>
+<li>建议关闭自动检查更新和开发版更新，稳定性更好。</li>
+<li>可自定义快捷键，提升操作效率。</li>
+</ul>
+<hr>
+<h4 id="主题美化"><a href="#主题美化" class="headerlink" title="主题美化"></a>主题美化</h4><ul>
+<li>推荐主题：<ul>
+<li><strong>Neil Jetbrains Mono Theme</strong>：适合 Jetbrains 系 IDE 用户，字体美观，界面简洁。</li>
+<li><strong>HappySimple</strong>：视觉舒适，适合日常写作和学习。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Markdown-使用教程"><a href="#Markdown-使用教程" class="headerlink" title="Markdown 使用教程"></a>Markdown 使用教程</h3><h4 id="一、什么是-Markdown？"><a href="#一、什么是-Markdown？" class="headerlink" title="一、什么是 Markdown？"></a>一、什么是 Markdown？</h4><p>Markdown 是一种轻量级的标记语言，设计用于让普通文本具有丰富的格式表现，同时保留文案内容的易读性和易写性。通过简单直观的标记符号实现文档格式化，广泛应用于技术文档、博客文章、电子邮件、笔记和协作文档等。</p>
+<hr>
+<h4 id="二、为什么选择-Markdown？"><a href="#二、为什么选择-Markdown？" class="headerlink" title="二、为什么选择 Markdown？"></a>二、为什么选择 Markdown？</h4><ol>
+<li><strong>简单直观</strong>：语法易学易用，常见标记符号即可快速上手。</li>
+<li><strong>跨平台支持</strong>：兼容多种工具和平台，如 GitHub、Notion、VS Code、Jupyter Notebook 等。</li>
+<li><strong>多格式输出</strong>：可转为 HTML、PDF、Word 等多种格式，满足不同需求。</li>
+<li><strong>专注创作</strong>：无需复杂排版工具，专注内容本身，提升写作效率。</li>
+</ol>
+<hr>
+<h4 id="三、Markdown-语法详解"><a href="#三、Markdown-语法详解" class="headerlink" title="三、Markdown 语法详解"></a>三、Markdown 语法详解</h4><h5 id="1-标题"><a href="#1-标题" class="headerlink" title="1. 标题"></a>1. 标题</h5><p>使用 <code>#</code> 符号表示标题，支持六级标题，<code>#</code> 的数量代表标题级别。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 一级标题</span></span><br><span class="line"><span class="section">## 二级标题</span></span><br><span class="line"><span class="section">### 三级标题</span></span><br><span class="line"><span class="section">#### 四级标题</span></span><br><span class="line"><span class="section">##### 五级标题</span></span><br><span class="line"><span class="section">###### 六级标题</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h5 id="2-段落与换行"><a href="#2-段落与换行" class="headerlink" title="2. 段落与换行"></a>2. 段落与换行</h5><p>普通文本直接书写即可。若需换行，在行尾添加两个空格。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">这是一段文字，行尾加两个空格后换行。  </span><br><span class="line">这是下一行。</span><br></pre></td></tr></table></figure>
+<hr>
+<h5 id="3-强调"><a href="#3-强调" class="headerlink" title="3. 强调"></a>3. 强调</h5><p>支持斜体和加粗，以及两者组合。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="emphasis">*斜体*</span> 或 <span class="emphasis">_斜体_</span></span><br><span class="line"><span class="strong">**加粗**</span> 或 <span class="strong">__加粗__</span></span><br><span class="line"><span class="strong">**<span class="emphasis">*斜体加粗*</span>**</span> 或 <span class="strong">__<span class="emphasis">_斜体加粗_</span>__</span></span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<ul>
+<li><em>斜体</em></li>
+<li><strong>加粗</strong></li>
+<li><em><strong>斜体加粗</strong></em></li>
+</ul>
+<hr>
+<h5 id="4-列表"><a href="#4-列表" class="headerlink" title="4. 列表"></a>4. 列表</h5><p>支持无序列表和有序列表。</p>
+<h6 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h6><p>使用 <code>-</code>、<code>*</code> 或 <code>+</code> 作为标记符。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> 项目一</span><br><span class="line"><span class="bullet">-</span> 项目二</span><br><span class="line"><span class="bullet">  -</span> 子项目一</span><br><span class="line"><span class="bullet">  -</span> 子项目三</span><br><span class="line"><span class="bullet">*</span> 项目三</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<ul>
+<li>项目一</li>
+<li>项目二<ul>
+<li>子项目一</li>
+<li>子项目三</li>
+</ul>
+</li>
+<li>项目三</li>
+</ul>
+<h6 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h6><p>使用数字加点 <code>1.</code>，数字顺序可不连续，最终会按顺序渲染。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 项目一</span><br><span class="line"><span class="bullet">2.</span> 项目二</span><br><span class="line"><span class="bullet">   1.</span> 子项目一</span><br><span class="line"><span class="bullet">   2.</span> 子项目二</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<ol>
+<li>项目一</li>
+<li>项目二<ol>
+<li>子项目一</li>
+<li>子项目二</li>
+</ol>
+</li>
+</ol>
+<hr>
+<h5 id="5-链接"><a href="#5-链接" class="headerlink" title="5. 链接"></a>5. 链接</h5><p>添加超链接：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">链接文字</span>](<span class="link">链接地址</span>)</span><br><span class="line">[<span class="string">google</span>](<span class="link">https://www.google.com</span>)</span><br></pre></td></tr></table></figure>
+
+<p>带标题提示：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">链接文字</span>](<span class="link">链接地址 &quot;标题提示&quot;</span>)</span><br><span class="line">[<span class="string">google</span>](<span class="link">https://www.google.com &quot;谷歌搜索&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：<br><a target="_blank" rel="noopener" href="https://www.google.com/">Google</a><br><a target="_blank" rel="noopener" href="https://www.google.com/" title="谷歌搜索">Google</a></p>
+<hr>
+<h5 id="6-图片"><a href="#6-图片" class="headerlink" title="6. 图片"></a>6. 图片</h5><p>添加图片与链接类似，只需在前面加一个 <code>!</code>。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">图片描述</span>](<span class="link">图片地址</span>)</span><br><span class="line">![<span class="string">鹿乃.jpg</span>](<span class="link">https://s2.loli.net/2024/10/27/I1iqvzVtnxEYuaT.jpg</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="7-引用"><a href="#7-引用" class="headerlink" title="7. 引用"></a>7. 引用</h5><p>引用使用 <code>&gt;</code> 进行标记，支持嵌套引用。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; 这是一个引用。</span></span><br><span class="line">&gt;&gt; 这是嵌套引用。</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<p>这是一个引用。</p>
+<blockquote>
+<p>这是嵌套引用。</p>
+</blockquote>
+</blockquote>
+<hr>
+<h5 id="8-代码块"><a href="#8-代码块" class="headerlink" title="8. 代码块"></a>8. 代码块</h5><h6 id="行内代码"><a href="#行内代码" class="headerlink" title="行内代码"></a>行内代码</h6><p>用反引号（&#96;）包裹。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">`这是行内代码`</span> 示例。</span><br></pre></td></tr></table></figure>
+
+<p>效果：<code>这是行内代码</code> 示例。</p>
+<h6 id="多行代码块"><a href="#多行代码块" class="headerlink" title="多行代码块"></a>多行代码块</h6><p>用三个反引号（&#96;&#96;&#96;）包裹，可指定语言高亮。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="code">``` python</span></span><br><span class="line"><span class="code">def hello():</span></span><br><span class="line"><span class="code">    print(&quot;Hello, Markdown!&quot;)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">效果如下：</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">def hello():</span><br><span class="line">    print(&quot;Hello, Markdown!&quot;)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="9-表格"><a href="#9-表格" class="headerlink" title="9. 表格"></a>9. 表格</h5><p>使用 <code>|</code> 和 <code>-</code> 创建表格。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| 表头1 | 表头2 | 表头3 |</span><br><span class="line">|-------|-------|-------|</span><br><span class="line">| 数据1 | 数据2 | 数据3 |</span><br><span class="line">| 数据4 | 数据5 | 数据6 |</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>表头 1</th>
+<th>表头 2</th>
+<th>表头 3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据 1</td>
+<td>数据 2</td>
+<td>数据 3</td>
+</tr>
+<tr>
+<td>数据 4</td>
+<td>数据 5</td>
+<td>数据 6</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="10-分隔线"><a href="#10-分隔线" class="headerlink" title="10. 分隔线"></a>10. 分隔线</h5><p>用三个或更多的 <code>-</code>、<code>*</code> 或 <code>_</code> 创建分隔线。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"><span class="strong">***</span></span><br><span class="line"><span class="strong">__<span class="emphasis">_</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="效果如下："><a href="#效果如下：" class="headerlink" title="效果如下："></a>效果如下：</h4><hr>
+<h4 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h4><p>用 <code>- [ ]</code> 创建未完成任务，<code>- [x]</code> 创建已完成任务。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> [ ] 任务一</span><br><span class="line"><span class="bullet">-</span> [x] 任务二</span><br><span class="line"><span class="bullet">-</span> [ ] 任务三</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 任务一</li>
+<li><input checked="" disabled="" type="checkbox"> 任务二</li>
+<li><input disabled="" type="checkbox"> 任务三</li>
+</ul>
+<hr>
+<h5 id="12-公式"><a href="#12-公式" class="headerlink" title="12. 公式"></a>12. 公式</h5><p>支持 LaTeX 数学公式（部分编辑器&#x2F;平台需开启支持）。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$\frac&#123;a&#125;&#123;b&#125;$</span><br></pre></td></tr></table></figure>
+
+<p>效果：$\frac{a}{b}$</p>
+<hr>
+<h5 id="13-mermaid-绘图"><a href="#13-mermaid-绘图" class="headerlink" title="13. mermaid 绘图"></a>13. mermaid 绘图</h5><p>支持流程图、时序图等（需平台支持）。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">A[串口中断接收] --&gt; B&#123;中断号判断&#125;</span><br><span class="line">B --&gt;|USART1 或 USART2| C[堆栈寄存器压入\n]</span><br><span class="line">C --&gt; B</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Typora-快捷键速查表"><a href="#Typora-快捷键速查表" class="headerlink" title="Typora 快捷键速查表"></a>Typora 快捷键速查表</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>快捷键（Windows）</th>
+<th>快捷键（Mac）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>加粗</td>
+<td>Ctrl + B</td>
+<td>Cmd + B</td>
+<td>选中内容加粗</td>
+</tr>
+<tr>
+<td>斜体</td>
+<td>Ctrl + I</td>
+<td>Cmd + I</td>
+<td>选中内容斜体</td>
+</tr>
+<tr>
+<td>插入标题</td>
+<td>Ctrl + 1 ~ Ctrl + 6</td>
+<td>Cmd + 1 ~ Cmd + 6</td>
+<td>对应一级至六级标题</td>
+</tr>
+<tr>
+<td>插入无序列表</td>
+<td>Ctrl + Shift + U</td>
+<td>Cmd + Shift + U</td>
+<td>快速插入无序列表</td>
+</tr>
+<tr>
+<td>插入有序列表</td>
+<td>Ctrl + Shift + O</td>
+<td>Cmd + Shift + O</td>
+<td>快速插入有序列表</td>
+</tr>
+<tr>
+<td>插入任务列表</td>
+<td>Ctrl + Shift + C</td>
+<td>Cmd + Shift + C</td>
+<td>插入 <code>- [ ]</code> 任务项</td>
+</tr>
+<tr>
+<td>插入代码块</td>
+<td>Ctrl + Shift + K</td>
+<td>Cmd + Option + K</td>
+<td>插入三反引号代码块（块级代码）</td>
+</tr>
+<tr>
+<td>插入行内代码</td>
+<td>Ctrl + E</td>
+<td>Cmd + E</td>
+<td>插入行内代码（单反引号）</td>
+</tr>
+<tr>
+<td>插入图片</td>
+<td>Ctrl + Shift + I</td>
+<td>Cmd + Shift + I</td>
+<td>打开插入图片对话框</td>
+</tr>
+<tr>
+<td>插入链接</td>
+<td>Ctrl + K</td>
+<td>Cmd + K</td>
+<td>插入超链接</td>
+</tr>
+<tr>
+<td>插入引用</td>
+<td>Ctrl + Shift + Q</td>
+<td>Cmd + Shift + Q</td>
+<td>插入引用 &gt;</td>
+</tr>
+<tr>
+<td>插入表格</td>
+<td>Ctrl + T</td>
+<td>Cmd + T</td>
+<td>打开插入表格面板</td>
+</tr>
+<tr>
+<td>插入公式</td>
+<td>Ctrl + Shift + M</td>
+<td>Cmd + Shift + M</td>
+<td>插入公式块（$$）</td>
+</tr>
+<tr>
+<td>插入Mermaid图</td>
+<td>Ctrl + Shift + G</td>
+<td>Cmd + Shift + G</td>
+<td>插入mermaid绘图代码块</td>
+</tr>
+<tr>
+<td>切换专注模式</td>
+<td>F8</td>
+<td>F8</td>
+<td>切换专注模式（Focus Mode）</td>
+</tr>
+<tr>
+<td>打开&#x2F;关闭侧边栏</td>
+<td>Ctrl + &#x2F;</td>
+<td>Cmd + &#x2F;</td>
+<td>显示或隐藏左侧目录栏</td>
+</tr>
+<tr>
+<td>查找</td>
+<td>Ctrl + F</td>
+<td>Cmd + F</td>
+<td>查找文本</td>
+</tr>
+<tr>
+<td>替换</td>
+<td>Ctrl + H</td>
+<td>Cmd + Option + F</td>
+<td>查找并替换文本</td>
+</tr>
+<tr>
+<td>保存</td>
+<td>Ctrl + S</td>
+<td>Cmd + S</td>
+<td>保存文档</td>
+</tr>
+<tr>
+<td>导出</td>
+<td>Ctrl + Shift + E</td>
+<td>Cmd + Shift + E</td>
+<td>导出为PDF、HTML等格式</td>
+</tr>
+<tr>
+<td>打开偏好设置</td>
+<td>Ctrl + ,</td>
+<td>Cmd + ,</td>
+<td>打开Typora设置</td>
+</tr>
+<tr>
+<td>新建文档</td>
+<td>Ctrl + N</td>
+<td>Cmd + N</td>
+<td>新建一个空白文档</td>
+</tr>
+<tr>
+<td>打开文档</td>
+<td>Ctrl + O</td>
+<td>Cmd + O</td>
+<td>打开本地文档</td>
+</tr>
+<tr>
+<td>关闭文档</td>
+<td>Ctrl + W</td>
+<td>Cmd + W</td>
+<td>关闭当前标签页</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>提示：</strong><br>Typora 支持自定义快捷键，部分功能可在 “偏好设置” &gt; “快捷键”中自定义。<br>常用操作如插入代码块、插入图片、切换侧边栏等快捷键建议多加练习，提升效率。</p>
+</blockquote>
+<hr>
+<h2 id="插件与刷课脚本部分"><a href="#插件与刷课脚本部分" class="headerlink" title="插件与刷课脚本部分"></a>插件与刷课脚本部分</h2><h3 id="一、浏览器插件简介"><a href="#一、浏览器插件简介" class="headerlink" title="一、浏览器插件简介"></a>一、浏览器插件简介</h3><h4 id="1-什么是浏览器插件？"><a href="#1-什么是浏览器插件？" class="headerlink" title="1. 什么是浏览器插件？"></a>1. 什么是浏览器插件？</h4><p>浏览器插件（扩展）是一种可以为浏览器增加新功能的小型程序。它们能够帮助用户实现自动化、界面美化、广告屏蔽、脚本自定义等功能，极大提升日常上网体验和效率。</p>
+<hr>
+<h4 id="2-油猴（Tampermonkey）与篡改猴（Violentmonkey）简介与对比"><a href="#2-油猴（Tampermonkey）与篡改猴（Violentmonkey）简介与对比" class="headerlink" title="2. 油猴（Tampermonkey）与篡改猴（Violentmonkey）简介与对比"></a>2. 油猴（Tampermonkey）与篡改猴（Violentmonkey）简介与对比</h4><p><strong>油猴（Tampermonkey）</strong> 和 <strong>篡改猴（Violentmonkey）</strong> 都是浏览器端最主流的用户脚本管理器插件，能够让用户轻松安装、管理和运行自定义脚本（如刷课、自动答题、网页优化等）。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>油猴（Tampermonkey）</th>
+<th>篡改猴（Violentmonkey）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>兼容性</td>
+<td>Chrome&#x2F;Edge&#x2F;Firefox&#x2F;Safari</td>
+<td>Chrome&#x2F;Edge&#x2F;Firefox&#x2F;Opera</td>
+</tr>
+<tr>
+<td>界面</td>
+<td>功能丰富，设置选项更多</td>
+<td>界面简洁，轻量，易用</td>
+</tr>
+<tr>
+<td>脚本支持</td>
+<td>支持几乎所有主流用户脚本</td>
+<td>支持大部分脚本，兼容性优秀</td>
+</tr>
+<tr>
+<td>开发者</td>
+<td>国外团队</td>
+<td>国外团队（有国人参与）</td>
+</tr>
+<tr>
+<td>推荐场景</td>
+<td>需要高级管理&#x2F;脚本较多的用户</td>
+<td>追求简洁&#x2F;轻量的用户</td>
+</tr>
+</tbody></table>
+<p><strong>小结：</strong></p>
+<ul>
+<li>油猴（Tampermonkey）适合大多数用户，功能更全，兼容性最好，推荐新手优先选择。</li>
+<li>篡改猴（Violentmonkey）更轻量，界面简洁，资源占用更低。</li>
+</ul>
+<hr>
+<h4 id="3-安装方法"><a href="#3-安装方法" class="headerlink" title="3. 安装方法"></a>3. 安装方法</h4><p><strong>a. Chrome 浏览器：</strong></p>
+<ul>
+<li><p>推荐前往 <a target="_blank" rel="noopener" href="https://www.crxsoso.com/search">crx搜搜插件网</a> 搜索「Tampermonkey」或「Violentmonkey」并下载安装（国内无需科学上网）。</p>
+<blockquote>
+<p>聚合了 Chrome、Edge、Firefox 各类插件和油猴脚本，国内访问速度快，适合查找各类扩展和脚本。</p>
+</blockquote>
+</li>
+<li><p>也可去 <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/">Chrome Web Store</a> 安装（需科学上网）。</p>
+</li>
+</ul>
+<p><strong>b. Edge 浏览器：</strong></p>
+<ul>
+<li>可在 Edge 插件商店或 crx搜搜 搜索并安装。</li>
+</ul>
+<p><strong>c. Firefox 浏览器：</strong></p>
+<ul>
+<li>前往 <a target="_blank" rel="noopener" href="https://addons.mozilla.org/">Firefox 附加组件</a> 搜索并安装。</li>
+</ul>
+<hr>
+<h3 id="OCS网课助手与刷课脚本"><a href="#OCS网课助手与刷课脚本" class="headerlink" title="OCS网课助手与刷课脚本"></a>OCS网课助手与刷课脚本</h3><h4 id="OCS网课助手简介"><a href="#OCS网课助手简介" class="headerlink" title="OCS网课助手简介"></a>OCS网课助手简介</h4><p>OCS网课助手是一款专为网课平台（如超星、智慧树、学堂在线等）开发的刷课插件，能实现自动播放、刷视频、自动答题等功能，大大提高网课学习效率。适合需要快速完成网课任务的同学。</p>
+<ul>
+<li><strong>官网&#x2F;项目主页</strong>：<a target="_blank" rel="noopener" href="https://docs.ocsjs.com/">OCS网课助手</a></li>
+<li><strong>主要功能</strong>：<ul>
+<li>自动刷视频、自动答题、自动过考试</li>
+<li>支持多个主流网课平台</li>
+<li>可配合题库使用（如教材&#x2F;言溪题库等）</li>
+</ul>
+</li>
+</ul>
+<h4 id="言溪题库简介"><a href="#言溪题库简介" class="headerlink" title="言溪题库简介"></a>言溪题库简介</h4><ul>
+<li><p><strong>官网主页</strong>：<a target="_blank" rel="noopener" href="https://tk.enncy.cn/">言溪题库</a></p>
+</li>
+<li><p>提供超星、智慧树等平台的题目答案，可提升刷课和自动答题的正确率。</p>
+</li>
+<li><p>常见用法：在 OCS 等刷课插件设置里绑定题库接口，或手动查找题目答案。</p>
+</li>
+</ul>
+<h4 id="WE-Learn-U校园刷课脚本与教程"><a href="#WE-Learn-U校园刷课脚本与教程" class="headerlink" title="WE Learn &amp; U校园刷课脚本与教程"></a>WE Learn &amp; U校园刷课脚本与教程</h4><ul>
+<li><strong>EOC 一站式刷课脚本合集</strong>：<a target="_blank" rel="noopener" href="https://ssmjae.github.io/EOC/">EOC项目主页</a><ul>
+<li>该网站提供了针对多种主流校园网课平台（如 WE Learn、U校园等）的刷课脚本及详细教程。</li>
+<li>主要功能包括：<ul>
+<li>自动刷视频、自动答题、自动完成作业、考试辅助等</li>
+<li>支持多平台、多类型课程的自动化处理</li>
+<li>提供详细的安装流程、脚本下载链接、常见问题解答</li>
+</ul>
+</li>
+<li>网站内容持续更新，适合自助查找和学习刷课自动化工具</li>
+</ul>
+</li>
+</ul>
+<p><strong>使用建议：</strong></p>
+<ul>
+<li>进入 EOC 项目主页后，根据你的网课平台（如 WE Learn、U校园）选择对应脚本和教程，按照页面说明进行安装和使用。</li>
+<li>建议优先使用油猴（Tampermonkey）或篡改猴（Violentmonkey）插件进行脚本管理，确保兼容性和脚本运行稳定。</li>
+<li>脚本仅供学习和便捷课程管理使用，切勿用于违规用途。</li>
+</ul>
+<hr>
+<p><strong>实用建议：</strong></p>
+<ul>
+<li>插件和脚本建议只从知名平台和官方渠道下载，避免安全风险。</li>
+<li>使用脚本前请详细阅读说明，注意账号安全，不要泄露个人信息。</li>
+<li>刷课脚本仅供学习交流，勿用于违规用途。</li>
+</ul>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2025/10/10/%E9%80%82%E8%80%81%E5%8C%96%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E6%8B%A8%E6%89%93%E8%A7%86%E9%A2%91%E5%92%8C%E5%88%B7%E6%8A%96%E9%9F%B3/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">适老化——自动拨打视频和刷抖音</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+    
+    
+    
+    
+      <img src="/images/profile_photo.jpg" class="soft-size--round soft-style--box" alt="shiranzby">
+    
+    
+      <h2>shiranzby</h2>
+    
+    
+      <p>释然</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>4</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        1
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        5
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+        <li class="categories-list-item">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+            学习笔记 (4)
+          </a>
+        </li>
+        
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/Hexo/" style="font-size: 10px;" class="tags-cloud-0">Hexo</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 10px;" class="tags-cloud-0">博客</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 20px;" class="tags-cloud-10">技术</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 10px;" class="tags-cloud-0">教程</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;" class="tags-cloud-0">随笔</a>
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    
+    
+    
+    <div class="social-icons">
+      
+        
+          <a href="https://github.com/shiranzby" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+            
+          </a>
+        
+      
+        
+          <a href="http://www.coolapk.com/u/18690800" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              
+              <span>cool</span>
+            
+          </a>
+        
+      
+    </div>
+    
+    <p>&copy; 2025 <a href="/" target="_blank">Shiranzby</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  
+
+
+
+
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>
