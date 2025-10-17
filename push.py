@@ -110,6 +110,9 @@ def main() -> None:
             run(['git', 'remote', 'add', 'origin', origin_url], cwd=str(deploy_dir))
             run(['git', 'config', 'user.name', 'auto-deploy'], cwd=str(deploy_dir))
             run(['git', 'config', 'user.email', 'auto-deploy@local'], cwd=str(deploy_dir))
+            # 统一换行符，避免 Windows 上的 CRLF 提示与不必要差异
+            run(['git', 'config', 'core.autocrlf', 'false'], cwd=str(deploy_dir))
+            run(['git', 'config', 'core.eol', 'lf'], cwd=str(deploy_dir))
 
         # 获取远端 main 分支最新状态（若不存在将忽略错误）
         try:

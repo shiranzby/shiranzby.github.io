@@ -219,6 +219,8 @@
           padding: 4px 8px
           color: var(--theme-text-primary)
           transition: box-shadow 0.3s ease
+          // 统一标签云字号：覆盖内联样式（Hexo tagcloud 会内联 font-size）
+          font-size: 14px !important
 
           &:hover {
             soft-box(var(--soft-small-radius))
