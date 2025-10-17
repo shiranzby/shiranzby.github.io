@@ -72,7 +72,13 @@ def main() -> None:
 
     # 2) 提交源码并推送到 data 分支
     try:
-        run(['git', 'add', '-A'])
+        # 统一根仓库换行符设置，避免 CRLF 提示
+        run(['git', 'config', 'core.autocrlf', 'false'])
+        run(['git', 'config', 'core.eol', 'lf'])
+        run(['git', 'config', 'core.safecrlf', 'false'])
+
+        # 使用 --renormalize 按照 .gitattributes 规范化索引中的换行符（首次执行可能会有少量文件变更）
+        run(['git', 'add', '--renormalize', '.'])
         try:
             run(['git', 'commit', '-m', msg])
         except subprocess.CalledProcessError:
