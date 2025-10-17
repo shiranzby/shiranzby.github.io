@@ -1,7 +1,8 @@
 ---
 title: Git & GitHub & Markdown &刷课
 date: 2025-10-17 11:17
-tags: 技术,教程
+categories: 学习笔记
+tags: [技术, 教程]
 ---
 
 # Git & GitHub & Markdown &刷课
