@@ -1312,6 +1312,7 @@ html.show-mobile-nav .navbar-list {
   padding: 4px 8px;
   color: var(--theme-text-primary);
   transition: box-shadow 0.3s ease;
+  font-size: 14px !important;
 }
 .content-container.post-container .widget-info .widget-tags .widget-body .tags-cloud a:hover {
   overflow: hidden;
