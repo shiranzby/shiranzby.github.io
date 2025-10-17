@@ -5,7 +5,13 @@
   </div>
   <div class="widget-body">
     <div class="tags-cloud">
-      <%- tagcloud(site.tags, { class: "tags-cloud" }) %>
+      <%- tagcloud(site.tags, {
+        class: "tags-cloud",
+        // 统一字号，避免按文章数放大某些标签
+        min: 14,
+        max: 14,
+        unit: "px"
+      }) %>
     </div>
   </div>
 </section>

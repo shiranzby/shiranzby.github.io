@@ -1,8 +1,23 @@
-name: Build and deploy Hexo to GitHub Pages
+name: Build and deploy Hexo to GitHub Pages (manual)
 
+# 说明：
+# 你当前已使用本地脚本 source/push.py 完成两步：
+# 1) 推送源码到 data 分支；
+# 2) 直接将 public/ 强推到 main。随后 GitHub Pages 会自动发布（pages build and deployment）。
+#
+# 这个旧的工作流也会在 push 到 data 时尝试再次构建并把站点推到 main，
+# 造成重复且可能失败（并触发失败邮件），但并不影响实际发布成功。
+#
+# 为避免重复执行，这里改为仅手动触发。如需改回自动构建，请把下面的
+# on:
+#  workflow_dispatch 改成
+# on: push: branches: [ data ]，
+# on:
+#  push:
+#    branches: [ data ]
+# 并同时删除/停用本地 push.py 的“推 main”逻辑。
 on:
-  push:
-    branches: [ data ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
