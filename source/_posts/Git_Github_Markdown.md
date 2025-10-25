@@ -140,25 +140,20 @@ tags: [技术, 教程]
 
 1）我们以随便某个 v2board 机场为例子，因为现在很多机场都是用的 v2board 页面。
 **第一步：购买套餐：点击购买订阅–选择你想要的套餐–付款**
-[![购买订阅](https://jichangtuijian.com/uploads/jichangjiaochen/v1.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/v1.webp)
-[![选择套餐](https://jichangtuijian.com/uploads/jichangjiaochen/v2.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/v2.webp)
+[![购买订阅](/images/Git_Github_Markdown/Git_Github_Markdown_12.webp)
+[![]](/images/Git_Github_Markdown/Git_Github_Markdown_13.webp)
+
+![选择套餐](/images/Git_Github_Markdown/Git_Github_Markdown_13.webp)
 
 **第二步：下载代理软件**，这里以 Clash for windows 为例子
 
 **第三步：导入订阅：回到仪表盘–点击一键订阅–导入到你的 Clash 客户端中**
-[![仪表盘](https://jichangtuijian.com/uploads/jichangjiaochen/v3.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/v3.webp)
-[![导入订阅](https://jichangtuijian.com/uploads/jichangjiaochen/v4.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/v4.webp)
-导入订阅后
-[![导入订阅后](https://jichangtuijian.com/uploads/jichangjiaochen/v5.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/v5.webp)
 
-后面看 clash 教程
+![仪表盘](/images/Git_Github_Markdown/Git_Github_Markdown_14.webp)
 
-2）另一个常见面板的：sspanel 前端面板的也是类似的。购买套餐-导入订阅
+![导入订阅](/images/Git_Github_Markdown/Git_Github_Markdown_15.webp)
 
-**购买订阅**
-[![购买订阅](https://jichangtuijian.com/uploads/jichangjiaochen/s1.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/s1.webp)
-**回到首页导入订阅**
-[![导入订阅](https://jichangtuijian.com/uploads/jichangjiaochen/s2.webp)](https://jichangtuijian.com/uploads/jichangjiaochen/s2.webp)
+![导入订阅后](/images/Git_Github_Markdown/Git_Github_Markdown_16.webp)
 
 具体详细操场教程可以参考各个机场的使用教程，每个机场基本都有小白教程的。
 
