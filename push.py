@@ -48,7 +48,6 @@ def copy_tree(src: Path, dst: Path) -> None:
                 shutil.rmtree(target)
             shutil.copytree(item, target)
         else:
-            # 确保父目录存在
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(item, target)
 
@@ -56,6 +55,7 @@ def copy_tree(src: Path, dst: Path) -> None:
 def main() -> None:
     repo = Path.cwd()
     public = repo / 'public'
+    images = repo / 'source' / 'images' 
     if not repo.exists():
         print('错误：找不到当前工作目录', file=sys.stderr)
         sys.exit(1)
@@ -66,6 +66,9 @@ def main() -> None:
     try:
         run('hexo clean', shell=True)
         run('hexo g', shell=True)
+
+        if images.exists():
+            copy_tree(images, public / 'images')
     except subprocess.CalledProcessError:
         print('Hexo 构建失败，取消部署', file=sys.stderr)
         sys.exit(1)
