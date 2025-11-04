@@ -187,14 +187,61 @@ def main() -> None:
         run(['git', 'config', 'core.eol', 'lf'], cwd=str(deploy_dir))
         run(['git', 'config', 'core.safecrlf', 'false'], cwd=str(deploy_dir))
 
-        # 获取远端 main 分支最新状态（若不存在将忽略错误）
+        # 获取远端 main 分支最新状态（若失败则尝试回退策略）
+        fetch_succeeded = False
         try:
             run(['git', 'fetch', 'origin', 'main'], cwd=str(deploy_dir))
+            fetch_succeeded = True
+        except subprocess.CalledProcessError:
+            # 首次 fetch 失败，可能是 SSH 认证/网络问题，尝试把 remote 切换为 HTTPS 并重试
+            print('警告：首次 fetch origin main 失败，尝试将 remote 切换为 HTTPS 并重试')
+            https_url = None
+            try:
+                # origin_url 在外层已读取为字符串
+                if origin_url.startswith('git@') and ':' in origin_url:
+                    # git@github.com:owner/repo.git -> https://github.com/owner/repo.git
+                    host_path = origin_url.split(':', 1)[1]
+                    host = origin_url.split('@', 1)[1].split(':', 1)[0]
+                    https_url = f'https://{host}/{host_path}'
+                elif origin_url.startswith('ssh://'):
+                    # ssh://git@github.com/owner/repo.git -> https://github.com/owner/repo.git
+                    parts = origin_url.split('://', 1)[1]
+                    if '@' in parts:
+                        parts = parts.split('@', 1)[1]
+                    https_url = 'https://' + parts
+                elif origin_url.startswith('https://'):
+                    https_url = origin_url
+            except Exception:
+                https_url = None
+
+            if https_url:
+                try:
+                    run(['git', 'remote', 'set-url', 'origin', https_url], cwd=str(deploy_dir))
+                    run(['git', 'fetch', 'origin', 'main'], cwd=str(deploy_dir))
+                    fetch_succeeded = True
+                except subprocess.CalledProcessError:
+                    print('尝试使用 HTTPS fetch 仍然失败')
+            else:
+                print('无法将 origin URL 转换为 HTTPS，跳过 HTTPS 重试')
+
+        # 根据 fetch 结果选择 checkout 策略：
+        if fetch_succeeded:
             # 基于远端 main 创建/重置本地 main
             run(['git', 'checkout', '-B', 'main', 'origin/main'], cwd=str(deploy_dir))
-        except subprocess.CalledProcessError:
-            # 远端还没有 main：使用孤儿分支
-            run(['git', 'checkout', '--orphan', 'main'], cwd=str(deploy_dir))
+        else:
+            # fetch 失败：优先使用已有本地分支（若存在），否则创建或重置孤儿分支
+            try:
+                # 如果本地已有 main 分支则切换到该分支并继续
+                run(['git', 'rev-parse', '--verify', 'main'], cwd=str(deploy_dir))
+                run(['git', 'checkout', 'main'], cwd=str(deploy_dir))
+            except subprocess.CalledProcessError:
+                # main 不存在，使用孤儿分支
+                try:
+                    run(['git', 'checkout', '--orphan', 'main'], cwd=str(deploy_dir))
+                except subprocess.CalledProcessError as exc:
+                    # 无法创建孤儿分支，给出明确错误信息并中止
+                    print('无法准备本地 main 分支用于发布（fetch 和创建孤儿分支均失败）：', exc, file=sys.stderr)
+                    sys.exit(1)
 
         # 清空工作区（保留 .git），复制 public 内容
         clean_dir_keep_git(deploy_dir)
