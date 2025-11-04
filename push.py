@@ -28,6 +28,41 @@ def run(cmd, cwd: str | None = None, shell: bool = False):
         print('> ' + cmdstr)
         subprocess.run(cmdstr, check=True, cwd=cwd, shell=True)
 
+
+def remove_deleted_index_entries(cwd: str | None = None) -> None:
+    """从 Git 索引中移除那些已被删除（在索引中但工作区不存在）的文件。
+
+    这样可以避免在后续运行 `git add --renormalize .` 时因为某些文件在工作区缺失而导致的 stat 错误。
+    如果没有删除的索引项，函数静默返回。
+    """
+    # 使用原生 subprocess 调用以捕获输出（run() 会在失败时抛出，
+    # 但 ls-files --deleted 在正常情况下会返回 0）
+    try:
+        proc = subprocess.run(
+            ['git', 'ls-files', '--deleted', '-z'],
+            check=True,
+            capture_output=True,
+            text=True,
+            cwd=cwd,
+        )
+    except subprocess.CalledProcessError:
+        # 无法列出已删除文件（非 git 仓库或其他问题），直接返回
+        return
+
+    out = proc.stdout
+    if not out:
+        return
+
+    # 输出以 NUL 分隔
+    paths = [p for p in out.split('\0') if p]
+    for p in paths:
+        # 对于每个路径，从索引中移除（--ignore-unmatch 保证即使路径不存在也不报错）
+        try:
+            run(['git', 'rm', '--cached', '--ignore-unmatch', p], cwd=cwd)
+        except subprocess.CalledProcessError:
+            # 若某条移除失败，继续处理其余文件
+            print(f'警告：尝试从索引移除 {p} 时失败，继续处理其它文件')
+
 def clean_dir_keep_git(path: Path) -> None:
     """删除给定目录下除 .git 外的所有内容。"""
     for item in path.iterdir():
@@ -79,6 +114,33 @@ def main() -> None:
         run(['git', 'config', 'core.autocrlf', 'false'])
         run(['git', 'config', 'core.eol', 'lf'])
         run(['git', 'config', 'core.safecrlf', 'false'])
+
+        # 在运行 git add 之前，检查索引中是否有在工作区被删除的文件，
+        # 如果有则列出并询问用户是否确认从索引中移除并继续上传。
+        try:
+            proc = subprocess.run(
+                ['git', 'ls-files', '--deleted', '-z'],
+                check=True,
+                capture_output=True,
+                text=True,
+                cwd=str(repo),
+            )
+            deleted_out = proc.stdout
+        except subprocess.CalledProcessError:
+            deleted_out = ''
+
+        if deleted_out:
+            deleted_paths = [p for p in deleted_out.split('\0') if p]
+            print('\n发现以下在索引中但工作区已删除的文件：')
+            for p in deleted_paths:
+                print('  -', p)
+            # 交互式确认
+            ans = input('\n是否从索引中移除这些文件并继续上传？(y/n): ').strip().lower()
+            if ans == 'y':
+                remove_deleted_index_entries(cwd=str(repo))
+            else:
+                print('已取消：未执行上传')
+                sys.exit(0)
 
         # 使用 --renormalize 按照 .gitattributes 规范化索引中的换行符（首次执行可能会有少量文件变更）
         run(['git', 'add', '--renormalize', '.'])

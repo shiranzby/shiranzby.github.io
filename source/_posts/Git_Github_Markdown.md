@@ -671,8 +671,6 @@ git commit -m "fix conflict"
   - 生成图片相对路径  
 - 图片插入后，建议压缩图片或生成缩略图，减少文档体积。
 
-![image-20251017093345944](/images/Git_Github_Markdown/Git_Github_Markdown_7.png)
-
 ---
 
 ##### Markdown 配置
