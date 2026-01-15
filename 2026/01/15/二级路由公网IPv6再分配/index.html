@@ -152,7 +152,8 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <p><strong>记录时间：</strong> 2026-01-15<br><strong>环境标签：</strong> OpenWrt 22.03+、IPv6、Prefix Delegation(PD)、多级路由、桥接模式<br><strong>核心价值：</strong> 解析 IPv6 前缀委派底层逻辑，解决二级路由下设备无法获取公网 IPv6 的核心痛点，附带技术原理解析与避坑指南</p>
 <hr>
-<h2 id="背景与网络拓扑"><a href="#背景与网络拓扑" class="headerlink" title="背景与网络拓扑"></a>背景与网络拓扑</h2><h3 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h3><ul>
+<h2 id="背景与网络拓扑"><a href="#背景与网络拓扑" class="headerlink" title="背景与网络拓扑"></a>背景与网络拓扑</h2><h3 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h3><p><img src="/images/%E4%BA%8C%E7%BA%A7%E8%B7%AF%E7%94%B1%E5%85%AC%E7%BD%91IPv6%E5%86%8D%E5%88%86%E9%85%8D.assets/image-20260115233010932.png" alt="image-20260115233010932"></p>
+<ul>
 <li><strong>光猫</strong>：工作在桥接模式，仅负责光电转换，不参与路由与 DHCP 分配</li>
 <li><strong>A 路由器（主路由）</strong>：<ul>
 <li>系统：OpenWrt 软路由</li>
@@ -191,22 +192,22 @@
 </thead>
 <tbody><tr>
 <td>A 路由 LAN 设备</td>
-<td>正常获取公网 IPv6（2409:8a38:1422:4cxx::&#x2F;60 网段），可访问 IPv6 公网资源</td>
+<td>正常获取公网 IPv6（2409::&#x2F;60 网段），可访问 IPv6 公网资源</td>
 <td>-</td>
 </tr>
 <tr>
 <td>B 路由 WAN6 口</td>
-<td>获得公网 IPv6 地址（2409:8a38:1422:4cxx:ded8:7cff:fe54:9fd1&#x2F;64）</td>
+<td>获得公网 IPv6 地址（2409::&#x2F;64）</td>
 <td><strong>仅获取地址，未获取 PD 前缀池</strong></td>
 </tr>
 <tr>
 <td>B 路由 LAN 口</td>
-<td>仅分配 ULA 地址（fde8:c555:1a9d::1&#x2F;64），无公网 IPv6 前缀</td>
+<td>仅分配 ULA 地址（fde8:::1&#x2F;64），无公网 IPv6 前缀</td>
 <td><strong>PD 未穿透，无法分发公网地址</strong></td>
 </tr>
 <tr>
 <td>B 下终端设备</td>
-<td>仅获取 fde8:: 私有地址，部分设备偶然出现非 A 路由网段公网 IPv6（非预期路径）</td>
+<td>仅获取 fde8:: 私有地址，部分设备偶然出现非 A 路由网段公网 IPv6</td>
 <td><strong>地址来源异常，不可靠</strong></td>
 </tr>
 </tbody></table>
