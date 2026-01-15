@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+    <meta name="description" content="欢迎来到我的博客！">
+  
+
+  
+    <meta name="keywords" content="学习,博客,Shiranzby">
+  
+
+  
+    <meta name="author" content="Shiranzby">
+  
+
+  
+
+  
+
+  <title>Shiranzby</title>
+
+  
+
+  
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+  
+  
+    <div class="post-image" style="background-image: url('/images/banner.jpg')"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Shiranzby
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/">首页</a></li>
+        
+          <li class="navbar-list-item"><a href="/archives">归档</a></li>
+        
+          <li class="navbar-list-item"><a href="/links">友链</a></li>
+        
+          <li class="navbar-list-item"><a href="/about">关于</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap"></h1>
+          <h2 class="title-sub-wrap">
+            <strong>Shiranzby</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2025-12-09T03:55:50.585Z" itemprop="datePublished">2025-12-09</time>
+          </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2026-01-15T04:26:24.461Z" itemprop="dateUpdated">2026-01-15</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h1 id="从公网IPv4困境中解脱：基于IPv6的免费内网访问方案（OpenWrt实战）"><a href="#从公网IPv4困境中解脱：基于IPv6的免费内网访问方案（OpenWrt实战）" class="headerlink" title="从公网IPv4困境中解脱：基于IPv6的免费内网访问方案（OpenWrt实战）"></a>从公网IPv4困境中解脱：基于IPv6的免费内网访问方案（OpenWrt实战）</h1><p>在当今的国内网络环境中，想要通过公网IPv4访问家庭内网服务，已经成了一个越来越难实现的”技术挑战”。运营商普遍取消了公网IPv4分配，即使通过光猫桥接获取的IP，也多是100.x.x.x的内网地址。而传统的内网穿透工具（如frp、ngrok）不仅需要额外服务器成本，还经常面临不稳定和速度瓶颈的问题。</p>
+<p><strong>但IPv6的普及为我们打开了一扇新门</strong>——三大运营商几乎100%支持IPv6，且地址是真·公网。本文将分享一个完整、稳定、成本为零的解决方案：<strong>IPv6 + DNSHE DDNS + Caddy反向代理</strong>，无需额外付费，无需复杂配置，即可实现安全、稳定的远程访问。</p>
+<hr>
+<h2 id="为什么IPv6是当前最优解？（附DDNS必要性说明）"><a href="#为什么IPv6是当前最优解？（附DDNS必要性说明）" class="headerlink" title="为什么IPv6是当前最优解？（附DDNS必要性说明）"></a>为什么IPv6是当前最优解？（附DDNS必要性说明）</h2><h3 id="1-无需额外成本"><a href="#1-无需额外成本" class="headerlink" title="1. 无需额外成本"></a>1. 无需额外成本</h3><ul>
+<li>国内三大运营商（电信&#x2F;移动&#x2F;联通）的宽带普遍提供IPv6</li>
+<li>不需要加钱办理专线，不依赖额外付费服务</li>
+<li>手机热点&#x2F;5G CPE设备同样能获取公网IPv6</li>
+</ul>
+<h3 id="2-真正的公网连接"><a href="#2-真正的公网连接" class="headerlink" title="2. 真正的公网连接"></a>2. 真正的公网连接</h3><ul>
+<li>IPv6地址是全球可达的，无需NAT转换</li>
+<li>与IPv4的”内网IP+端口映射”相比，连接更直接、延迟更低</li>
+</ul>
+<h3 id="3-DDNS的必要性：解决IPv6动态变化问题"><a href="#3-DDNS的必要性：解决IPv6动态变化问题" class="headerlink" title="3. DDNS的必要性：解决IPv6动态变化问题"></a>3. DDNS的必要性：解决IPv6动态变化问题</h3><p>IPv6地址虽然提供公网连接，但它是<strong>动态分配</strong>的。每次路由器重启或网络重连，IPv6前缀都可能变化。如果没有DDNS，我们需要记住每次变化的IPv6地址才能访问，这显然不现实。DDNS通过将域名与动态IPv6地址关联，确保无论地址如何变化，域名始终指向正确的IP，从而实现稳定访问。</p>
+<blockquote>
+<p>重要提示：IPv6的DDNS比IPv4更可靠，因为IPv6地址变化频率远低于IPv4，且IPv6网络环境更简单。</p>
+</blockquote>
+<hr>
+<h2 id="实战方案：完整部署指南"><a href="#实战方案：完整部署指南" class="headerlink" title="实战方案：完整部署指南"></a>实战方案：完整部署指南</h2><h3 id="1-域名准备：白嫖DNSHE二级域名"><a href="#1-域名准备：白嫖DNSHE二级域名" class="headerlink" title="1. 域名准备：白嫖DNSHE二级域名"></a>1. 域名准备：白嫖DNSHE二级域名</h3><p><strong>为什么选择DNSHE？</strong></p>
+<ul>
+<li>免费提供二级域名（如<code>yourname.cc.cd</code>）</li>
+<li>支持API动态更新，适合DDNS</li>
+<li>无广告、无强制付费</li>
+</ul>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li>访问 <a target="_blank" rel="noopener" href="https://my.dnshe.com/index.php?m=domain_hub">DNSHE官网</a> 注册账号</li>
+<li>申请一个二级域名（如<code>home.cc.cd</code>）</li>
+<li>添加AAAA记录（IPv6专用）：<ul>
+<li>主机名：<code>@</code></li>
+<li>记录值：<code>::1</code>（临时占位）</li>
+<li>TTL：<code>600</code>（10分钟）</li>
+</ul>
+</li>
+</ol>
+<p><strong>获取API更新地址：</strong> 在DNSHE控制台找到”动态域名解析”接口，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://api005.dnshe.com/index.php?m=domain_hub&amp;c=api&amp;a=update&amp;domain=yourdomain&amp;username=yourusername&amp;password=yourpassword&amp;ipaddr=[IP]</span><br></pre></td></tr></table></figure>
+
+<p><em>注意：<code>[IP]</code>是OpenWrt的内置变量，无需手动填写</em></p>
+<hr>
+<h3 id="2-OpenWrt-DDNS配置"><a href="#2-OpenWrt-DDNS配置" class="headerlink" title="2. OpenWrt DDNS配置"></a>2. OpenWrt DDNS配置</h3><p><strong>关键点</strong>：确保IPv6地址能被正确更新</p>
+<ol>
+<li>进入OpenWrt后台：<code>服务 &gt; 动态DNS</code></li>
+<li>添加新服务：<ul>
+<li>服务名称：<code>dnshe_ipv6</code></li>
+<li>查询主机名：<code>home.cc.cd</code></li>
+<li>IP地址版本：<code>IPv6</code></li>
+<li>服务提供商：<code>自定义</code></li>
+<li>更新URL：填写上一步获取的API地址</li>
+<li>检查周期：<code>5分钟</code></li>
+<li>IP地址来源：<code>接口</code></li>
+<li>接口：<code>wan6</code>（IPv6接口）</li>
+</ul>
+</li>
+</ol>
+<p><strong>验证配置</strong>：</p>
+<ul>
+<li>启动服务后，查看日志确认<code>Update successful</code></li>
+<li>在DNSHE控制台刷新域名解析，确认AAAA记录已更新</li>
+</ul>
+<hr>
+<h3 id="3-修改LuCI管理界面端口（关键步骤）"><a href="#3-修改LuCI管理界面端口（关键步骤）" class="headerlink" title="3. 修改LuCI管理界面端口（关键步骤）"></a>3. 修改LuCI管理界面端口（关键步骤）</h3><p><strong>问题</strong>：OpenWrt的LuCI默认使用80和443端口，与Caddy冲突</p>
+<p><strong>为什么需要让出80和443端口？</strong> Caddy作为反向代理服务器，需要监听80（HTTP）和443（HTTPS）端口，才能实现无需在URL中添加端口号，直接通过域名访问。例如，用户可以直接访问<code>https://home.cc.cd</code>，而不是<code>https://home.cc.cd:443</code>。这是HTTPS服务的标准做法，也是用户体验最佳的方式。</p>
+<p><strong>解决方案</strong>：</p>
+<ol>
+<li>进入OpenWrt管理界面：<code>系统 &gt; 管理权 &gt; 网络</code></li>
+<li>修改HTTP端口为<code>8080</code>，HTTPS端口为<code>8443</code></li>
+<li>保存并应用配置</li>
+</ol>
+<p><strong>验证</strong>：</p>
+<ul>
+<li>现在LuCI可通过<code>http://192.168.1.1:8080</code>访问</li>
+<li>80和443端口已空出，供Caddy使用</li>
+</ul>
+<hr>
+<h3 id="4-防火墙配置：最容易被忽略的关键步骤"><a href="#4-防火墙配置：最容易被忽略的关键步骤" class="headerlink" title="4. 防火墙配置：最容易被忽略的关键步骤"></a>4. 防火墙配置：最容易被忽略的关键步骤</h3><p><strong>问题现象</strong>：配置完成后，外网无法访问</p>
+<p><strong>原因</strong>：OpenWrt防火墙默认拒绝所有入站连接</p>
+<p><strong>为什么需要特定的防火墙规则？</strong></p>
+<ul>
+<li>Caddy需要监听80和443端口，但默认防火墙会阻止所有入站连接</li>
+<li>仅开放IPv6的入站连接，可以避免IPv4的潜在安全风险</li>
+<li>限制为IPv6可以确保只有IPv6网络的连接被允许，提高安全性</li>
+</ul>
+<p><strong>解决方案</strong>：</p>
+<ol>
+<li>进入<code>网络 &gt; 防火墙 &gt; 通信规则</code></li>
+<li>添加新规则：<ul>
+<li>名称：<code>Allow-IPv6-Web</code></li>
+<li>协议：<code>TCP</code></li>
+<li>源区域：<code>wan6</code></li>
+<li>目标区域：<code>lan</code>（或<code>设备</code>）</li>
+<li>目标端口：<code>80,443</code></li>
+<li>限制地址族：<code>IPv6</code></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>重要提示</strong>：仅开放必要的端口，避免安全风险</p>
+</blockquote>
+<hr>
+<h3 id="5-Caddy部署：轻量级反向代理"><a href="#5-Caddy部署：轻量级反向代理" class="headerlink" title="5. Caddy部署：轻量级反向代理"></a>5. Caddy部署：轻量级反向代理</h3><p><strong>为什么选择Caddy？</strong></p>
+<ul>
+<li>Go语言编写，内存占用极低</li>
+<li>自动申请和续期HTTPS证书</li>
+<li>配置简单直观，无需复杂配置</li>
+</ul>
+<p><strong>部署步骤：</strong></p>
+<ol>
+<li><p>在路由器上创建配置目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /mnt/docker/caddy/config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建<code>Caddyfile</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">home.cc.cd &#123;</span><br><span class="line">    encode gzip</span><br><span class="line">    reverse_proxy 192.168.1.1:8080</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>注：<code>192.168.1.1:8080</code>是修改后的LuCI地址</em></p>
+</li>
+<li><p>启动容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">  --name caddy \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  --network host \</span><br><span class="line">  -v /mnt/docker/caddy/config/Caddyfile:/etc/caddy/Caddyfile \</span><br><span class="line">  caddy:latest</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>验证</strong>：</p>
+<ul>
+<li>等待1-2分钟，Caddy会自动申请SSL证书</li>
+<li>用手机4G网络访问<code>https://home.cc.cd</code>，应显示OpenWrt登录界面</li>
+</ul>
+<hr>
+<h3 id="6-内网DNS优化：解决”回环”问题"><a href="#6-内网DNS优化：解决”回环”问题" class="headerlink" title="6. 内网DNS优化：解决”回环”问题"></a>6. 内网DNS优化：解决”回环”问题</h3><p><strong>问题现象</strong>：在家中WiFi下访问域名时速度慢或失败</p>
+<p><strong>原因</strong>：内网设备解析到公网IPv6地址，导致数据包绕行</p>
+<p><strong>解决方案</strong>：DNS劫持（内网直连）</p>
+<ol>
+<li>进入<code>网络 &gt; DHCP/DNS &gt; 主机名</code></li>
+<li>添加规则：<ul>
+<li>主机名：<code>home.cc.cd</code></li>
+<li>IP地址：<code>192.168.1.1</code>（路由器内网IPv4）</li>
+</ul>
+</li>
+</ol>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>外网访问：解析到公网IPv6 → Caddy反代</li>
+<li>内网访问：解析到内网IPv4 → 直连路由器</li>
+<li>体验无缝切换，速度接近内网带宽</li>
+</ul>
+<hr>
+<h2 id="安全防范：内网服务暴露的风险与应对"><a href="#安全防范：内网服务暴露的风险与应对" class="headerlink" title="安全防范：内网服务暴露的风险与应对"></a>安全防范：内网服务暴露的风险与应对</h2><p>将内网服务暴露到公网，会带来一定的安全风险。虽然IPv6的地址空间极大，使得暴力破解难度增加，但仍需采取以下安全措施：</p>
+<ol>
+<li><strong>强密码策略</strong>：<ul>
+<li>为OpenWrt LuCI、NAS等服务设置强密码</li>
+<li>避免使用默认密码或常见密码（如admin&#x2F;admin）</li>
+</ul>
+</li>
+<li><strong>登录尝试限制</strong>：<ul>
+<li>在OpenWrt中启用登录尝试限制（<code>系统 &gt; 管理权 &gt; 限制</code>）</li>
+<li>设置最大尝试次数（如5次）和锁定时间（如15分钟）</li>
+</ul>
+</li>
+<li><strong>使用HTTPS</strong>：<ul>
+<li>通过Caddy自动启用HTTPS，避免明文传输</li>
+<li>保证数据传输安全</li>
+</ul>
+</li>
+<li><strong>定期更新</strong>：<ul>
+<li>保持OpenWrt系统和软件包更新</li>
+<li>及时修复已知安全漏洞</li>
+</ul>
+</li>
+<li><strong>防火墙规则细化</strong>：<ul>
+<li>限制仅允许特定IP地址访问（如家庭IP）</li>
+<li>或者使用更复杂的规则，如基于时间的访问控制</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="总结：每个组件的作用"><a href="#总结：每个组件的作用" class="headerlink" title="总结：每个组件的作用"></a>总结：每个组件的作用</h2><p>至此，一套完整的公网访问方案就搭建完成了：</p>
+<ol>
+<li><strong>IPv6</strong> 提供了物理通路，让家庭网络成为真正的”公网”，无需NAT转换即可直接访问。</li>
+<li><strong>DNSHE</strong> 提供了免费域名，无需额外付费，且支持API动态更新，为DDNS提供基础。</li>
+<li><strong>DDNS</strong> 确保了路标（域名）永远指向正确的家，解决了IPv6地址动态变化的问题。</li>
+<li><strong>Caddy</strong> 提供了安全的大门（HTTPS）和分流，自动申请证书并实现反向代理，让用户可以直接通过域名访问，无需额外端口号。</li>
+<li><strong>本地DNS</strong> 优化了回家的体验，让内网访问直连，速度达到内网极限，无需绕行公网。</li>
+</ol>
+<p>这套方案的真正价值在于：</p>
+<ul>
+<li><strong>无需额外付费</strong>：域名、服务全部免费</li>
+<li><strong>长期稳定</strong>：IPv6地址由运营商分配，变化频率远低于IPv4</li>
+<li><strong>体验流畅</strong>：HTTPS加密、内网直连优化，访问体验接近本地</li>
+</ul>
+<hr>
+<h2 id="为什么这套方案优于其他选择？"><a href="#为什么这套方案优于其他选择？" class="headerlink" title="为什么这套方案优于其他选择？"></a>为什么这套方案优于其他选择？</h2><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>成本</th>
+<th>稳定性</th>
+<th>配置难度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>公网IPv4+端口映射</td>
+<td>高（专线）</td>
+<td>低</td>
+<td>中</td>
+<td>企业级需求</td>
+</tr>
+<tr>
+<td>内网穿透（frp&#x2F;ngrok）</td>
+<td>中</td>
+<td>中</td>
+<td>高</td>
+<td>临时需求</td>
+</tr>
+<tr>
+<td><strong>IPv6+DDNS+Caddy</strong></td>
+<td><strong>免费</strong></td>
+<td><strong>高</strong></td>
+<td><strong>低</strong></td>
+<td><strong>家庭&#x2F;个人长期使用</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="附录：常见问题排查"><a href="#附录：常见问题排查" class="headerlink" title="附录：常见问题排查"></a>附录：常见问题排查</h2><h3 id="Q1：DDNS更新失败"><a href="#Q1：DDNS更新失败" class="headerlink" title="Q1：DDNS更新失败"></a>Q1：DDNS更新失败</h3><ul>
+<li>检查API地址中的参数是否正确</li>
+<li>确认OpenWrt的<code>wan6</code>接口已获取IPv6地址</li>
+<li>在路由器终端执行：<code>curl &quot;https://api005.dnshe.com/...&amp;ipaddr=2001:db8::1&quot;</code></li>
+</ul>
+<h3 id="Q2：外网无法访问"><a href="#Q2：外网无法访问" class="headerlink" title="Q2：外网无法访问"></a>Q2：外网无法访问</h3><ul>
+<li>检查防火墙规则是否已添加</li>
+<li>确认Caddy是否监听443端口：<code>docker logs caddy</code></li>
+<li>使用<code>ping6 home.cc.cd</code>测试IPv6连通性</li>
+</ul>
+<h3 id="Q3：HTTPS证书申请失败"><a href="#Q3：HTTPS证书申请失败" class="headerlink" title="Q3：HTTPS证书申请失败"></a>Q3：HTTPS证书申请失败</h3><ul>
+<li>确认防火墙开放了80端口（Caddy申请证书需要）</li>
+<li>检查域名是否已正确解析到路0由器IPv6</li>
+<li>确认LuCI端口已修改为8080&#x2F;8443</li>
+</ul>
+<hr>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>在当前国内网络环境下，IPv6已成为家庭内网访问的最优解。通过DNSHE免费域名、OpenWrt DDNS、Caddy反向代理和内网DNS优化的组合方案，我们不仅避免了公网IPv4的获取困境，还实现了<strong>稳定、安全、低成本</strong>的远程访问。</p>
+<p>这套方案的真正价值在于：它不是临时解决方案，而是基于当前网络基础设施的长期解决方案。IPv6的普及是大势所趋，而DDNS+Caddy的组合则让这个趋势变得触手可及。</p>
+<blockquote>
+<p>附：<a target="_blank" rel="noopener" href="https://test-ipv6.com/">测试IPv6连通性</a> | <a target="_blank" rel="noopener" href="https://my.dnshe.com/index.php?m=domain_hub">DNSHE注册链接</a></p>
+</blockquote>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2026/01/15/%E4%BA%8C%E7%BA%A7%E8%B7%AF%E7%94%B1IPv6%E9%85%8D%E7%BD%AE/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">二级路由公网IPv6再分配问题</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2025/11/04/%E7%BD%91%E8%A7%84%E8%AE%BA%E6%96%87/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">网规论文</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+    
+    
+    
+    
+      <img src="/images/profile_photo.jpg" class="soft-size--round soft-style--box" alt="shiranzby">
+    
+    
+      <h2>shiranzby</h2>
+    
+    
+      <p>释然</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>7</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        1
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        6
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+        <li class="categories-list-item">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+            学习笔记 (6)
+          </a>
+        </li>
+        
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/Hexo/" style="font-size: 14px;" class="tags-cloud-0">Hexo</a> <a href="/tags/Openwrt/" style="font-size: 14px;" class="tags-cloud-0">Openwrt</a> <a href="/tags/c/" style="font-size: 14px;" class="tags-cloud-0">c</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;" class="tags-cloud-0">博客</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 14px;" class="tags-cloud-10">技术</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 14px;" class="tags-cloud-5">教程</a>
+    </div>
+  </div>
+</section>
+
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    
+    
+    
+    <div class="social-icons">
+      
+        
+          <a href="https://github.com/shiranzby" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+            
+          </a>
+        
+      
+        
+          <a href="http://www.coolapk.com/u/18690800" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              
+              <span>cool</span>
+            
+          </a>
+        
+      
+    </div>
+    
+    <p>&copy; 2026 <a href="/" target="_blank">Shiranzby</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  
+
+
+
+
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>

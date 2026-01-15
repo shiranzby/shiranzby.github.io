@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+    <meta name="description" content="欢迎来到我的博客！">
+  
+
+  
+    <meta name="keywords" content="学习,博客,Shiranzby">
+  
+
+  
+    <meta name="author" content="Shiranzby">
+  
+
+  
+
+  
+
+  <title>二级路由公网IPv6再分配问题 | Shiranzby</title>
+
+  
+
+  
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+  
+  
+    <div class="post-image" style="background-image: url('/images/banner.jpg')"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Shiranzby
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/">首页</a></li>
+        
+          <li class="navbar-list-item"><a href="/archives">归档</a></li>
+        
+          <li class="navbar-list-item"><a href="/links">友链</a></li>
+        
+          <li class="navbar-list-item"><a href="/about">关于</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">二级路由公网IPv6再分配问题</h1>
+          <h2 class="title-sub-wrap">
+            <strong>Shiranzby</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2026-01-15T14:59:00.000Z" itemprop="datePublished">2026-01-15</time>
+          </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+    <li><a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">📒 学习笔记</a></li>
+    
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/%E6%8A%80%E6%9C%AF/">🏷️ 技术</a></li>
+  
+    <li><a href="/tags/%E6%95%99%E7%A8%8B/">🏷️ 教程</a></li>
+  
+    <li><a href="/tags/Openwrt/">🏷️ Openwrt</a></li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <p><strong>记录时间：</strong> 2026-01-15<br><strong>环境标签：</strong> OpenWrt 22.03+、IPv6、Prefix Delegation(PD)、多级路由、桥接模式<br><strong>核心价值：</strong> 解析 IPv6 前缀委派底层逻辑，解决二级路由下设备无法获取公网 IPv6 的核心痛点，附带技术原理解析与避坑指南</p>
+<hr>
+<h2 id="背景与网络拓扑"><a href="#背景与网络拓扑" class="headerlink" title="背景与网络拓扑"></a>背景与网络拓扑</h2><h3 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h3><ul>
+<li><strong>光猫</strong>：工作在桥接模式，仅负责光电转换，不参与路由与 DHCP 分配</li>
+<li><strong>A 路由器（主路由）</strong>：<ul>
+<li>系统：OpenWrt 软路由</li>
+<li>WAN 口：PPPoE 拨号，从 ISP 获取 <code>/60</code> 长度的 IPv6 公网前缀</li>
+<li>LAN 网段：<code>192.168.2.1/24</code>（已稳定运行，不改动）</li>
+</ul>
+</li>
+<li><strong>B 路由器（二级路由）</strong>：<ul>
+<li>系统：OpenWrt 软路由</li>
+<li>连接方式：WAN 口直连 A 路由器 LAN 口</li>
+<li>LAN 网段：<code>192.168.6.1/24</code>（核心约束：必须保留独立网段，不允许改为 AP 模式或合并网段）</li>
+</ul>
+</li>
+<li><strong>终端设备</strong>：需通过 任意A、B 路由器获取 <strong>全球唯一、可公网路由的 IPv6 地址</strong>（非 ULA 私有地址、非 NAT66 转换地址）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    光猫[&quot;光猫 - 桥接模式&quot;] --&gt; A路由[&quot;A路由器（主路由）&quot;]</span><br><span class="line">    A路由 --&gt;|LAN→WAN| B路由[&quot;B路由器（二级路由）&quot;]</span><br><span class="line">    B路由 --&gt; 终端设备[&quot;PC/手机/IoT设备&quot;]</span><br><span class="line">    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">	subgraph &quot;A路由配置（Qihoo 360T7）&quot;</span><br><span class="line">        A_HW[&quot;硬件：Qihoo 360T7/ARMv8&quot;]</span><br><span class="line">        A_SYS[&quot;系统：ImmortalWrt 24.10-SNAPSHOT/内核6.6.95&quot;]</span><br><span class="line">        A_WAN[&quot;WAN：PPPoE拨号&quot;]</span><br><span class="line">        A_LAN[&quot;LAN：192.168.2.1/24&quot;]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    subgraph &quot;B路由配置（JDCloud RE-CS-02）&quot;</span><br><span class="line">        B_HW[&quot;硬件：JDCloud RE-CS-02 AX6600/ARMv8&quot;]</span><br><span class="line">        B_SYS[&quot;系统：BleachWrt Docker 20251212/内核6.12.61&quot;]</span><br><span class="line">        B_WAN[&quot;WAN：DHCP&quot;]</span><br><span class="line">        B_LAN[&quot;LAN：192.168.6.1/24&quot;]</span><br><span class="line">    end</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="核心需求与约束"><a href="#核心需求与约束" class="headerlink" title="核心需求与约束"></a>核心需求与约束</h3><ul>
+<li><strong>功能需求：</strong>A、B 路由下设备获取 <strong>全球唯一公网 IPv6 地址</strong>（非 ULA 私有地址、非 NAT66 转换）</li>
+<li><strong>禁止操作：</strong>不合并网段、不修改 A&#x2F;B 路由 IPv4 网段、B 路由不切换 AP 模式。</li>
+</ul>
+<h3 id="初始故障现象"><a href="#初始故障现象" class="headerlink" title="初始故障现象"></a>初始故障现象</h3><p><strong>核心故障：B 路由器无法获取 IPv6 前缀委派（PD），其 LAN 口仅分配 <code>fde8::</code> 开头的 ULA 私有地址，导致下联设备无法访问 IPv6 公网</strong></p>
+<table>
+<thead>
+<tr>
+<th>设备&#x2F;接口</th>
+<th>IPv6 状态</th>
+<th>异常点分析</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A 路由 LAN 设备</td>
+<td>正常获取公网 IPv6（2409:8a38:1422:4cxx::&#x2F;60 网段），可访问 IPv6 公网资源</td>
+<td>-</td>
+</tr>
+<tr>
+<td>B 路由 WAN6 口</td>
+<td>获得公网 IPv6 地址（2409:8a38:1422:4cxx:ded8:7cff:fe54:9fd1&#x2F;64）</td>
+<td><strong>仅获取地址，未获取 PD 前缀池</strong></td>
+</tr>
+<tr>
+<td>B 路由 LAN 口</td>
+<td>仅分配 ULA 地址（fde8:c555:1a9d::1&#x2F;64），无公网 IPv6 前缀</td>
+<td><strong>PD 未穿透，无法分发公网地址</strong></td>
+</tr>
+<tr>
+<td>B 下终端设备</td>
+<td>仅获取 fde8:: 私有地址，部分设备偶然出现非 A 路由网段公网 IPv6（非预期路径）</td>
+<td><strong>地址来源异常，不可靠</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="核心技术概念解析（先懂原理再配置）"><a href="#核心技术概念解析（先懂原理再配置）" class="headerlink" title="核心技术概念解析（先懂原理再配置）"></a>核心技术概念解析（先懂原理再配置）</h2><h3 id="什么是-IPv6-前缀委派（Prefix-Delegation-PD）？"><a href="#什么是-IPv6-前缀委派（Prefix-Delegation-PD）？" class="headerlink" title="什么是 IPv6 前缀委派（Prefix Delegation, PD）？"></a>什么是 IPv6 前缀委派（Prefix Delegation, PD）？</h3><p>IPv6 前缀委派是 DHCPv6 协议的核心扩展功能，用于 <strong>多级路由场景下的前缀分配与管理</strong>。简单说：</p>
+<ul>
+<li>ISP 向主路由（A）分配一个大的 IPv6 前缀（如本文 <code>/60</code>），相当于给主路由分配了一个”地址池”</li>
+<li>主路由（A）通过 PD 机制，将这个大前缀拆分成多个小前缀（如 <code>/64</code>），分发给下游路由（B）</li>
+<li>下游路由（B）再用分到的小前缀，为自己 LAN 下的设备分配独立公网 IPv6 地址</li>
+</ul>
+<p><strong>类比理解</strong>：ISP 给你家（A 路由）分配了一栋 16 层的楼（<code>/60</code> 前缀，可拆 16 个 <code>/64</code> 子网），PD 就是你把其中一层（如第 4 层，<code>/64</code> 子网）分配给租客（B 路由），租客再把这一层的房间（独立 IPv6 地址）分配给家人（终端设备）。</p>
+<h3 id="IPv6-PD-协议交互流程"><a href="#IPv6-PD-协议交互流程" class="headerlink" title="IPv6 PD 协议交互流程"></a>IPv6 PD 协议交互流程</h3><p>PD 并非简单的”地址分配”，而是 <strong>DHCPv6 协议簇的 IA_PD（Identity Association for Prefix Delegation）交互过程</strong>，核心流程如下：</p>
+<ol>
+<li><strong>A 路由拨号阶段</strong>：A 路由通过 PPPoE 发送 DHCPv6 Solicit 报文，携带 IA_PD 请求选项，ISP 回应 Advertise 报文，分配 &#x2F;60 前缀（2409:8a38:1422:4cxx::&#x2F;60）</li>
+<li><strong>B 路由请求阶段</strong>：B 路由 WAN6 口发送 DHCPv6 Solicit 报文，携带 IA_PD（请求 &#x2F;64 前缀）和 IA_NA（请求自身 IPv6 地址）选项</li>
+<li><strong>A 路由分配阶段</strong>：A 路由的 odhcpd 服务接收请求，从 &#x2F;60 前缀池中拆分出一个 &#x2F;64 子前缀（如 2409:8a38:1422:4cyy::&#x2F;64），通过 Reply 报文返回给 B 路由</li>
+<li><strong>B 路由分发阶段</strong>：B 路由将获得的 &#x2F;64 前缀配置到 br-lan 接口，通过 RA 报文通告给终端，同时 DHCPv6 服务器补充 DNS 等配置</li>
+</ol>
+<h3 id="为什么-IPv6-最小子网必须是-64？"><a href="#为什么-IPv6-最小子网必须是-64？" class="headerlink" title="为什么 IPv6 最小子网必须是 /64？"></a>为什么 IPv6 最小子网必须是 <code>/64</code>？</h3><p>这是 IPv6 协议设计的硬性规范，核心原因有三：</p>
+<ol>
+<li><p><strong>SLAAC 地址自动配置需求</strong>：IPv6 无状态地址自动配置（SLAAC）依赖 EUI-64 格式生成地址，SLAAC 协议要求接口标识字段为 64 位（通过 MAC 地址转换生成），因此子网前缀必须为 &#x2F;64（网络位 64 + 接口位 64 &#x3D; 128 位完整地址）</p>
+</li>
+<li><p><strong>协议兼容性</strong>：几乎所有 IPv6 设备（电脑、手机、IoT 设备）仅支持 <code>/64</code> 子网，非 <code>/64</code> 子网（如 <code>/63</code>、<code>/65</code>）会导致设备无法自动获取地址或通信异常</p>
+<blockquote>
+<p>RFC 4291 明确规定，除点对点链路外，所有 IPv6 子网必须使用 &#x2F;64 前缀，非 &#x2F;64 子网（如 &#x2F;63、&#x2F;65）会导致设备拒绝接收 RA 报文</p>
+</blockquote>
+</li>
+<li><p><strong>路由标准化</strong>：ISP 分配的公网前缀（如 <code>/56</code>、<code>/60</code>）均为 <code>/64</code> 的整数倍（<code>/56</code> 可拆 256 个 <code>/64</code>，<code>/60</code> 可拆 16 个 <code>/64</code>），确保多级分配无浪费</p>
+</li>
+</ol>
+<h3 id="前缀委派成功的三大核心条件"><a href="#前缀委派成功的三大核心条件" class="headerlink" title="前缀委派成功的三大核心条件"></a>前缀委派成功的三大核心条件</h3><ol>
+<li><strong>上游路由（A）</strong>：<ul>
+<li>已从 ISP 获取合法公网前缀（如 <code>/60</code>）</li>
+<li>启用 DHCPv6 服务器与 RA（路由通告）服务</li>
+<li>允许向下游路由分发子前缀（PD 分发权限开启）</li>
+</ul>
+</li>
+<li><strong>下游路由（B）</strong>：<ul>
+<li>WAN6 口启用 DHCPv6 客户端，且显式请求前缀委派</li>
+<li>LAN 口配置为从 PD 前缀自动获取地址，启用 RA&#x2F;DHCPv6 服务</li>
+</ul>
+</li>
+<li><strong>通信链路</strong>：<ul>
+<li>两级路由之间允许 DHCPv6 协议（UDP 546&#x2F;547 端口）与 ICMPv6 协议（RS&#x2F;RA&#x2F;NS&#x2F;NA 类型）通行</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="根本故障原因"><a href="#根本故障原因" class="headerlink" title="根本故障原因"></a>根本故障原因</h2><p><strong>B 路由未获取 PD 前缀，A 路由 odhcpd 服务因配置限制，未响应 B 路由的 IA_PD 请求。</strong></p>
+<h3 id="核心误区：对-“PD-最小长度”-的理解错误"><a href="#核心误区：对-“PD-最小长度”-的理解错误" class="headerlink" title="核心误区：对 “PD 最小长度” 的理解错误"></a>核心误区：对 “PD 最小长度” 的理解错误</h3><p>A 路由器 Web UI（LuCI）中，DHCPv6 服务器有一个关键选项 **”PD 最小长度（Minimum Prefix Delegation Length）”**，这是本次踩坑的核心陷阱：</p>
+<table>
+<thead>
+<tr>
+<th>错误认知</th>
+<th>正确逻辑</th>
+<th>底层原理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“要分给 B 路由 <code>/64</code> 子网，所以填 64”</td>
+<td>“PD 最小长度 &#x3D; 上游获取的前缀长度（如 <code>/60</code>）”</td>
+<td>该字段实际含义是 **”允许向下游分配的最长前缀长度下限”**，填 <code>/60</code> 表示”允许分配 <code>/60</code> 及更长的前缀（如 <code>/61</code>、<code>/62</code>、<code>/64</code>）”</td>
+</tr>
+<tr>
+<td>“UI 限制 1-62，无法填 64 就是配置不了”</td>
+<td>“UI 限制是 Bug，填 <code>/60</code> 即可触发底层自动分配 <code>/64</code>“</td>
+<td>OpenWrt 底层 odhcpd 服务支持从 <code>/60</code> 拆分 <code>/64</code>，LuCI 前端硬编码输入范围，与底层 odhcpd 服务支持冲突，UI 输入限制仅为前端逻辑，不影响底层功能</td>
+</tr>
+</tbody></table>
+<h3 id="故障点"><a href="#故障点" class="headerlink" title="故障点"></a>故障点</h3><ul>
+<li>B 路由器 WAN6 口未显式配置 <code>reqprefix=&#39;auto&#39;</code>，仅请求了 IPv6 地址，未请求前缀委派</li>
+<li>初始配置中 A 路由器错配未勾选 “将委派前缀60并分配给下游”，导致 B 路由的 PD 请求被拒绝</li>
+</ul>
+<hr>
+<h2 id="分步解决方案（按优先级排序）"><a href="#分步解决方案（按优先级排序）" class="headerlink" title="分步解决方案（按优先级排序）"></a>分步解决方案（按优先级排序）</h2><h3 id="4-1-A-路由器（上游主路由PD分发端）配置"><a href="#4-1-A-路由器（上游主路由PD分发端）配置" class="headerlink" title="4.1 A 路由器（上游主路由PD分发端）配置"></a>4.1 A 路由器（上游主路由PD分发端）配置</h3><h4 id="让-A路由器的odhcpd-服务正确响应-B-路由的-PD-请求"><a href="#让-A路由器的odhcpd-服务正确响应-B-路由的-PD-请求" class="headerlink" title="让 A路由器的odhcpd 服务正确响应 B 路由的 PD 请求"></a>让 A路由器的odhcpd 服务正确响应 B 路由的 PD 请求</h4><ol>
+<li><p><strong>WAN 接口配置</strong>：</p>
+<ul>
+<li>协议：PPPoEc</li>
+<li>勾选：<code>请求 IPv6 前缀委派（Request IPv6 prefix delegation）</code></li>
+<li>高级设置：<code>使用默认网关，自动获取DNS服务器，开启IPv6源路由，委托IPv6前缀，禁用IPv6分配长度，其余默认</code></li>
+<li><code>使用对等 DNS</code> 勾选（若有）</li>
+<li>DHCP服务器：<code>常规设置 忽略此接口，指定的主接口默认关闭，IPv6设置全部禁用</code></li>
+<li>确认：已获取 <code>/60</code> 前缀（如 <code>2409:8a38:1422:4c20::/60</code>）</li>
+</ul>
+</li>
+<li><p><strong>LAN 接口 → DHCP 服务器 → IPv6 设置</strong>：</p>
+<ul>
+<li><p>高级设置：<code>开启委托IPv6前缀，IPv6分配长度设置为64，其余默认</code></p>
+</li>
+<li><p>DHCP服务器：</p>
+<ul>
+<li><p><code>高级设置动态DHCP开启</code></p>
+</li>
+<li><p><code>IPv6设置 RA DHCPv6服务均设置服务器模式 PD最小长度60 其余默认</code></p>
+<blockquote>
+<p> RA 服务：<code>服务器模式</code>（必须，用于向 B 路由通告路由信息）</p>
+<p>DHCPv6 服务：<code>服务器模式</code>（必须，用于分配 DNS 等配置信息）</p>
+<p>NDP 代理：<code>禁用</code>（默认禁用，无需改动）</p>
+</blockquote>
+</li>
+<li><p><code>IPv6 RA设置 启用SLAAC RA标记改为其他配置 DHCPv6模式改为无状态+有状态的 其余默认</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>保存配置并应用</strong></p>
+</li>
+</ol>
+<h3 id="B-路由器（下游二级路由）配置"><a href="#B-路由器（下游二级路由）配置" class="headerlink" title="B 路由器（下游二级路由）配置"></a>B 路由器（下游二级路由）配置</h3><h4 id="让-B-路由正确请求-PD-并应用到-LAN通过-br-lan-分发"><a href="#让-B-路由正确请求-PD-并应用到-LAN通过-br-lan-分发" class="headerlink" title="让 B 路由正确请求 PD 并应用到 LAN通过 br-lan 分发"></a>让 B 路由正确请求 PD 并应用到 LAN通过 br-lan 分发</h4><ol>
+<li><p><strong>WAN6 接口配置</strong>（关键：请求 PD 而非仅请求地址）：</p>
+<ul>
+<li>协议：DHCPv6 客户端</li>
+<li>请求 IPv6 地址：<code>try</code>（尝试获取，不强制，避免拨号失败）</li>
+<li>请求指定长度的 IPv6 前缀：<code>自动（auto）</code>（告诉 A 路由”我需要一个子前缀”）</li>
+<li>高级设置：勾选 <code>使用默认网关 使用对等通告的DNS服务器</code> 其余默认（从 A 路由获取 IPv6 DNS 服务器）</li>
+</ul>
+</li>
+<li><p><strong>LAN 接口 → DHCP 服务器 → IPv6 设置</strong>：</p>
+<ul>
+<li><p>RA 服务：<code>服务器模式</code>（向下游设备通告路由）</p>
+</li>
+<li><p>基本设置：<code>IPv6分配长度改为64</code></p>
+</li>
+<li><p>DHCP服务器：</p>
+<ul>
+<li><p><code>高级设置动态DHCP开启</code></p>
+</li>
+<li><p><code>IPv6设置 RA DHCPv6服务均设置服务器模式 PD最小长度60 其余默认</code></p>
+<blockquote>
+<p> RA路由通告服务：<code>服务器模式</code></p>
+<p>DHCPv6 服务：<code>服务器模式</code></p>
+<p>NDP 代理：<code>禁用</code>（默认禁用，无需改动）</p>
+<p>IPv6 RA设置 启用SLAAC RA标记改为其他配置（若有）</p>
+<p>DHCPv6模式改为无状态+有状态的</p>
+<p>勾选：<code>总是通告默认路由</code></p>
+<p>其余默认</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>保存配置并应用</strong></p>
+</li>
+</ol>
+<h3 id="防火墙配置（默认已兼容，异常时检查）"><a href="#防火墙配置（默认已兼容，异常时检查）" class="headerlink" title="防火墙配置（默认已兼容，异常时检查）"></a>防火墙配置（默认已兼容，异常时检查）</h3><p>IPv6 通信依赖 ICMPv6 与 DHCPv6 协议，确保 A&#x2F;B 路由防火墙未拦截：</p>
+<ul>
+<li><p>允许 UDP 546&#x2F;547 端口（DHCPv6 客户端&#x2F;服务器端口）</p>
+</li>
+<li><p>允许 ICMPv6 类型 133（RS 路由请求）、134（RA 路由通告）、135（NS 邻居请求）、136（NA 邻居通告）</p>
+</li>
+<li><p>OpenWrt 默认防火墙规则已放行上述流量，无需额外配置，除非手动修改过默认规则</p>
+</li>
+<li><p>命令行放行（若默认规则被修改）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A/B 路由均执行</span></span><br><span class="line">uci add firewall rule</span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].name=<span class="string">&#x27;Allow-DHCPv6&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].proto=<span class="string">&#x27;udp&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].src=<span class="string">&#x27;lan&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].dest_port=<span class="string">&#x27;546-547&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].target=<span class="string">&#x27;ACCEPT&#x27;</span></span><br><span class="line"></span><br><span class="line">uci add firewall rule</span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].name=<span class="string">&#x27;Allow-ICMPv6&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].proto=<span class="string">&#x27;icmpv6&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].src=<span class="string">&#x27;lan&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].icmp_type=<span class="string">&#x27;133 134 135 136&#x27;</span></span><br><span class="line">uci <span class="built_in">set</span> firewall.@rule[-1].target=<span class="string">&#x27;ACCEPT&#x27;</span></span><br><span class="line"></span><br><span class="line">uci commit firewall</span><br><span class="line">/etc/init.d/firewall restart</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="修改后状态验证"><a href="#修改后状态验证" class="headerlink" title="修改后状态验证"></a>修改后状态验证</h2><h3 id="B-路由器状态验证"><a href="#B-路由器状态验证" class="headerlink" title="B 路由器状态验证"></a>B 路由器状态验证</h3><ol>
+<li><p><strong>Web UI 验证</strong>：</p>
+<ul>
+<li>WAN6 接口：显示 <code>IPv6-PD</code> 字段（如 <code>2409:xxyy:xxyy:xxyy::/62</code>），表示成功获取子前缀池</li>
+<li>LAN 接口（br-lan）：显示公网 IPv6 地址（如 <code>2409:xxyy:xxyy:xxyy::1/64</code>），同时可能存在 <code>fde8::</code> 开头的 ULA 地址（可忽略，不影响使用）</li>
+</ul>
+</li>
+<li><p><strong>SSH 命令验证</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看 PD 获取状态</span></span><br><span class="line">ubus call network.interface.wan6 status | grep -A6 <span class="string">&quot;ipv6-prefix&quot;</span></span><br><span class="line"><span class="comment"># 成功输出示例</span></span><br><span class="line"><span class="string">&quot;ipv6-prefix&quot;</span>: [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;address&quot;</span>: <span class="string">&quot;2409:xxyy:xxyy:xxyy::&quot;</span>,</span><br><span class="line">    <span class="string">&quot;mask&quot;</span>: 62,  <span class="comment"># 显示 /62 是正常的，底层会自动拆分 /64 子网</span></span><br><span class="line">    <span class="string">&quot;preferred&quot;</span>: 86400,</span><br><span class="line">    <span class="string">&quot;valid&quot;</span>: 172800</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看 LAN 口 IPv6 地址：<code>ip -6 addr show br-lan</code>，需存在 <code>scope global</code> 类型的公网地址（非 <code>fe80::</code> 链路本地地址）</li>
+</ul>
+</li>
+<li><p><strong>终端设备验证（Windows&#x2F;macOS&#x2F;Linux）</strong>：</p>
+<ul>
+<li><p>Windows：<code>ipconfig /all</code> 应显示 2409:xxyy:xxyy:xxyy 地址</p>
+</li>
+<li><p>macOS&#x2F;Linux：<code>ip -6 addr</code> 应显示 scope global 类型的  2409:xxyy:xxyy:xxyy开头地址</p>
+</li>
+<li><p>连通性测试：访问 <code>https://test-ipv6.com/</code>，得分 10&#x2F;10 表示配置完全正确</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令行</span></span><br><span class="line">ping6 ipv6.google.com  <span class="comment"># 通表示路由正常</span></span><br><span class="line">curl -6 https://api6.ipify.org  <span class="comment"># 返回公网 IPv6 地址表示成功</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h2 id="排错工具链（从日志到抓包）"><a href="#排错工具链（从日志到抓包）" class="headerlink" title="排错工具链（从日志到抓包）"></a>排错工具链（从日志到抓包）</h2><h3 id="常见误区原因"><a href="#常见误区原因" class="headerlink" title="常见误区原因"></a>常见误区原因</h3><ol>
+<li><strong>误区 1</strong>：PD 最小长度填 <code>64</code> → 正确做法：填上游获取的前缀长度（如 <code>/60</code>）<ul>
+<li>原因：UI 显示”最小长度”实为”最长前缀允许下限”，填 <code>/60</code> 才能让系统拆分 <code>/64</code> 子前缀</li>
+</ul>
+</li>
+<li><strong>误区 2</strong>：B 路由 WAN6 仅请求地址，未请求 PD → 正确做法：必须设置 <code>reqprefix=&#39;auto&#39;</code><ul>
+<li>原因：仅请求地址会导致 B 路由只有自身 IPv6 地址，没有子前缀池，无法分给下游设备</li>
+</ul>
+</li>
+<li><strong>误区 3</strong>：手动给 B 路由 LAN 口指定静态 IPv6 地址 → 正确做法：留空，让系统从 PD 自动获取<ul>
+<li>原因：手动指定会导致地址与 PD 前缀不匹配，下游设备无法获取有效地址</li>
+</ul>
+</li>
+</ol>
+<h3 id="常见故障排查"><a href="#常见故障排查" class="headerlink" title="常见故障排查"></a>常见故障排查</h3><table>
+<thead>
+<tr>
+<th>故障现象</th>
+<th>排查步骤</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B 路由 WAN6 无 IPv6-PD</td>
+<td>1. 检查 A 路由是否勾选”分配 PD 给下游”；2. 检查 B 路由 reqprefix 是否为 auto；3. 查看 A 路由日志 &#96;logread</td>
+<td>grep dhcpv6&#96;</td>
+</tr>
+<tr>
+<td>B 路由 LAN 口无公网 IPv6</td>
+<td>1. 检查 B 路由 LAN 分配长度是否为 64；2. 查看 PD 是否获取成功；3. 重启 B 路由网络服务</td>
+<td>1. 设为 64 子网；2. 重新请求 PD；3. 执行 <code>/etc/init.d/network restart</code></td>
+</tr>
+<tr>
+<td>终端有公网 IPv6 但无法上网</td>
+<td>1. 检查是否为 ULA 地址（fd 开头）；2. 验证默认路由是否存在；3. 测试 DNS 解析 <code>nslookup -type=AAAA ipv6.google.com</code></td>
+<td>1. 确保获取公网前缀（2409: 等）；2. 确认 RA 已通告默认路由；3. 检查 DNS 配置是否正确</td>
+</tr>
+</tbody></table>
+<h3 id="日志分析（SSH）："><a href="#日志分析（SSH）：" class="headerlink" title="日志分析（SSH）："></a><strong>日志分析（SSH）</strong>：</h3><ul>
+<li>查看 A 路由 PD 分配日志：<code>logread | grep odhcpd | grep -E &#39;prefix|delegate&#39;</code></li>
+<li>查看 B 路由 PD 请求日志：<code>logread | grep dhcp6c | grep -E &#39;IA_PD|prefix&#39;</code></li>
+<li>关键成功日志：<code>dhcp6c: client6_recvreply: reply received from fe80::e2ef:2ff:fed0:ac01%wan, pending IAID 0</code></li>
+</ul>
+<h3 id="抓包验证（需安装-tcpdump）："><a href="#抓包验证（需安装-tcpdump）：" class="headerlink" title="抓包验证（需安装 tcpdump）："></a><strong>抓包验证（需安装 tcpdump）</strong>：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># B 路由安装 tcpdump</span></span><br><span class="line">opkg update &amp;&amp; opkg install tcpdump</span><br><span class="line"><span class="comment"># 抓取 WAN6 口 DHCPv6 报文</span></span><br><span class="line">tcpdump -i wan6 port 546 or port 547 -vvv</span><br><span class="line"><span class="comment"># 成功标志：存在 DHCPv6 Reply 报文，携带 IA_PD 选项（前缀 2409:8a38:1422:4cyy::/64）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="协议本质"><a href="#协议本质" class="headerlink" title="协议本质"></a>协议本质</h3><p>IPv6 PD 穿透的核心是 <strong>“请求-分配-分发”的 DHCPv6 交互闭环</strong>，OpenWrt&#x2F;ImmortalWrt 的 UI 限制只是表象，通过 SSH 命令行可直接操作底层配置文件，突破前端限制。对于无独立 RA 配置的机型，记住”DHCPv6 服务器模式&#x3D;RA 服务器模式”的等效关系，即可实现功能全覆盖。</p>
+<p>本方案已在 Qihoo 360T7（ImmortalWrt 24.10）+ JDCloud RE-CS-02 AX6600（BleachWrt 25.10.10）环境验证通过，适用于所有 OpenWrt 22.03+ 衍生版本，以及 ISP 提供 &#x2F;56、&#x2F;60 前缀的场景。</p>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2025/12/09/DDNS/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">(no title)</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+    
+    
+    
+    
+      <img src="/images/profile_photo.jpg" class="soft-size--round soft-style--box" alt="shiranzby">
+    
+    
+      <h2>shiranzby</h2>
+    
+    
+      <p>释然</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>7</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        1
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        6
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+        <li class="categories-list-item">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+            学习笔记 (6)
+          </a>
+        </li>
+        
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/Hexo/" style="font-size: 14px;" class="tags-cloud-0">Hexo</a> <a href="/tags/Openwrt/" style="font-size: 14px;" class="tags-cloud-0">Openwrt</a> <a href="/tags/c/" style="font-size: 14px;" class="tags-cloud-0">c</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 14px;" class="tags-cloud-0">博客</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 14px;" class="tags-cloud-10">技术</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 14px;" class="tags-cloud-5">教程</a>
+    </div>
+  </div>
+</section>
+
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    
+    
+    
+    <div class="social-icons">
+      
+        
+          <a href="https://github.com/shiranzby" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+            
+          </a>
+        
+      
+        
+          <a href="http://www.coolapk.com/u/18690800" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            
+              
+              <span>cool</span>
+            
+          </a>
+        
+      
+    </div>
+    
+    <p>&copy; 2026 <a href="/" target="_blank">Shiranzby</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  
+
+
+
+
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>
