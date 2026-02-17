@@ -26,7 +26,7 @@
 
   
 
-  <title>test | Shiranzby</title>
+  <title>路由器 eMMC 全盘分区详解 | Shiranzby</title>
 
   
 
@@ -107,17 +107,12 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">test</h1>
+          <h1 class="title-wrap">路由器 eMMC 全盘分区详解</h1>
           <h2 class="title-sub-wrap">
             <strong>Shiranzby</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2025-08-04T10:02:12.000Z" itemprop="datePublished">2025-08-04</time>
+            <time  class="article-date" datetime="2026-02-17T10:57:00.000Z" itemprop="datePublished">2026-02-17</time>
           </h2>
-          
-            <h2 class="last-time">
-              <span>最后更新于</span>
-              <time  class="article-updated" datetime="2026-01-15T15:29:27.955Z" itemprop="dateUpdated">2026-01-15</time>
-            </h2>
           
           
           <ul class="wrap-list dark">
@@ -127,9 +122,11 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/Hexo/">🏷️ Hexo</a></li>
+    <li><a href="/tags/%E6%8A%80%E6%9C%AF/">🏷️ 技术</a></li>
   
-    <li><a href="/tags/%E5%8D%9A%E5%AE%A2/">🏷️ 博客</a></li>
+    <li><a href="/tags/%E6%95%99%E7%A8%8B/">🏷️ 教程</a></li>
+  
+    <li><a href="/tags/Openwrt/">🏷️ Openwrt</a></li>
   
 </ul>
         </div>
@@ -153,36 +150,334 @@
       
       
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h1 id="First"><a href="#First" class="headerlink" title="First"></a>First</h1><h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><ul>
-<li>1</li>
-<li>2</li>
-<li>3</li>
-<li>4</li>
-</ul>
-<blockquote>
-<p>你好<br>你好</p>
+        <h1 id="路由器-eMMC-全盘分区详解"><a href="#路由器-eMMC-全盘分区详解" class="headerlink" title="路由器 eMMC 全盘分区详解"></a>路由器 eMMC 全盘分区详解</h1><blockquote>
+<p>以 8GB eMMC 路由器 GPT 分区为例<br>适用架构：Qualcomm IPQ 系列<br>系统类型：OpenWrt &#x2F; Kwrt<br>存储类型：eMMC 8GB（实际约 7.22 GiB）<br>分区表类型：GPT（2048 扇区 &#x2F; 1MB 对齐）</p>
 </blockquote>
+<hr>
+<h2 id="整体空间结构划分"><a href="#整体空间结构划分" class="headerlink" title="整体空间结构划分"></a>整体空间结构划分</h2><p>整块 eMMC 可逻辑划分为三大区域：</p>
+<ol>
+<li><strong>Boot 引导区（p1–p17）</strong></li>
+<li><strong>系统核心区（p18–p25）</strong></li>
+<li><strong>用户可用区（p26）</strong></li>
+</ol>
+<p>结构示意：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ Boot Chain ]  →  [ Linux System ]  →  [ User Data ]</span><br><span class="line">p1–p17              p18–p25              p26</span><br></pre></td></tr></table></figure>
 
+<hr>
+<h2 id="Boot-引导区（p1–p17）"><a href="#Boot-引导区（p1–p17）" class="headerlink" title="Boot 引导区（p1–p17）"></a>Boot 引导区（p1–p17）</h2><h3 id="启动链原理"><a href="#启动链原理" class="headerlink" title="启动链原理"></a>启动链原理</h3><p>Qualcomm 平台采用分级加载启动机制：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BootROM (SoC 内置，只读)</span><br><span class="line">        ↓</span><br><span class="line">XBL / SBL</span><br><span class="line">        ↓</span><br><span class="line">ABOOT / LK</span><br><span class="line">        ↓</span><br><span class="line">Linux Kernel</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>BootROM 固化在芯片内部，不可修改。</li>
+<li>eMMC 中的 p1–p17 承载外部启动组件。</li>
+<li>任一关键分区损坏，将导致启动链中断。</li>
+<li>结果通常为：无串口输出、无法软件恢复。</li>
+</ul>
+<hr>
+<h3 id="区域特性说明"><a href="#区域特性说明" class="headerlink" title="区域特性说明"></a>区域特性说明</h3><ul>
+<li>总容量约 20MB</li>
+<li>由厂商出厂写入</li>
+<li>GPT 仅描述分区位置，不代表可操作</li>
+<li>严禁删除、格式化或改动大小</li>
+<li>若损坏，仅能通过 EDL &#x2F; 专用烧录工具恢复</li>
+</ul>
+<hr>
+<h3 id="Boot-分区详解表"><a href="#Boot-分区详解表" class="headerlink" title="Boot 分区详解表"></a>Boot 分区详解表</h3><table>
+<thead>
+<tr>
+<th>分区</th>
+<th>起始-结束</th>
+<th>大小</th>
+<th>功能说明（基于 Qualcomm 架构推测）</th>
+<th>风险等级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>p1</td>
+<td>34-1569</td>
+<td>768KB</td>
+<td>XBL：初始化 DDR、时钟系统</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p2</td>
+<td>1570-2081</td>
+<td>256KB</td>
+<td>DDR Config：内存校准参数</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p3</td>
+<td>2082-2593</td>
+<td>256KB</td>
+<td>DEV_INFO：设备标志位</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p4</td>
+<td>2594-6177</td>
+<td>1.75MB</td>
+<td>APPSBL：二级引导加载器</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p5</td>
+<td>6178-9761</td>
+<td>1.75MB</td>
+<td>APPSBL 备份</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p6</td>
+<td>9762-10273</td>
+<td>256KB</td>
+<td>RPM：电源管理固件</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p7</td>
+<td>10274-10785</td>
+<td>256KB</td>
+<td>TZ：TrustZone 安全环境</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p8</td>
+<td>10786-11297</td>
+<td>256KB</td>
+<td>Hyp：虚拟化支持</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p9</td>
+<td>11298-11809</td>
+<td>256KB</td>
+<td>MBA：调制解调器认证</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p10</td>
+<td>11810-12321</td>
+<td>256KB</td>
+<td>Modem 配置</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p11</td>
+<td>12322-12833</td>
+<td>256KB</td>
+<td>Boot 环境变量备份</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p12</td>
+<td>12834-13345</td>
+<td>256KB</td>
+<td>A&#x2F;B 切换标志</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p13</td>
+<td>13346-14625</td>
+<td>640KB</td>
+<td>Factory A：MAC &#x2F; 序列号</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p14</td>
+<td>14626-15905</td>
+<td>640KB</td>
+<td>Factory B 备份</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p15</td>
+<td>15906-16417</td>
+<td>256KB</td>
+<td>SSD：安全启动标志</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p16</td>
+<td>16418-28705</td>
+<td>6MB</td>
+<td>ABOOT：Android Bootloader</td>
+<td>极高</td>
+</tr>
+<tr>
+<td>p17</td>
+<td>28706-40993</td>
+<td>6MB</td>
+<td>ABOOT 备份</td>
+<td>极高</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="系统核心区（p18–p25）"><a href="#系统核心区（p18–p25）" class="headerlink" title="系统核心区（p18–p25）"></a>系统核心区（p18–p25）</h2><p>该区域为 OpenWrt系统实际运行区域。</p>
+<hr>
+<h3 id="OpenWrt-文件系统架构"><a href="#OpenWrt-文件系统架构" class="headerlink" title="OpenWrt 文件系统架构"></a>OpenWrt 文件系统架构</h3><p>OpenWrt 采用只读系统 + 可写叠加层结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/rom        → SquashFS（只读系统镜像）</span><br><span class="line">/overlay    → F2FS / JFFS2（可写层）</span><br></pre></td></tr></table></figure>
+
+<p>通过 OverlayFS 组合：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overlayfs = lowerdir(/rom) + upperdir(/overlay)</span><br></pre></td></tr></table></figure>
+
+<p>系统升级时：</p>
+<ul>
+<li>替换 SquashFS 镜像</li>
+<li>Overlay 保留用户配置</li>
+</ul>
+<hr>
+<h3 id="系统分区详解表"><a href="#系统分区详解表" class="headerlink" title="系统分区详解表"></a>系统分区详解表</h3><table>
+<thead>
+<tr>
+<th>分区</th>
+<th>起始-结束</th>
+<th>大小</th>
+<th>挂载点</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>p18</td>
+<td>40994-4235297</td>
+<td>2.0 GB</td>
+<td>&#x2F;rom</td>
+<td>SquashFS 系统镜像(只读,升级时整体替换)</td>
+</tr>
+<tr>
+<td>p19</td>
+<td>4235298-4243489</td>
+<td>4 MB</td>
+<td>-</td>
+<td>备用内核 &#x2F; OTA</td>
+</tr>
+<tr>
+<td>p20</td>
+<td>4243490-4366369</td>
+<td>60 MB</td>
+<td>-</td>
+<td>缓存或 JFFS2 空间</td>
+</tr>
+<tr>
+<td>p21</td>
+<td>4366370-4374561</td>
+<td>4 MB</td>
+<td>-</td>
+<td>misc 标志区</td>
+</tr>
+<tr>
+<td>p22</td>
+<td>4374562-4415521</td>
+<td>20 MB</td>
+<td>-</td>
+<td>Crash Dump</td>
+</tr>
+<tr>
+<td>p23</td>
+<td>4415522-4416545</td>
+<td>512 KB</td>
+<td>-</td>
+<td>Factory 配置</td>
+</tr>
+<tr>
+<td>p24</td>
+<td>4416546-4595745</td>
+<td>87.5 MB</td>
+<td>&#x2F;overlay</td>
+<td>用户可写层(<code>/etc</code> 配置文件,安装的 ipk 包,用户修改文件)</td>
+</tr>
+<tr>
+<td>p25</td>
+<td>4595746-5210145</td>
+<td>300 MB</td>
+<td>-</td>
+<td>Docker &#x2F; 数据预留扩展区</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="各核心分区说明"><a href="#各核心分区说明" class="headerlink" title="各核心分区说明"></a>各核心分区说明</h3><h4 id="查看p18-—-rom-区系统本体挂载状态："><a href="#查看p18-—-rom-区系统本体挂载状态：" class="headerlink" title="查看p18 — &#x2F;rom 区系统本体挂载状态："></a>查看p18 — &#x2F;rom 区系统本体挂载状态：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount | grep rom</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="查看p24-—-Overlay-区使用情况："><a href="#查看p24-—-Overlay-区使用情况：" class="headerlink" title="查看p24 — Overlay 区使用情况："></a>查看p24 — Overlay 区使用情况：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="用户可用区（p26-p27）"><a href="#用户可用区（p26-p27）" class="headerlink" title="用户可用区（p26,p27）"></a>用户可用区（p26,p27）</h2><p>这是唯一可安全操作的分区。</p>
+<table>
+<thead>
+<tr>
+<th>分区</th>
+<th>起始-结束</th>
+<th>大小</th>
+<th>建议用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>p26</td>
+<td>5212160-15146974</td>
+<td>4.74 GB</td>
+<td>数据存储</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="分区对齐间隙"><a href="#分区对齐间隙" class="headerlink" title="分区对齐间隙"></a>分区对齐间隙</h2><h3 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h3><p>GPT 分区默认按 2048 扇区（1MB）对齐。</p>
+<p>原因：</p>
+<ul>
+<li>提升 eMMC 读写性能</li>
+<li>避免跨擦除块写入</li>
+<li>适配闪存页结构</li>
+</ul>
+<hr>
+<h3 id="对齐间隙明细"><a href="#对齐间隙明细" class="headerlink" title="对齐间隙明细"></a>对齐间隙明细</h3><p><strong>这些空间不可利用.</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>起始-结束</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前置间隙</td>
+<td>9-33</td>
+<td>12.5 KB</td>
+<td>GPT 保护性 MBR</td>
+</tr>
+<tr>
+<td>中间间隙</td>
+<td>5210146-5212159</td>
+<td>1007 KB</td>
+<td>分区对齐填充</td>
+</tr>
+<tr>
+<td>尾部间隙</td>
+<td>15146975-15146999</td>
+<td>12.5 KB</td>
+<td>GPT 末尾保护区</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="相关常用命令总结"><a href="#相关常用命令总结" class="headerlink" title="相关常用命令总结"></a>相关常用命令总结</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 📦 格式化命令</span></span><br><span class="line">推荐 ext4：（稳定性优先）</span><br><span class="line">mkfs.ext4 -F /dev/mmcblk0p26</span><br><span class="line">或 F2FS：（闪存优化）</span><br><span class="line">mkfs.f2fs /dev/mmcblk0p26</span><br><span class="line"></span><br><span class="line"><span class="comment"># 📂 挂载命令</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /mnt/data</span><br><span class="line">mount /dev/mmcblk0p26 /mnt/data</span><br><span class="line">开机自动挂载：</span><br><span class="line">vi /etc/config/fstab</span><br><span class="line">或：</span><br><span class="line">block detect &gt; /etc/config/fstab</span><br><span class="line"></span><br><span class="line"><span class="comment"># 📊 查看各分区占用情况</span></span><br><span class="line"><span class="comment">## 查看分区结构</span></span><br><span class="line">fdisk -l /dev/mmcblk0</span><br><span class="line"><span class="comment">## 查看文件系统</span></span><br><span class="line">lsblk -f</span><br><span class="line"><span class="comment">## 查看挂载占用</span></span><br><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"><span class="comment">## 查看块设备 UUID</span></span><br><span class="line">blkid</span><br></pre></td></tr></table></figure>
       </section>
 
       
       
         <nav class="article-nav">
           
+          
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
     
     <div class="card-text">
       
-        <a href="/2025/08/04/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E7%AD%96%E7%95%A5/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">数据备份策略</h2>
+        <a href="/2026/02/07/%E5%86%85%E6%A0%B8%E7%BA%A7root%E6%96%B9%E6%A1%88%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">内核级root方案前置知识</h2>
         </a>
       
-      <div class="card-text--row">Newer</div>
+      <div class="card-text--row">Older</div>
     </div>
   </article>
 </div>
-          
           
         </nav>
       
