@@ -26,7 +26,7 @@
 
   
 
-  <title>路由器 eMMC 全盘分区详解 | Shiranzby</title>
+  <title>软路由高连接数与 PPPoE 无法上网问题笔记 | Shiranzby</title>
 
   
 
@@ -107,17 +107,12 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">路由器 eMMC 全盘分区详解</h1>
+          <h1 class="title-wrap">软路由高连接数与 PPPoE 无法上网问题笔记</h1>
           <h2 class="title-sub-wrap">
             <strong>Shiranzby</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2026-02-17T10:57:00.000Z" itemprop="datePublished">2026-02-17</time>
+            <time  class="article-date" datetime="2026-02-18T06:58:00.000Z" itemprop="datePublished">2026-02-18</time>
           </h2>
-          
-            <h2 class="last-time">
-              <span>最后更新于</span>
-              <time  class="article-updated" datetime="2026-02-18T07:00:07.858Z" itemprop="dateUpdated">2026-02-18</time>
-            </h2>
           
           
           <ul class="wrap-list dark">
@@ -132,6 +127,8 @@
     <li><a href="/tags/%E6%95%99%E7%A8%8B/">🏷️ 教程</a></li>
   
     <li><a href="/tags/Openwrt/">🏷️ Openwrt</a></li>
+  
+    <li><a href="/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/">🏷️ 软路由</a></li>
   
 </ul>
         </div>
@@ -155,324 +152,176 @@
       
       
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
-        <h1 id="路由器-eMMC-全盘分区详解"><a href="#路由器-eMMC-全盘分区详解" class="headerlink" title="路由器 eMMC 全盘分区详解"></a>路由器 eMMC 全盘分区详解</h1><blockquote>
-<p>以 8GB eMMC 路由器 GPT 分区为例<br>适用架构：Qualcomm IPQ 系列<br>系统类型：OpenWrt &#x2F; Kwrt<br>存储类型：eMMC 8GB（实际约 7.22 GiB）<br>分区表类型：GPT（2048 扇区 &#x2F; 1MB 对齐）</p>
-</blockquote>
+        <h1 id="软路由高连接数与-PPPoE-无法上网问题笔记"><a href="#软路由高连接数与-PPPoE-无法上网问题笔记" class="headerlink" title="软路由高连接数与 PPPoE 无法上网问题笔记"></a><strong>软路由高连接数与 PPPoE 无法上网问题笔记</strong></h1><p>以软路由实际运行 <strong>OpenWrt &#x2F; Kwrt</strong> 系统为例<br>适用架构：Qualcomm IPQ 系列 &#x2F; 其他 ARM &#x2F; x86 OpenWrt 路由器<br>系统类型：OpenWrt &#x2F; Kwrt<br>场景说明：大量 TCP&#x2F;UDP 长连接运行下</p>
 <hr>
-<h2 id="整体空间结构划分"><a href="#整体空间结构划分" class="headerlink" title="整体空间结构划分"></a>整体空间结构划分</h2><p>整块 eMMC 可逻辑划分为三大区域：</p>
-<ol>
-<li><strong>Boot 引导区（p1–p17）</strong></li>
-<li><strong>系统核心区（p18–p25）</strong></li>
-<li><strong>用户可用区（p26）</strong></li>
-</ol>
-<p>结构示意：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ Boot Chain ]  →  [ Linux System ]  →  [ User Data ]</span><br><span class="line">    p1–p17              p18–p25              p26</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="Boot-引导区（p1–p17）"><a href="#Boot-引导区（p1–p17）" class="headerlink" title="Boot 引导区（p1–p17）"></a>Boot 引导区（p1–p17）</h2><h3 id="启动链原理"><a href="#启动链原理" class="headerlink" title="启动链原理"></a>启动链原理</h3><p>Qualcomm 平台采用分级加载启动机制：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BootROM (SoC 内置，只读)</span><br><span class="line">        ↓</span><br><span class="line">XBL / SBL</span><br><span class="line">        ↓</span><br><span class="line">ABOOT / LK</span><br><span class="line">        ↓</span><br><span class="line">Linux Kernel</span><br></pre></td></tr></table></figure>
-
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p>在软路由中，尤其是在做高并发业务（如 大量设备连接）时，可能会出现以下现象：</p>
 <ul>
-<li>BootROM 固化在芯片内部，不可修改。</li>
-<li>eMMC 中的 p1–p17 承载外部启动组件。</li>
-<li><strong>任一关键分区损坏，将导致启动链中断。</strong></li>
-<li><strong>结果通常为：无串口输出、无法软件恢复。</strong></li>
+<li>PPPoE 接口显示已连接，宽带拨号正常。</li>
+<li>但是网络无法访问互联网，尤其是 IPv6 网站或双栈网站。</li>
+<li>系统连接数 <code>/proc/sys/net/netfilter/nf_conntrack_count</code> 可能已经很高，<code>nf_conntrack_max</code> 为 65535 仍然无法解决问题。</li>
 </ul>
+<p>这种现象在流量较大、长连接较多的情况下尤为明显。</p>
 <hr>
-<h3 id="区域特性说明"><a href="#区域特性说明" class="headerlink" title="区域特性说明"></a>区域特性说明</h3><ul>
-<li>总容量约 20MB</li>
-<li>由厂商出厂写入</li>
-<li>GPT 仅描述分区位置，不代表可操作</li>
-<li><strong>严禁删除、格式化或改动大小</strong></li>
-<li><strong>若损坏，仅能通过 EDL &#x2F; 专用烧录工具恢复</strong></li>
-</ul>
-<hr>
-<h3 id="Boot-分区详解表"><a href="#Boot-分区详解表" class="headerlink" title="Boot 分区详解表"></a>Boot 分区详解表</h3><table>
+<h2 id="活动连接数与流量卸载的关系"><a href="#活动连接数与流量卸载的关系" class="headerlink" title="活动连接数与流量卸载的关系"></a><strong>活动连接数与流量卸载的关系</strong></h2><p>软路由在处理大量上行&#x2F;下行流量时，会产生大量 <strong>活动连接</strong>（active connections &#x2F; conntrack entries），主要通过 <strong>netfilter conntrack 表</strong> 记录。</p>
+<table>
 <thead>
 <tr>
-<th align="center">分区</th>
-<th align="center">起始-结束</th>
-<th align="center">大小</th>
-<th align="center">功能说明（基于 Qualcomm 架构推测）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">p1</td>
-<td align="center">34-1569</td>
-<td align="center">768KB</td>
-<td align="center">XBL：初始化 DDR、时钟系统</td>
-</tr>
-<tr>
-<td align="center">p2</td>
-<td align="center">1570-2081</td>
-<td align="center">256KB</td>
-<td align="center">DDR Config：内存校准参数</td>
-</tr>
-<tr>
-<td align="center">p3</td>
-<td align="center">2082-2593</td>
-<td align="center">256KB</td>
-<td align="center">DEV_INFO：设备标志位</td>
-</tr>
-<tr>
-<td align="center">p4</td>
-<td align="center">2594-6177</td>
-<td align="center">1.75MB</td>
-<td align="center">APPSBL：二级引导加载器</td>
-</tr>
-<tr>
-<td align="center">p5</td>
-<td align="center">6178-9761</td>
-<td align="center">1.75MB</td>
-<td align="center">APPSBL 备份</td>
-</tr>
-<tr>
-<td align="center">p6</td>
-<td align="center">9762-10273</td>
-<td align="center">256KB</td>
-<td align="center">RPM：电源管理固件</td>
-</tr>
-<tr>
-<td align="center">p7</td>
-<td align="center">10274-10785</td>
-<td align="center">256KB</td>
-<td align="center">TZ：TrustZone 安全环境</td>
-</tr>
-<tr>
-<td align="center">p8</td>
-<td align="center">10786-11297</td>
-<td align="center">256KB</td>
-<td align="center">Hyp：虚拟化支持</td>
-</tr>
-<tr>
-<td align="center">p9</td>
-<td align="center">11298-11809</td>
-<td align="center">256KB</td>
-<td align="center">MBA：调制解调器认证</td>
-</tr>
-<tr>
-<td align="center">p10</td>
-<td align="center">11810-12321</td>
-<td align="center">256KB</td>
-<td align="center">Modem 配置</td>
-</tr>
-<tr>
-<td align="center">p11</td>
-<td align="center">12322-12833</td>
-<td align="center">256KB</td>
-<td align="center">Boot 环境变量备份</td>
-</tr>
-<tr>
-<td align="center">p12</td>
-<td align="center">12834-13345</td>
-<td align="center">256KB</td>
-<td align="center">A&#x2F;B 切换标志</td>
-</tr>
-<tr>
-<td align="center">p13</td>
-<td align="center">13346-14625</td>
-<td align="center">640KB</td>
-<td align="center">Factory A：MAC &#x2F; 序列号</td>
-</tr>
-<tr>
-<td align="center">p14</td>
-<td align="center">14626-15905</td>
-<td align="center">640KB</td>
-<td align="center">Factory B 备份</td>
-</tr>
-<tr>
-<td align="center">p15</td>
-<td align="center">15906-16417</td>
-<td align="center">256KB</td>
-<td align="center">SSD：安全启动标志</td>
-</tr>
-<tr>
-<td align="center">p16</td>
-<td align="center">16418-28705</td>
-<td align="center">6MB</td>
-<td align="center">ABOOT：Android Bootloader</td>
-</tr>
-<tr>
-<td align="center">p17</td>
-<td align="center">28706-40993</td>
-<td align="center">6MB</td>
-<td align="center">ABOOT 备份</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="系统核心区（p18–p25）"><a href="#系统核心区（p18–p25）" class="headerlink" title="系统核心区（p18–p25）"></a>系统核心区（p18–p25）</h2><p>该区域为 OpenWrt系统实际运行区域。</p>
-<hr>
-<h3 id="OpenWrt-文件系统架构"><a href="#OpenWrt-文件系统架构" class="headerlink" title="OpenWrt 文件系统架构"></a>OpenWrt 文件系统架构</h3><p>OpenWrt 采用只读系统 + 可写叠加层结构：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/rom        → SquashFS（只读系统镜像）</span><br><span class="line">/overlay    → F2FS / JFFS2（可写层）</span><br></pre></td></tr></table></figure>
-
-<p>通过 OverlayFS 组合：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overlayfs = lowerdir(/rom) + upperdir(/overlay)</span><br></pre></td></tr></table></figure>
-
-<p>系统升级时：</p>
-<ul>
-<li>替换 SquashFS 镜像</li>
-<li>Overlay 保留用户配置</li>
-</ul>
-<hr>
-<h3 id="系统分区详解表"><a href="#系统分区详解表" class="headerlink" title="系统分区详解表"></a>系统分区详解表</h3><table>
-<thead>
-<tr>
-<th>分区</th>
-<th>起始-结束</th>
-<th>大小</th>
-<th>挂载点</th>
+<th>参数</th>
+<th>默认值</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>p18</td>
-<td>40994-4235297</td>
-<td>2.0 GB</td>
-<td>&#x2F;rom</td>
-<td>SquashFS 系统镜像(只读,升级时整体替换)</td>
+<td>nf_conntrack_max</td>
+<td>65535</td>
+<td>conntrack 最大条目数（理论最大）</td>
 </tr>
 <tr>
-<td>p19</td>
-<td>4235298-4243489</td>
-<td>4 MB</td>
-<td>-</td>
-<td>备用内核 &#x2F; OTA</td>
-</tr>
-<tr>
-<td>p20</td>
-<td>4243490-4366369</td>
-<td>60 MB</td>
-<td>-</td>
-<td>缓存或 JFFS2 空间</td>
-</tr>
-<tr>
-<td>p21</td>
-<td>4366370-4374561</td>
-<td>4 MB</td>
-<td>-</td>
-<td>misc 标志区</td>
-</tr>
-<tr>
-<td>p22</td>
-<td>4374562-4415521</td>
-<td>20 MB</td>
-<td>-</td>
-<td>Crash Dump</td>
-</tr>
-<tr>
-<td>p23</td>
-<td>4415522-4416545</td>
-<td>512 KB</td>
-<td>-</td>
-<td>Factory 配置</td>
-</tr>
-<tr>
-<td>p24</td>
-<td>4416546-4595745</td>
-<td>87.5 MB</td>
-<td>&#x2F;overlay</td>
-<td>用户可写层(<code>/etc</code> 配置文件,安装的 ipk 包,用户修改文件)</td>
-</tr>
-<tr>
-<td>p25</td>
-<td>4595746-5210145</td>
-<td>300 MB</td>
-<td>-</td>
-<td>Docker &#x2F; 数据预留扩展区</td>
+<td>nf_conntrack_count</td>
+<td>动态</td>
+<td>当前表使用量</td>
 </tr>
 </tbody></table>
+<h3 id="现象分析"><a href="#现象分析" class="headerlink" title="现象分析"></a><strong>现象分析</strong></h3><ul>
+<li>当路由器运行大量 TCP&#x2F;UDP 长连接时，活动连接数可能轻松突破 <strong>1 万条</strong>。</li>
+<li><strong>硬件流量卸载（HW Offload）</strong>模式下，流量直接在网卡硬件处理，CPU 参与少，转发速度高。</li>
+<li>问题在于硬件卸载对 conntrack 管理存在限制，conntrack 表中已记录连接数量一旦超过大约 1 万条，某些 NAT&#x2F;PPPoE 接口状态可能异常：<ul>
+<li>拨号连接存在，但无法上网</li>
+<li>网关无法正常转发</li>
+<li>CPU 使用率低，但网络不可用</li>
+</ul>
+</li>
+</ul>
+<p>这是因为硬件卸载绕过了软件层部分连接管理逻辑，超大量连接下软件无法及时回收 NAT&#x2F;PPPoE 相关状态。</p>
 <hr>
-<h3 id="各核心分区说明"><a href="#各核心分区说明" class="headerlink" title="各核心分区说明"></a>各核心分区说明</h3><h4 id="查看p18-—-rom-区系统本体挂载状态："><a href="#查看p18-—-rom-区系统本体挂载状态：" class="headerlink" title="查看p18 — &#x2F;rom 区系统本体挂载状态："></a>查看p18 — &#x2F;rom 区系统本体挂载状态：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount | grep rom</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="查看p24-—-Overlay-区使用情况："><a href="#查看p24-—-Overlay-区使用情况：" class="headerlink" title="查看p24 — Overlay 区使用情况："></a>查看p24 — Overlay 区使用情况：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="用户可用区（p26-p27）"><a href="#用户可用区（p26-p27）" class="headerlink" title="用户可用区（p26,p27）"></a>用户可用区（p26,p27）</h2><p>这是唯一可安全操作的分区。</p>
-<table>
+<h3 id="软件流量卸载与关闭卸载的差异"><a href="#软件流量卸载与关闭卸载的差异" class="headerlink" title="软件流量卸载与关闭卸载的差异"></a><strong>软件流量卸载与关闭卸载的差异</strong></h3><table>
 <thead>
 <tr>
-<th>分区</th>
-<th>起始-结束</th>
-<th>大小</th>
-<th>建议用途</th>
+<th>流量卸载类型</th>
+<th>优点</th>
+<th>缺点</th>
+<th>使用场景</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>p26</td>
-<td>5212160-15146974</td>
-<td>4.74 GB</td>
-<td>数据存储</td>
+<td>硬件流量卸载（HW Offload）</td>
+<td>转发速度高，CPU 占用低</td>
+<td>高连接数容易出现 NAT 异常；conntrack 超过 1 万易导致拨号失效</td>
+<td>高速转发、低 CPU 消耗环境</td>
+</tr>
+<tr>
+<td>软件流量卸载（SW Offload）</td>
+<td>CPU 可全程管理连接表，conntrack 管理完整</td>
+<td>转发速度受 CPU 限制，性能下降</td>
+<td>高连接数管理、低速&#x2F;稳定性优先</td>
+</tr>
+<tr>
+<td>无卸载</td>
+<td>全程 CPU 管理</td>
+<td>最大 CPU 消耗，性能最低</td>
+<td>调试、实验或少量流量场景</td>
 </tr>
 </tbody></table>
+<p><strong>结论</strong>：在高速转发场景下，必须保持硬件卸载以保证带宽性能，同时通过 <strong>优化连接超时和自动重拨策略</strong>缓解高连接数引起的异常。</p>
 <hr>
-<h2 id="分区对齐间隙"><a href="#分区对齐间隙" class="headerlink" title="分区对齐间隙"></a>分区对齐间隙</h2><h3 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h3><p>GPT 分区默认按 2048 扇区（1MB）对齐。</p>
-<p>原因：</p>
-<ul>
-<li>提升 eMMC 读写性能</li>
-<li>避免跨擦除块写入</li>
-<li>适配闪存页结构</li>
-</ul>
-<hr>
-<h3 id="对齐间隙明细"><a href="#对齐间隙明细" class="headerlink" title="对齐间隙明细"></a>对齐间隙明细</h3><p><strong>这些空间不可利用.</strong></p>
+<h2 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a><strong>优化方案</strong></h2><h3 id="方案-1：调整-TCP-UDP-连接超时"><a href="#方案-1：调整-TCP-UDP-连接超时" class="headerlink" title="方案 1：调整 TCP &#x2F; UDP 连接超时"></a><strong>方案 1：调整 TCP &#x2F; UDP 连接超时</strong></h3><p>建议调整到适中值：</p>
 <table>
 <thead>
 <tr>
 <th>类型</th>
-<th>起始-结束</th>
-<th>大小</th>
+<th>原始值（秒）</th>
+<th>建议值（秒）</th>
 <th>说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>前置间隙</td>
-<td>9-33</td>
-<td>12.5 KB</td>
-<td>GPT 保护性 MBR</td>
+<td>TCP ESTABLISHED</td>
+<td>7440</td>
+<td>3600</td>
+<td>长连接仍可维持 1 小时</td>
 </tr>
 <tr>
-<td>中间间隙</td>
-<td>5210146-5212159</td>
-<td>1007 KB</td>
-<td>分区对齐填充</td>
+<td>TCP CLOSE_WAIT</td>
+<td>60</td>
+<td>30</td>
+<td>尽快释放资源</td>
 </tr>
 <tr>
-<td>尾部间隙</td>
-<td>15146975-15146999</td>
-<td>12.5 KB</td>
-<td>GPT 末尾保护区</td>
+<td>TCP FIN_WAIT</td>
+<td>120</td>
+<td>30</td>
+<td>避免僵尸连接</td>
+</tr>
+<tr>
+<td>TCP TIME_WAIT</td>
+<td>120</td>
+<td>30</td>
+<td>保持 TCP 协议完整性</td>
+</tr>
+<tr>
+<td>UDP</td>
+<td>60</td>
+<td>30</td>
+<td>UDP 短连接快速回收</td>
+</tr>
+<tr>
+<td>UDP STREAM</td>
+<td>180</td>
+<td>60</td>
+<td>UDP 长流适度保留</td>
 </tr>
 </tbody></table>
+<p>修改方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> 3600 &gt; /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_established</span><br><span class="line"><span class="built_in">echo</span> 30   &gt; /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_close_wait</span><br><span class="line"><span class="built_in">echo</span> 30   &gt; /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_fin_wait</span><br><span class="line"><span class="built_in">echo</span> 30   &gt; /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_time_wait</span><br><span class="line"><span class="built_in">echo</span> 30   &gt; /proc/sys/net/netfilter/nf_conntrack_udp_timeout</span><br><span class="line"><span class="built_in">echo</span> 60   &gt; /proc/sys/net/netfilter/nf_conntrack_udp_timeout_stream</span><br></pre></td></tr></table></figure>
+
 <hr>
-<h2 id="相关常用命令总结"><a href="#相关常用命令总结" class="headerlink" title="相关常用命令总结"></a>相关常用命令总结</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 格式化命令</span></span><br><span class="line">推荐 ext4：（稳定性优先）</span><br><span class="line">mkfs.ext4 -F /dev/mmcblk0p26</span><br><span class="line">或 F2FS：（闪存优化）</span><br><span class="line">mkfs.f2fs /dev/mmcblk0p26</span><br><span class="line"></span><br><span class="line"><span class="comment"># 挂载命令</span></span><br><span class="line"><span class="built_in">mkdir</span> -p /mnt/data</span><br><span class="line">mount /dev/mmcblk0p26 /mnt/data</span><br><span class="line">开机自动挂载：</span><br><span class="line">vi /etc/config/fstab</span><br><span class="line">或：</span><br><span class="line">block detect &gt; /etc/config/fstab</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看各分区占用情况</span></span><br><span class="line"><span class="comment">## 查看分区结构</span></span><br><span class="line">fdisk -l /dev/mmcblk0</span><br><span class="line"><span class="comment">## 查看文件系统</span></span><br><span class="line">lsblk -f</span><br><span class="line"><span class="comment">## 查看挂载占用</span></span><br><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"><span class="comment">## 查看块设备 UUID</span></span><br><span class="line">blkid</span><br></pre></td></tr></table></figure>
+<h3 id="方案-2：自动检测接口并重启-PPPoE-脚本"><a href="#方案-2：自动检测接口并重启-PPPoE-脚本" class="headerlink" title="方案 2：自动检测接口并重启 PPPoE 脚本"></a><strong>方案 2：自动检测接口并重启 PPPoE 脚本</strong></h3><p>特点：</p>
+<ol>
+<li><strong>自动检测所有接口</strong>，选择可访问公网的 IPv6 或 IPv4 接口。</li>
+<li><strong>排除保留地址和本地链路</strong>（如 <code>fe80::/10</code>、<code>fc00::/7</code>、<code>fd00::/8</code>、<code>::1</code> 等）。</li>
+<li><strong>自适应 ping 间隔</strong>：网络正常时间隔长，异常时缩短，加快故障响应。</li>
+<li><strong>日志保留 7 天自动清理</strong>。</li>
+<li><strong>可随系统启动自启</strong>。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment"># 文件名: /mnt/sda1/scripts/pppoe_watchdog.sh</span></span><br><span class="line"></span><br><span class="line">PING_TARGET=<span class="string">&quot;baidu.com&quot;</span></span><br><span class="line">MAX_FAIL=3</span><br><span class="line">PING_SHORT=5       <span class="comment"># 异常短间隔</span></span><br><span class="line">PING_LONG=30       <span class="comment"># 正常长间隔</span></span><br><span class="line">LOG_DIR=<span class="string">&quot;/mnt/sda1/scripts/log&quot;</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$LOG_DIR</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理 7 天前日志</span></span><br><span class="line">find <span class="variable">$LOG_DIR</span> -<span class="built_in">type</span> f -mtime +7 -name <span class="string">&quot;*.log&quot;</span> -<span class="built_in">exec</span> <span class="built_in">rm</span> -f &#123;&#125; \;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取公网 IPv6 接口</span></span><br><span class="line"><span class="function"><span class="title">get_public_ipv6_interfaces</span></span>() &#123;</span><br><span class="line">    ip -6 addr show | awk <span class="string">&#x27;/inet6/ &#123;</span></span><br><span class="line"><span class="string">        if ($2 !~ /^(fe80|fc00|fd00|::1)/) print $NF</span></span><br><span class="line"><span class="string">    &#125;&#x27;</span> | <span class="built_in">sort</span> -u</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 IPv4 接口</span></span><br><span class="line"><span class="function"><span class="title">get_ipv4_interfaces</span></span>() &#123;</span><br><span class="line">    ip -4 addr show | awk <span class="string">&#x27;/inet/ &#123;if ($2 !~ /^127/) print $NF&#125;&#x27;</span> | <span class="built_in">sort</span> -u</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">choose_interfaces</span></span>() &#123;</span><br><span class="line">    IFACES=$(get_public_ipv6_interfaces)</span><br><span class="line">    <span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$IFACES</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        IFACES=$(get_ipv4_interfaces)</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$IFACES</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主循环</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span>; <span class="keyword">do</span></span><br><span class="line">    DATE=$(<span class="built_in">date</span> <span class="string">&quot;+%Y-%m-%d_%H-%M-%S&quot;</span>)</span><br><span class="line">    LOG_FILE=<span class="string">&quot;<span class="variable">$LOG_DIR</span>/pppoe_watchdog_<span class="variable">$DATE</span>.log&quot;</span></span><br><span class="line">    INTERFACES=$(choose_interfaces)</span><br><span class="line">    INTERVAL=<span class="variable">$PING_LONG</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> IF <span class="keyword">in</span> <span class="variable">$INTERFACES</span>; <span class="keyword">do</span></span><br><span class="line">        FAIL_COUNT=0</span><br><span class="line">        ping -I <span class="variable">$IF</span> -c 1 -W 2 <span class="variable">$PING_TARGET</span> &gt;/dev/null 2&gt;&amp;1</span><br><span class="line">        <span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">            FAIL_COUNT=$((FAIL_COUNT+<span class="number">1</span>))</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;<span class="subst">$(date)</span> Ping failed on <span class="variable">$IF</span> #<span class="variable">$FAIL_COUNT</span>&quot;</span> &gt;&gt; <span class="variable">$LOG_FILE</span></span><br><span class="line">            INTERVAL=<span class="variable">$PING_SHORT</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            FAIL_COUNT=0</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$FAIL_COUNT</span> -ge <span class="variable">$MAX_FAIL</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;<span class="subst">$(date)</span> Ping failed <span class="variable">$MAX_FAIL</span> times on <span class="variable">$IF</span>, restarting interface...&quot;</span> &gt;&gt; <span class="variable">$LOG_FILE</span></span><br><span class="line">            /etc/init.d/network restart <span class="variable">$IF</span></span><br><span class="line">            FAIL_COUNT=0</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">sleep</span> <span class="variable">$INTERVAL</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="系统自启配置"><a href="#系统自启配置" class="headerlink" title="系统自启配置"></a><strong>系统自启配置</strong></h3><ol>
+<li>给脚本可执行权限：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /mnt/sda1/scripts/pppoe_watchdog.sh</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>编辑 <code>/etc/rc.local</code> 或 OpenWrt 启动脚本，在 <code>exit 0</code> 前加入：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">nohup</span> /mnt/sda1/scripts/pppoe_watchdog.sh &gt;/mnt/sda1/scripts/pppoe_watchdog.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>保存并重启路由器，脚本将随系统启动自动运行。</li>
+</ol>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><ul>
+<li>活动连接数过高 + 硬件流量卸载可能导致 PPPoE 接口“连上但无法上网”。</li>
+<li>软件卸载或关闭卸载可以避免 conntrack 限制，但可能降低性能。</li>
+<li>调整 TCP&#x2F;UDP 超时可释放僵尸连接，减少连接占用压力。</li>
+<li>自动检测接口 + 自适应 ping + 日志轮转脚本可保证 PPPoE 长时间稳定。</li>
+<li>IPv6 检测采用排除法，兼容多运营商公网 IPv6 地址，IPv4 作为备选。</li>
+</ul>
+
       </section>
 
       
       
         <nav class="article-nav">
           
-            <div class="article-nav-item layout-padding">
-  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
-    
-    <div class="card-text">
-      
-        <a href="/2026/02/18/%E8%BD%AF%E8%B7%AF%E7%94%B1%E9%AB%98%E8%BF%9E%E6%8E%A5%E6%95%B0%E5%AF%BC%E8%87%B4PPPoE%20%E6%97%A0%E6%B3%95%E4%B8%8A%E7%BD%91%E9%97%AE%E9%A2%98%E7%AC%94%E8%AE%B0/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">软路由高连接数与 PPPoE 无法上网问题笔记</h2>
-        </a>
-      
-      <div class="card-text--row">Newer</div>
-    </div>
-  </article>
-</div>
-          
           
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
     
     <div class="card-text">
       
-        <a href="/2026/02/07/%E5%86%85%E6%A0%B8%E7%BA%A7root%E6%96%B9%E6%A1%88%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">内核级root方案前置知识</h2>
+        <a href="/2026/02/17/%E8%B7%AF%E7%94%B1%E5%99%A8%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA%E9%97%AE%E9%A2%98/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">路由器 eMMC 全盘分区详解</h2>
         </a>
       
       <div class="card-text--row">Older</div>
